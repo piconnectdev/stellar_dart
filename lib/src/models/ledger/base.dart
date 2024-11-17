@@ -6818,9 +6818,9 @@ class SorobanAuthorizedInvocation extends XDRSerialization {
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.lazyStruct([
-      const LazyLayout(
+      LazyLayout(
           layout: SorobanAuthorizedFunction.layout, property: "function"),
-      const LazyLayout(layout: _selfVector, property: "subInvocations")
+      LazyLayout(layout: _selfVector, property: "subInvocations")
     ], property: property);
   }
 
