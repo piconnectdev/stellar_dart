@@ -62,7 +62,7 @@ void _transaction() {
     expect(transaction.operations[1].body.operationType,
         OperationType.pathPaymentStrictReceive);
     expect(decode.signatures.length, 1);
-    TransactionSignaturePayload payload = TransactionSignaturePayload(
+    final TransactionSignaturePayload payload = TransactionSignaturePayload(
         networkId: StellarNetwork.testnet.passphraseHash,
         taggedTransaction: transaction);
     final pubkey = transaction.sourceAccount.address.toPublicKey();
