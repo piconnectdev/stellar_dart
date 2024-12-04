@@ -1,5 +1,5 @@
 import 'package:blockchain_utils/blockchain_utils.dart';
-import 'package:stellar_dart/src/stellar_dart.dart';
+import 'package:stellar_dart/stellar_dart.dart';
 import 'test_provider.dart';
 
 void main() async {

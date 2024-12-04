@@ -34,15 +34,16 @@ class StellarHelper {
     BigRational number = BigRational.parseDecimal(price);
 
     // Initialize with [n0, d0] = [0, 1] and [n1, d1] = [1, 0] for continued fraction calculation
-    List<BigRational> numerators = [BigRational.zero, BigRational.one];
-    List<BigRational> denominators = [BigRational.one, BigRational.zero];
+    final List<BigRational> numerators = [BigRational.zero, BigRational.one];
+    final List<BigRational> denominators = [BigRational.one, BigRational.zero];
 
     while (true) {
-      BigRational integerPart = number.floor();
-      BigRational fractionalPart = number - integerPart;
+      final BigRational integerPart = number.floor();
+      final BigRational fractionalPart = number - integerPart;
 
-      BigRational newNumerator = (numerators[1] * integerPart) + numerators[0];
-      BigRational newDenominator =
+      final BigRational newNumerator =
+          (numerators[1] * integerPart) + numerators[0];
+      final BigRational newDenominator =
           (denominators[1] * integerPart) + denominators[0];
 
       // Stop if the new numerator or denominator exceeds the max int limit

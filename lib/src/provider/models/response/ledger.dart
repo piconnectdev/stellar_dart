@@ -118,7 +118,7 @@ class SorobanLedgerEntriesResponse {
       {required this.entries, required this.latestLedger});
 
   factory SorobanLedgerEntriesResponse.fromJson(Map<String, dynamic> json) {
-    var entriesList = (json['entries'] as List)
+    final entriesList = (json['entries'] as List)
         .map((entry) => SorobanLedgerEntry.fromJson(entry))
         .toList();
 

@@ -2590,8 +2590,8 @@ class UInt128Parts extends XDRSerialization {
       throw DartStellarPlugingException("Number is to large for `Int256Parts`",
           details: {"number": number.toString()});
     }
-    BigInt hi = (number >> 64).toUnsigned(64);
-    BigInt lo = number.toUnsigned(64);
+    final BigInt hi = (number >> 64).toUnsigned(64);
+    final BigInt lo = number.toUnsigned(64);
     return UInt128Parts(hi: hi, lo: lo);
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -2602,8 +2602,8 @@ class UInt128Parts extends XDRSerialization {
   }
 
   BigInt toBigInt() {
-    BigInt part = (hi << 64);
-    BigInt int256 = part | lo;
+    final BigInt part = (hi << 64);
+    final BigInt int256 = part | lo;
     return int256;
   }
 
@@ -2634,8 +2634,8 @@ class Int128Parts extends XDRSerialization {
       throw DartStellarPlugingException("Number is to large for `Int256Parts`",
           details: {"number": number.toString()});
     }
-    BigInt hi = (number >> 64).toSigned(64);
-    BigInt lo = number.toUnsigned(64);
+    final BigInt hi = (number >> 64).toSigned(64);
+    final BigInt lo = number.toUnsigned(64);
     return Int128Parts(hi: hi, lo: lo);
   }
   factory Int128Parts.fromStruct(Map<String, dynamic> json) {
@@ -2649,8 +2649,8 @@ class Int128Parts extends XDRSerialization {
   }
 
   BigInt toBigInt() {
-    BigInt part = (hi << 64);
-    BigInt int256 = part | lo;
+    final BigInt part = (hi << 64);
+    final BigInt int256 = part | lo;
     return int256;
   }
 
@@ -2701,10 +2701,10 @@ class UInt256Parts extends XDRSerialization {
       throw DartStellarPlugingException("Number is to large for `Int256Parts`",
           details: {"number": number.toString()});
     }
-    BigInt hiHi = (number >> 192).toUnsigned(64);
-    BigInt hiLo = (number >> 128).toUnsigned(64);
-    BigInt loHi = (number >> 64).toUnsigned(64);
-    BigInt loLo = number.toUnsigned(64);
+    final BigInt hiHi = (number >> 192).toUnsigned(64);
+    final BigInt hiLo = (number >> 128).toUnsigned(64);
+    final BigInt loHi = (number >> 64).toUnsigned(64);
+    final BigInt loLo = number.toUnsigned(64);
     return UInt256Parts(hiHi: hiHi, hiLo: hiLo, loHi: loHi, loLo: loLo);
   }
 
@@ -2718,11 +2718,11 @@ class UInt256Parts extends XDRSerialization {
   }
 
   BigInt toBigInt() {
-    BigInt part1 = (hiHi << 192);
-    BigInt part2 = (hiLo << 128);
-    BigInt part3 = (loHi << 64);
-    BigInt part4 = loLo;
-    BigInt int256 = part1 | part2 | part3 | part4;
+    final BigInt part1 = (hiHi << 192);
+    final BigInt part2 = (hiLo << 128);
+    final BigInt part3 = (loHi << 64);
+    final BigInt part4 = loLo;
+    final BigInt int256 = part1 | part2 | part3 | part4;
     return int256;
   }
 
@@ -2769,10 +2769,10 @@ class Int256Parts extends XDRSerialization {
       throw const DartStellarPlugingException(
           "Number is to large for `Int256Parts`");
     }
-    BigInt hiHi = (number >> 192).toSigned(64);
-    BigInt hiLo = (number >> 128).toUnsigned(64);
-    BigInt loHi = (number >> 64).toUnsigned(64);
-    BigInt loLo = number.toUnsigned(64);
+    final BigInt hiHi = (number >> 192).toSigned(64);
+    final BigInt hiLo = (number >> 128).toUnsigned(64);
+    final BigInt loHi = (number >> 64).toUnsigned(64);
+    final BigInt loLo = number.toUnsigned(64);
     return Int256Parts(hiHi: hiHi, hiLo: hiLo, loHi: loHi, loLo: loLo);
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -2785,11 +2785,11 @@ class Int256Parts extends XDRSerialization {
   }
 
   BigInt toBigInt() {
-    BigInt part1 = (hiHi << 192);
-    BigInt part2 = (hiLo << 128);
-    BigInt part3 = (loHi << 64);
-    BigInt part4 = loLo;
-    BigInt int256 = part1 | part2 | part3 | part4;
+    final BigInt part1 = (hiHi << 192);
+    final BigInt part2 = (hiLo << 128);
+    final BigInt part3 = (loHi << 64);
+    final BigInt part4 = loLo;
+    final BigInt int256 = part1 | part2 | part3 | part4;
     return int256;
   }
 
