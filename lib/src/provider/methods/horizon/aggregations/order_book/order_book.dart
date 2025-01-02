@@ -9,7 +9,7 @@ import 'package:stellar_dart/src/provider/models/request/request_types.dart';
 /// native and do not need to designate the code or the issuer.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/retrieve-an-order-book
 class HorizonRequestOrderBook
-    extends HorizonRequestParam<Map<String, dynamic>, Map<String, dynamic>> {
+    extends HorizonRequest<Map<String, dynamic>, Map<String, dynamic>> {
   /// he type for the asset being sold (base asset).
   final RequestAssetType sellingAssetType;
 
@@ -48,12 +48,12 @@ class HorizonRequestOrderBook
 
   @override
   Map<String, dynamic> get queryParameters => {
-        "selling_asset_type": sellingAssetType.name,
-        "selling_asset_issuer": sellingAssetIssuer,
-        "selling_asset_code": sellingAssetCode,
-        "buying_asset_type": buyingAssetType?.name,
-        "buying_asset_issuer": buyingAssetIssuer,
-        "buying_asset_code": buyingAssetCode,
-        "limit": limit
+        'selling_asset_type': sellingAssetType.name,
+        'selling_asset_issuer': sellingAssetIssuer,
+        'selling_asset_code': sellingAssetCode,
+        'buying_asset_type': buyingAssetType?.name,
+        'buying_asset_issuer': buyingAssetIssuer,
+        'buying_asset_code': buyingAssetCode,
+        'limit': limit
       };
 }

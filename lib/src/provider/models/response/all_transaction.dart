@@ -9,13 +9,13 @@ class StellarInnerTransactionResponse {
       {required this.hash, required this.signatures, required this.maxFee});
   factory StellarInnerTransactionResponse.fromJson(Map<String, dynamic> json) {
     return StellarInnerTransactionResponse(
-        hash: json["hash"],
-        signatures: (json["signatures"] as List).cast(),
-        maxFee: json["max_fee"]);
+        hash: json['hash'],
+        signatures: (json['signatures'] as List).cast(),
+        maxFee: json['max_fee']);
   }
 
   Map<String, dynamic> toJson() {
-    return {"hash": hash, "signatures": signatures, "max_fee": maxFee};
+    return {'hash': hash, 'signatures': signatures, 'max_fee': maxFee};
   }
 }
 
@@ -27,11 +27,11 @@ class StellarFeeBumpTransactionResponse {
   factory StellarFeeBumpTransactionResponse.fromJson(
       Map<String, dynamic> json) {
     return StellarFeeBumpTransactionResponse(
-        hash: json["hash"], signatures: (json["signatures"] as List).cast());
+        hash: json['hash'], signatures: (json['signatures'] as List).cast());
   }
 
   Map<String, dynamic> toJson() {
-    return {"hash": hash, "signatures": signatures};
+    return {'hash': hash, 'signatures': signatures};
   }
 }
 
@@ -41,11 +41,11 @@ class TimeboundsResponse {
   const TimeboundsResponse({required this.maxTime, required this.minTime});
   factory TimeboundsResponse.fromJson(Map<String, dynamic> json) {
     return TimeboundsResponse(
-        minTime: json["min_time"], maxTime: json["max_time"]);
+        minTime: json['min_time'], maxTime: json['max_time']);
   }
 
   Map<String, dynamic> toJson() {
-    return {"min_time": minTime, "max_time": maxTime};
+    return {'min_time': minTime, 'max_time': maxTime};
   }
 }
 
@@ -56,11 +56,11 @@ class LedgerboundsResponse {
       {required this.maxLedger, required this.minLedger});
   factory LedgerboundsResponse.fromJson(Map<String, dynamic> json) {
     return LedgerboundsResponse(
-        minLedger: json["min_ledger"], maxLedger: json["max_ledger"]);
+        minLedger: json['min_ledger'], maxLedger: json['max_ledger']);
   }
 
   Map<String, dynamic> toJson() {
-    return {"min_ledger": minLedger, "max_ledger": maxLedger};
+    return {'min_ledger': minLedger, 'max_ledger': maxLedger};
   }
 }
 
@@ -80,24 +80,24 @@ class PreconditionsResponse {
       required this.extraSigners});
   factory PreconditionsResponse.fromJson(Map<String, dynamic> json) {
     return PreconditionsResponse(
-        timeBounds: TimeboundsResponse.fromJson(json["timebounds"]),
-        ledgerBounds: json["ledgerbounds"] == null
+        timeBounds: TimeboundsResponse.fromJson(json['timebounds']),
+        ledgerBounds: json['ledgerbounds'] == null
             ? null
-            : LedgerboundsResponse.fromJson(json["ledgerbounds"]),
-        minAccountSequence: json["min_account_sequence"],
-        minAccountSequenceAge: json["min_account_sequence_age"],
-        minAccountSequenceLedgerGap: json["min_account_sequence_ledger_gap"],
-        extraSigners: (json["extra_signers"] as List?)?.cast());
+            : LedgerboundsResponse.fromJson(json['ledgerbounds']),
+        minAccountSequence: json['min_account_sequence'],
+        minAccountSequenceAge: json['min_account_sequence_age'],
+        minAccountSequenceLedgerGap: json['min_account_sequence_ledger_gap'],
+        extraSigners: (json['extra_signers'] as List?)?.cast());
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "timebounds": timeBounds.toJson(),
-      "ledgerbounds": ledgerBounds?.toJson(),
-      "min_account_sequence": minAccountSequence,
-      "min_account_sequence_age": minAccountSequenceAge,
-      "min_account_sequence_ledger_gap": minAccountSequenceLedgerGap,
-      "extra_signers": extraSigners
+      'timebounds': timeBounds.toJson(),
+      'ledgerbounds': ledgerBounds?.toJson(),
+      'min_account_sequence': minAccountSequence,
+      'min_account_sequence_age': minAccountSequenceAge,
+      'min_account_sequence_ledger_gap': minAccountSequenceLedgerGap,
+      'extra_signers': extraSigners
     };
   }
 }
@@ -121,9 +121,9 @@ class StellarAllTransactionResponse {
   final int operationCount;
   final String envelopeXdr;
   final String resultXdr;
-  final String resultMetaXdr;
+  final String? resultMetaXdr;
   final String feeMetaXdr;
-  final String memoType;
+  final String? memoType;
   final List<String> signatures;
   final String? validAfter;
   final String? validBefore;

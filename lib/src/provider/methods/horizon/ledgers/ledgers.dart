@@ -1,6 +1,5 @@
 import 'package:stellar_dart/src/provider/core/core/core.dart';
 import 'package:stellar_dart/src/provider/core/core/methods.dart';
-import 'package:stellar_dart/src/provider/models/request/request_types.dart';
 import 'package:stellar_dart/src/provider/models/response/ledger.dart';
 
 /// This endpoint lists all ledgers and can be used in streaming mode. Streaming mode allows you to listen for new ledgers as they close.
@@ -8,10 +7,9 @@ import 'package:stellar_dart/src/provider/models/response/ledger.dart';
 /// in which case it will start from that cursor. By setting the cursor value to now,
 /// you can stream ledgers since your request time.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/list-all-ledgers
-class HorizonRequestLedgers extends HorizonRequestParam<
-    List<StellarLedgerResponse>, Map<String, dynamic>> {
-  const HorizonRequestLedgers({HorizonPaginationParams? paginationParams})
-      : super(paginationParams: paginationParams);
+class HorizonRequestLedgers
+    extends HorizonRequest<List<StellarLedgerResponse>, Map<String, dynamic>> {
+  const HorizonRequestLedgers({super.paginationParams});
 
   @override
   String get method => StellarHorizonMethods.ledgers.url;
@@ -21,7 +19,7 @@ class HorizonRequestLedgers extends HorizonRequestParam<
 
   @override
   List<StellarLedgerResponse> onResonse(Map<String, dynamic> result) {
-    final records = (result["_embedded"]?["records"] as List?) ?? [];
+    final records = (result['_embedded']?['records'] as List?) ?? [];
     return records.map((e) => StellarLedgerResponse.fromJson(e)).toList();
   }
 }

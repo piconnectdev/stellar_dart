@@ -4,8 +4,8 @@ import 'package:stellar_dart/src/provider/models/models.dart';
 
 /// This endpoint lists accounts by one of four filters : signer, asset, liquidity pool or sponsor.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/list-all-accounts
-class HorizonRequestAccounts extends HorizonRequestParam<
-    List<StellarAccountResponse>, Map<String, dynamic>> {
+class HorizonRequestAccounts
+    extends HorizonRequest<List<StellarAccountResponse>, Map<String, dynamic>> {
   /// Account ID of the sponsor. Every account in the response will either be sponsored by
   /// the given account ID or have a subentry (trustline, offer, or data entry) which is sponsored by the given account ID.
   final String? sponser;
@@ -24,8 +24,8 @@ class HorizonRequestAccounts extends HorizonRequestParam<
     this.asset,
     this.signer,
     this.liqudityPool,
-    HorizonPaginationParams? paginationParams,
-  }) : super(paginationParams: paginationParams);
+    super.paginationParams,
+  });
 
   @override
   String get method => StellarHorizonMethods.accounts.url;
@@ -35,15 +35,15 @@ class HorizonRequestAccounts extends HorizonRequestParam<
 
   @override
   Map<String, dynamic> get queryParameters => {
-        "sponser": sponser,
-        "asset": asset,
-        "signer": signer,
-        "liqudity_pool": liqudityPool
+        'sponser': sponser,
+        'asset': asset,
+        'signer': signer,
+        'liqudity_pool': liqudityPool
       };
 
   @override
   List<StellarAccountResponse> onResonse(Map<String, dynamic> result) {
-    final records = (result["_embedded"]?["records"] as List?) ?? [];
+    final records = (result['_embedded']?['records'] as List?) ?? [];
     return records.map((e) => StellarAccountResponse.fromJson(e)).toList();
   }
 }

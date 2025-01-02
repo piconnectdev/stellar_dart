@@ -5,8 +5,8 @@ class SorobanEventResponse {
       {required this.latestLedger, required this.events});
   factory SorobanEventResponse.fromJson(Map<String, dynamic> json) {
     return SorobanEventResponse(
-        latestLedger: json["latestLedger"],
-        events: (json["events"] as List)
+        latestLedger: json['latestLedger'],
+        events: (json['events'] as List)
             .map((e) => SorobanEvent.fromJson(e))
             .toList());
   }

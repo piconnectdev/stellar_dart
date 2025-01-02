@@ -3,7 +3,7 @@ import 'package:stellar_dart/stellar_dart.dart';
 import 'test_provider.dart';
 
 void main() async {
-  final rpc = HorizonProvider(StellarHTTPProvider(
+  final rpc = StellarProvider(StellarHTTPProvider(
       url: "https://horizon-testnet.stellar.org",
       soroban: "https://soroban-testnet.stellar.org"));
   final privateKey = StellarPrivateKey.fromHex(

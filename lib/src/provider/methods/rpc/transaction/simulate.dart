@@ -7,7 +7,7 @@ import 'package:stellar_dart/src/provider/core/core.dart';
 /// outcomes of a transaction without actually submitting it to the network.
 /// https://developers.stellar.org/docs/data/rpc/api-reference/methods/simulateTransaction
 class SorobanRequestSimulateTransaction
-    extends SorobanRequestParam<SorobanSimulateResponse, Map<String, dynamic>> {
+    extends SorobanRequest<SorobanSimulateResponse, Map<String, dynamic>> {
   final String tx;
   final int? instructionLeeway;
   const SorobanRequestSimulateTransaction(
@@ -15,8 +15,8 @@ class SorobanRequestSimulateTransaction
 
   @override
   Map<String, dynamic> get params => {
-        "transaction": tx,
-        "resourceConfig": {"instructionLeeway": instructionLeeway}
+        'transaction': tx,
+        'resourceConfig': {'instructionLeeway': instructionLeeway}
       };
 
   @override

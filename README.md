@@ -36,8 +36,8 @@ To maximize the benefits of Stellar Dart, a solid understanding of Stellar's net
 transfer
 
 ```dart
-  /// Initialize the HorizonProvider with the specified URLs for the testnet.
-  final rpc = HorizonProvider(StellarHTTPProvider(
+  /// Initialize the StellarProvider with the specified URLs for the testnet.
+  final rpc = StellarProvider(StellarHTTPProvider(
       url: "https://horizon-testnet.stellar.org",
       soroban: "https://soroban-testnet.stellar.org"));
 
@@ -101,19 +101,19 @@ transfer
 ```dart
 class StellarHTTPProvider implements StellarServiceProvider {
   @override
-  Future<HorizonServiceResponse> get(HorizonRequestDetails params,
+  Future<HorizonServiceResponse> get(StellarRequestDetails params,
       [Duration? timeout]) async {
         /// see example file
       }
 
   @override
-  Future<HorizonServiceResponse> post(HorizonRequestDetails params,
+  Future<HorizonServiceResponse> post(StellarRequestDetails params,
       [Duration? timeout]) async {
         /// see example file
       }
 }
 
-  final providr = HorizonProvider(StellarHTTPProvider(
+  final providr = StellarProvider(StellarHTTPProvider(
       url: "https://horizon-testnet.stellar.org",
       soroban: "https://soroban-testnet.stellar.org"));
 

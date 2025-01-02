@@ -1,6 +1,5 @@
 import 'package:stellar_dart/src/provider/core/core/core.dart';
 import 'package:stellar_dart/src/provider/core/core/methods.dart';
-import 'package:stellar_dart/src/provider/models/request/request_types.dart';
 
 /// This endpoint lists all effects and can be used in streaming mode.
 /// Streaming mode allows you to listen for new effects as they are added to the Stellar ledger.
@@ -9,9 +8,8 @@ import 'package:stellar_dart/src/provider/models/request/request_types.dart';
 /// you can stream effects created since your request time.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/list-all-effects
 class HorizonRequestEffects
-    extends HorizonRequestParam<Map<String, dynamic>, Map<String, dynamic>> {
-  const HorizonRequestEffects({HorizonPaginationParams? paginationParams})
-      : super(paginationParams: paginationParams);
+    extends HorizonRequest<Map<String, dynamic>, Map<String, dynamic>> {
+  const HorizonRequestEffects({super.paginationParams});
 
   @override
   String get method => StellarHorizonMethods.effects.url;

@@ -10,14 +10,14 @@ import 'package:stellar_dart/src/provider/core/core.dart';
 /// For comprehensive debugging needs that extend beyond the 2-hour timeframe, it is advisable to retrieve
 /// transaction information from Horizon, as it provides a lasting and persistent record.
 /// https://developers.stellar.org/docs/data/rpc/api-reference/methods/getTransaction
-class SorobanRequestGetTransaction extends SorobanRequestParam<
-    SorobanTransactionResponse, Map<String, dynamic>> {
+class SorobanRequestGetTransaction
+    extends SorobanRequest<SorobanTransactionResponse, Map<String, dynamic>> {
   /// Transaction hash to query as a hex-encoded string. This transaction hash should correspond to transaction that has been previously submitted to the network.
   final String txId;
   SorobanRequestGetTransaction(this.txId);
 
   @override
-  Map<String, dynamic> get params => {"hash": txId};
+  Map<String, dynamic> get params => {'hash': txId};
 
   @override
   String get method => SorobanAPIMethods.getTransaction.name;

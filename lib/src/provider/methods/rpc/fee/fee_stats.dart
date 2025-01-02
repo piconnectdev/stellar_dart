@@ -7,7 +7,7 @@ import 'package:stellar_dart/src/provider/core/core.dart';
 /// Inclusion fees are used to prevent spam and prioritize transactions during network traffic surge.
 /// https://developers.stellar.org/docs/data/rpc/api-reference/methods/getFeeStats
 class SorobanRequestGetFeeStats
-    extends SorobanRequestParam<SorobanFeeStatsResponse, Map<String, dynamic>> {
+    extends SorobanRequest<SorobanFeeStatsResponse, Map<String, dynamic>> {
   SorobanRequestGetFeeStats();
 
   @override

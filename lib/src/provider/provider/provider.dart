@@ -1,76 +1,62 @@
-import 'package:blockchain_utils/utils/string/string.dart';
+import 'package:blockchain_utils/exception/exceptions.dart';
+import 'package:blockchain_utils/service/service.dart';
+import 'package:blockchain_utils/utils/utils.dart';
 import 'package:stellar_dart/src/provider/core/core.dart';
-import 'package:stellar_dart/src/provider/exception/exception.dart';
-import 'package:stellar_dart/src/provider/models/models.dart';
 import 'package:stellar_dart/src/provider/service/service.dart';
 
-/// Facilitates communication with the stellar horizon api by making requests using a provided [HorizonProvider].
-class HorizonProvider {
+/// Facilitates communication with the stellar horizon api by making requests using a provided [StellarProvider].
+class StellarProvider implements BaseProvider<StellarRequestDetails> {
   /// The underlying horizon service provider used for network communication.
   final StellarServiceProvider rpc;
 
-  /// Constructs a new [HorizonProvider] instance with the specified [rpc] service provider.
-  HorizonProvider(this.rpc);
+  /// Constructs a new [StellarProvider] instance with the specified [rpc] service provider.
+  StellarProvider(this.rpc);
 
-  int _id = 0;
-
-  static dynamic _parseResponse(
-      HorizonServiceResponse val, HorizonRequestDetails request) {
-    final Map<String, dynamic>? response = StringUtils.tryToJson(val.body);
-    if (response == null) {
-      throw HorizonAPIError(message: val.body, errorCode: val.statusCode);
-    }
-    if (val.success) {
-      if (request.apiType == StellarAPIType.soroban) {
-        final error = response["error"];
-        if (error != null) {
-          throw HorizonAPIError(
-              message: error["message"] ?? val.body,
-              errorCode: int.tryParse(error["code"]?.toString() ?? ""),
-              extras: Map<String, dynamic>.from(error));
-        }
-        return response["result"];
+  static SERVICERESPONSE _findError<SERVICERESPONSE>(
+      {required BaseServiceResponse<Map<String, dynamic>> response,
+      required StellarRequestDetails params}) {
+    final Map<String, dynamic> r = response.getResult(params);
+    if (params.apiType == StellarAPIType.soroban) {
+      final error = r['error'];
+      if (error != null) {
+        throw RPCError(
+            message: error['message']?.toString() ?? '',
+            errorCode: IntUtils.tryParse(error['code']),
+            details: Map<String, dynamic>.from(error));
       }
-      return response;
+      return ServiceProviderUtils.parseResponse(
+          object: r['result'], params: params);
     }
-    if (response.containsKey("errorResultXdr")) {
-      return response;
-    }
-    throw HorizonAPIError(
-        message: response["detail"] ?? response["title"] ?? val.body,
-        type: response["type"],
-        errorCode: int.tryParse(response["status"]?.toString() ?? ""),
-        extras: response["extras"]);
+    return ServiceProviderUtils.parseResponse(object: r, params: params);
   }
 
-  /// Sends a request to the stellar network using the specified [request] parameter.
+  /// The unique identifier for each JSON-RPC request.
+  int _id = 0;
+
+  /// Sends a request to the stellar network (horizon) using the specified [request] parameter.
+  ///
+  /// The [timeout] parameter, if provided, sets the maximum duration for the request.
+  @override
+  Future<RESULT> request<RESULT, SERVICERESPONSE>(
+      BaseServiceRequest<RESULT, SERVICERESPONSE, StellarRequestDetails>
+          request,
+      {Duration? timeout}) async {
+    final r = await requestDynamic(request, timeout: timeout);
+    return request.onResonse(r);
+  }
+
+  /// Sends a request to the stellar network (Horizon) using the specified [request] parameter.
   ///
   /// The [timeout] parameter, if provided, sets the maximum duration for the request.
   /// Whatever is received will be returned
-  Future<dynamic> requestDynamic(HorizonRequestParam request,
-      [Duration? timeout]) async {
-    final id = ++_id;
-    final params = request.toRequest(id);
-    final data = params.requestType == APIRequestType.post
-        ? await rpc.post(params, timeout)
-        : await rpc.get(params, timeout);
-    return _parseResponse(data, params);
-  }
-
-  /// Sends a request to the stellar network using the specified [request] parameter.
-  ///
-  /// The [timeout] parameter, if provided, sets the maximum duration for the request.
-  Future<T> request<T, E>(HorizonRequestParam<T, E> request,
-      [Duration? timeout]) async {
-    final data = await requestDynamic(request, timeout);
-    final Object result;
-    if (E == List<Map<String, dynamic>>) {
-      result = (data as List)
-          .map((e) => (e as Map).cast<String, dynamic>())
-          .toList();
-    } else {
-      result = data;
-    }
-    return request.onResonse(result as E);
+  @override
+  Future<SERVICERESPONSE> requestDynamic<RESULT, SERVICERESPONSE>(
+      BaseServiceRequest<RESULT, SERVICERESPONSE, StellarRequestDetails>
+          request,
+      {Duration? timeout}) async {
+    final params = request.buildRequest(_id++);
+    final response =
+        await rpc.doRequest<Map<String, dynamic>>(params, timeout: timeout);
+    return _findError(params: params, response: response);
   }
 }

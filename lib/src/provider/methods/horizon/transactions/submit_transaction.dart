@@ -8,20 +8,20 @@ import 'package:stellar_dart/src/provider/models/response/all_transaction.dart';
 /// the same response as would’ve been returned for the original transaction submission.
 /// This allows for safe resubmission of transactions in error scenarios, as highlighted in the error-handling guide.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/submit-a-transaction
-class HorizonRequestSubmitTransaction extends HorizonPostRequestParam<
+class HorizonRequestSubmitTransaction extends HorizonPostRequest<
     StellarAllTransactionResponse, Map<String, dynamic>> {
   final String tx;
   const HorizonRequestSubmitTransaction(this.tx);
 
   @override
-  Map<String, String>? get header =>
+  Map<String, String>? get headers =>
       {'Content-Type': 'application/x-www-form-urlencoded'};
 
   @override
   String get method => StellarHorizonMethods.submitTransaction.url;
 
   @override
-  Map<String, dynamic> get queryParameters => {"tx": tx};
+  Map<String, dynamic> get queryParameters => {'tx': tx};
 
   @override
   StellarAllTransactionResponse onResonse(Map<String, dynamic> result) {

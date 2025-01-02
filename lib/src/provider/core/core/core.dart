@@ -1,3 +1,4 @@
+import 'package:blockchain_utils/service/service.dart';
 import 'package:blockchain_utils/utils/string/string.dart';
 import 'package:stellar_dart/src/exception/exception.dart';
 import 'package:stellar_dart/src/provider/models/models.dart';
@@ -7,26 +8,22 @@ enum APIRequestType { get, post }
 
 enum StellarAPIType { horizon, soroban }
 
-abstract class HorizonRequestParams {
-  abstract final String method;
-}
-
-abstract class HorizonRequestParam<RESULT, RESPONSE>
-    implements HorizonRequestParams {
-  const HorizonRequestParam({this.paginationParams});
+abstract class HorizonRequest<RESULT, RESPONSE>
+    extends BaseServiceRequest<RESULT, RESPONSE, StellarRequestDetails> {
+  const HorizonRequest({this.paginationParams});
   final HorizonPaginationParams? paginationParams;
   List<String> get pathParameters => [];
   Map<String, dynamic> get queryParameters => {};
-
-  RESULT onResonse(RESPONSE result) {
-    return result as RESULT;
-  }
-
-  HorizonRequestDetails toRequest(int v) {
+  Map<String, String>? get headers => null;
+  abstract final String method;
+  @override
+  RequestServiceType get requestType => RequestServiceType.get;
+  @override
+  StellarRequestDetails buildRequest(int requestID) {
     final pathParams = StellarProviderUtils.extractParams(method);
     if (pathParams.length != pathParameters.length) {
-      throw DartStellarPlugingException("Invalid Path Parameters.",
-          details: {"pathParams": pathParameters, "excepted": pathParams});
+      throw DartStellarPlugingException('Invalid Path Parameters.',
+          details: {'pathParams': pathParameters, 'excepted': pathParams});
     }
     String params = method;
     for (int i = 0; i < pathParams.length; i++) {
@@ -43,96 +40,101 @@ abstract class HorizonRequestParam<RESULT, RESPONSE>
           .normalizePath()
           .toString();
     }
-    return HorizonRequestDetails(id: v, pathParams: params);
+    return StellarRequestDetails(
+        requestID: requestID,
+        pathParams: params,
+        headers: headers ?? ServiceConst.defaultPostHeaders,
+        type: requestType);
   }
 }
 
-abstract class HorizonPostRequestParam<RESULT, RESPONSE>
-    extends HorizonRequestParam<RESULT, RESPONSE> {
-  const HorizonPostRequestParam();
-  Object? get body => null;
-
-  final Map<String, String>? header = null;
-
+abstract class HorizonPostRequest<RESULT, RESPONSE>
+    extends HorizonRequest<RESULT, RESPONSE> {
+  const HorizonPostRequest();
   @override
-  HorizonRequestDetails toRequest(int v) {
-    final request = super.toRequest(v);
-    return request.copyWith(header: header, requestType: APIRequestType.post);
-  }
+  RequestServiceType get requestType => RequestServiceType.post;
 }
 
-abstract class SorobanRequestParam<RESULT, RESPONSE>
-    extends HorizonRequestParam<RESULT, RESPONSE> {
+abstract class SorobanRequest<RESULT, RESPONSE>
+    extends BaseServiceRequest<RESULT, RESPONSE, StellarRequestDetails> {
+  abstract final String method;
   final SorobanPaginationParams? pagination;
-  const SorobanRequestParam({this.pagination});
+  const SorobanRequest({this.pagination});
   Map<String, dynamic>? get params => null;
-
-  final Map<String, String>? header = null;
+  @override
+  RequestServiceType get requestType => RequestServiceType.post;
 
   @override
-  HorizonRequestDetails toRequest(int v) {
-    return HorizonRequestDetails(
-        id: v,
+  StellarRequestDetails buildRequest(int requestID) {
+    return StellarRequestDetails(
+        requestID: requestID,
         pathParams: '',
-        header: header ?? {},
-        body: StringUtils.fromJson(
-            {"id": v, "params": params, "jsonrpc": "2.0", "method": method}),
-        requestType: APIRequestType.post,
+        headers: ServiceConst.defaultPostHeaders,
+        jsonBody: ServiceProviderUtils.buildJsonRPCParams(
+            requestId: requestID, method: method, params: params),
+        type: requestType,
         apiType: StellarAPIType.soroban);
   }
 }
 
-class HorizonRequestDetails {
-  const HorizonRequestDetails(
-      {required this.id,
+class StellarRequestDetails extends BaseServiceRequestParams {
+  const StellarRequestDetails(
+      {required super.requestID,
       required this.pathParams,
-      this.header = const {},
-      this.requestType = APIRequestType.get,
+      required super.headers,
+      required super.type,
       this.apiType = StellarAPIType.horizon,
-      this.body});
+      this.jsonBody});
 
-  HorizonRequestDetails copyWith({
-    int? id,
-    String? pathParams,
-    APIRequestType? requestType,
-    Map<String, String>? header,
-    Object? body,
-    StellarAPIType? apiType,
-  }) {
-    return HorizonRequestDetails(
-        id: id ?? this.id,
+  StellarRequestDetails copyWith(
+      {int? requestID,
+      String? pathParams,
+      RequestServiceType? type,
+      Map<String, String>? headers,
+      Map<String, dynamic>? jsonBody,
+      StellarAPIType? apiType}) {
+    return StellarRequestDetails(
         pathParams: pathParams ?? this.pathParams,
-        requestType: requestType ?? this.requestType,
-        header: header ?? this.header,
-        body: body ?? this.body,
-        apiType: apiType ?? this.apiType);
+        jsonBody: jsonBody ?? this.jsonBody,
+        apiType: apiType ?? this.apiType,
+        headers: headers ?? this.headers,
+        requestID: requestID ?? this.requestID,
+        type: type ?? this.type);
   }
-
-  /// Unique identifier for the request.
-  final int id;
 
   /// URL path parameters
   final String pathParams;
 
-  final APIRequestType requestType;
-
-  final Map<String, String> header;
-
-  final Object? body;
+  // final Object? body;
   final StellarAPIType apiType;
 
-  /// Generates the complete request URL by combining the base URI and method-specific URI.
-  String url({required String horizonUri, String? sorobanUri}) {
-    if (apiType == StellarAPIType.soroban && sorobanUri == null) {
-      throw const DartStellarPlugingException(
-          "Please provide the Soroban API provider URL before sending a Soroban request.");
+  @override
+  List<int>? body() {
+    if (jsonBody != null) {
+      return StringUtils.encode(StringUtils.fromJson(jsonBody!));
     }
-    if (apiType == StellarAPIType.soroban) return sorobanUri!;
-    String url = horizonUri;
-    if (url.endsWith("/")) {
-      url = url.substring(0, url.length - 1);
+    return null;
+  }
+
+  final Map<String, dynamic>? jsonBody;
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'pahtParameters': pathParams,
+      'body': jsonBody,
+      'type': type.name,
+      'apiType': apiType.name
+    };
+  }
+
+  @override
+  Uri toUri(String uri) {
+    if (apiType == StellarAPIType.soroban) return Uri.parse(uri);
+    if (uri.endsWith('/')) {
+      uri = uri.substring(0, uri.length - 1);
     }
-    final finalUrl = "$url$pathParams";
-    return finalUrl;
+    final finalUrl = '$uri$pathParams';
+    return Uri.parse(finalUrl);
   }
 }

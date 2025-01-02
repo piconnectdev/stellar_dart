@@ -12,8 +12,8 @@ import 'package:stellar_dart/src/provider/models/response/trade.dart';
 /// counter_asset_type, counter_asset_issuer, and counter_asset_code. If the base or counter asset is
 /// XLM, you only need to indicate the asset type as native and do not need to designate the code or the issuer.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/get-all-trades
-class HorizonRequestTrades extends HorizonRequestParam<
-    List<StellarTradeResponse>, Map<String, dynamic>> {
+class HorizonRequestTrades
+    extends HorizonRequest<List<StellarTradeResponse>, Map<String, dynamic>> {
   /// The offer ID. Used to filter for trades originating from a specific offer.
   final String? offerId;
 
@@ -50,8 +50,7 @@ class HorizonRequestTrades extends HorizonRequestParam<
       this.counterAssetIssuer,
       this.counterAssetCode,
       this.tradeType,
-      HorizonPaginationParams? paginationParams})
-      : super(paginationParams: paginationParams);
+      super.paginationParams});
 
   @override
   String get method => StellarHorizonMethods.trades.url;
@@ -61,19 +60,19 @@ class HorizonRequestTrades extends HorizonRequestParam<
 
   @override
   Map<String, dynamic> get queryParameters => {
-        "offer_id": offerId,
-        "base_asset_type": baseAssetType?.name,
-        "base_asset_issuer": baseAssetIssuer,
-        "base_asset_code": baseAssetCode,
-        "counter_asset_type": counterAssetType?.name,
-        "counter_asset_issuer": counterAssetIssuer,
-        "counter_asset_code": counterAssetCode,
-        "trade_type": tradeType?.name
+        'offer_id': offerId,
+        'base_asset_type': baseAssetType?.name,
+        'base_asset_issuer': baseAssetIssuer,
+        'base_asset_code': baseAssetCode,
+        'counter_asset_type': counterAssetType?.name,
+        'counter_asset_issuer': counterAssetIssuer,
+        'counter_asset_code': counterAssetCode,
+        'trade_type': tradeType?.name
       };
 
   @override
   List<StellarTradeResponse> onResonse(Map<String, dynamic> result) {
-    final records = (result["_embedded"]?["records"] as List?) ?? [];
+    final records = (result['_embedded']?['records'] as List?) ?? [];
     return records.map((e) => StellarTradeResponse.fromJson(e)).toList();
   }
 }

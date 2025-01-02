@@ -4,7 +4,7 @@ import 'package:stellar_dart/src/provider/models/models.dart';
 /// General node health check.
 /// https://developers.stellar.org/docs/data/rpc/api-reference/methods/getHealth
 class SorobanRequestGetHealth
-    extends SorobanRequestParam<SorobanHealthResponse, Map<String, dynamic>> {
+    extends SorobanRequest<SorobanHealthResponse, Map<String, dynamic>> {
   SorobanRequestGetHealth();
 
   @override

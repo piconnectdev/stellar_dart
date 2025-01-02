@@ -8,8 +8,8 @@ import 'package:stellar_dart/src/provider/models/response/account_operation.dart
 /// If called in streaming mode, Horizon will start at the earliest known operation unless a cursor is set,
 /// in which case it will start from that cursor. By setting the cursor value to now, you can stream operations created since your request time.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/get-operations-by-account-id
-class HorizonRequestAccountOperations extends HorizonRequestParam<
-    AccountOperationResponse, Map<String, dynamic>> {
+class HorizonRequestAccountOperations
+    extends HorizonRequest<AccountOperationResponse, Map<String, dynamic>> {
   const HorizonRequestAccountOperations(this.accountId,
       {HorizonPaymentPaginationParams? paginationParams})
       : super(paginationParams: paginationParams);

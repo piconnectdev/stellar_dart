@@ -6,11 +6,11 @@ import 'package:stellar_dart/src/utils/validator.dart';
 class RequestAssetType {
   final String name;
   const RequestAssetType._(this.name);
-  static const RequestAssetType native = RequestAssetType._("native");
+  static const RequestAssetType native = RequestAssetType._('native');
   static const RequestAssetType creditAlphanum4 =
-      RequestAssetType._("credit_alphanum4");
+      RequestAssetType._('credit_alphanum4');
   static const RequestAssetType creditAlphanum12 =
-      RequestAssetType._("credit_alphanum12");
+      RequestAssetType._('credit_alphanum12');
   static const List<RequestAssetType> values = [
     native,
     creditAlphanum4,
@@ -19,10 +19,10 @@ class RequestAssetType {
   static RequestAssetType fromName(String? name) {
     return values.firstWhere(
       (e) => e.name == name,
-      orElse: () => throw DartStellarPlugingException("Asset type not found.",
+      orElse: () => throw DartStellarPlugingException('Asset type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -36,27 +36,27 @@ class RequestAssetType {
       case RequestAssetType.creditAlphanum4:
         return AssetType.creditAlphanum4;
       default:
-        throw DartStellarPlugingException("Invalid response asset type.",
-            details: {"type": name});
+        throw DartStellarPlugingException('Invalid response asset type.',
+            details: {'type': name});
     }
   }
 
   @override
   String toString() {
-    return "RequestAssetType.$name";
+    return 'RequestAssetType.$name';
   }
 }
 
 class RequestTradeType {
   final String name;
   const RequestTradeType._(this.name);
-  static const RequestTradeType all = RequestTradeType._("all");
-  static const RequestTradeType orderbook = RequestTradeType._("orderbook");
+  static const RequestTradeType all = RequestTradeType._('all');
+  static const RequestTradeType orderbook = RequestTradeType._('orderbook');
   static const RequestTradeType liquidityPools =
-      RequestTradeType._("liquidity_pools");
+      RequestTradeType._('liquidity_pools');
   @override
   String toString() {
-    return "RequestTradeType.$name";
+    return 'RequestTradeType.$name';
   }
 }
 
@@ -76,7 +76,7 @@ class SorobanPaginationParams {
 
   const SorobanPaginationParams({this.cursor, this.limit});
   Map<String, dynamic> toJson() {
-    return {"cursor": cursor, "limit": limit};
+    return {'cursor': cursor, 'limit': limit};
   }
 }
 
@@ -97,49 +97,39 @@ class HorizonPaginationParams {
   const HorizonPaginationParams({this.cursor, this.order, this.limit});
   Map<String, dynamic> toJson() {
     return {
-      "cursor": cursor?.toString(),
-      "order": order?.name,
-      "limit": limit?.toString()
+      'cursor': cursor?.toString(),
+      'order': order?.name,
+      'limit': limit?.toString()
     };
   }
 }
 
 class HorizonTransactionPaginationParams extends HorizonPaginationParams {
   HorizonTransactionPaginationParams(
-      {required int? cursor,
-      required HorizonQueryOrder? order,
-      required int? limit,
-      this.includeFailed})
-      : super(cursor: cursor, order: order, limit: limit);
+      {required super.cursor,
+      required super.order,
+      required super.limit,
+      this.includeFailed});
 
   /// Set to true to include failed operations in results. Options include true and false.
   final bool? includeFailed;
 
   @override
   Map<String, dynamic> toJson() {
-    return {...super.toJson(), "include_failed": includeFailed};
+    return {...super.toJson(), 'include_failed': includeFailed};
   }
 }
 
 class HorizonPaymentPaginationParams
     extends HorizonTransactionPaginationParams {
   HorizonPaymentPaginationParams(
-      {int? cursor,
-      HorizonQueryOrder? order,
-      int? limit,
-      bool? includeFailed,
-      this.join})
-      : super(
-            cursor: cursor,
-            order: order,
-            limit: limit,
-            includeFailed: includeFailed);
+      {super.cursor, super.order, super.limit, super.includeFailed, this.join});
 
   /// Set to transactions to include the transactions which created each of the operations in the response.
   final Object? join;
   @override
   Map<String, dynamic> toJson() {
-    return {...super.toJson(), "join": join};
+    return {...super.toJson(), 'join': join};
   }
 }
 
@@ -153,9 +143,9 @@ class SorobanEventFilter {
       {required List<String> topics,
       required List<String> contractIds,
       required this.type})
-      : topics = topics.immutable.max(5, name: "topics"),
-        contractIds = contractIds.immutable.max(5, name: "contractIds");
+      : topics = topics.immutable.max(5, name: 'topics'),
+        contractIds = contractIds.immutable.max(5, name: 'contractIds');
   Map<String, dynamic> toJson() {
-    return {"type": type.name, "contractIds": contractIds, "topics": topics};
+    return {'type': type.name, 'contractIds': contractIds, 'topics': topics};
   }
 }

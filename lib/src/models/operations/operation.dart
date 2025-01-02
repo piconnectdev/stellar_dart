@@ -9,9 +9,9 @@ import 'package:stellar_dart/src/utils/validator.dart';
 class OperationLevel {
   final String name;
   const OperationLevel._(this.name);
-  static const OperationLevel low = OperationLevel._("low");
-  static const OperationLevel high = OperationLevel._("high");
-  static const OperationLevel medium = OperationLevel._("medium");
+  static const OperationLevel low = OperationLevel._('low');
+  static const OperationLevel high = OperationLevel._('high');
+  static const OperationLevel medium = OperationLevel._('medium');
 
   @override
   String toString() {
@@ -103,10 +103,10 @@ class OperationType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "Operation type not found.",
+          'Operation type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -122,26 +122,26 @@ class Operation<T extends OperationBody> extends XDRSerialization {
     return Operation.fromStruct(decode);
   }
   factory Operation.fromStruct(Map<String, dynamic> json) {
-    final body = OperationBody.fromStruct(json.asMap("body"));
+    final body = OperationBody.fromStruct(json.asMap('body'));
     if (body is! T) {
-      throw const DartStellarPlugingException("Incorrect operation casting.");
+      throw const DartStellarPlugingException('Incorrect operation casting.');
     }
     return Operation(
         body: body,
         sourceAccount: json.mybeAs<MuxedAccount, Map<String, dynamic>>(
-            key: "sourceAccount", onValue: (e) => MuxedAccount.fromStruct(e)));
+            key: 'sourceAccount', onValue: (e) => MuxedAccount.fromStruct(e)));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) =>
       LayoutConst.struct([
         LayoutConst.optionalU32Be(MuxedAccount.layout(),
-            property: "sourceAccount"),
-        OperationBody.layout(property: "body")
+            property: 'sourceAccount'),
+        OperationBody.layout(property: 'body')
       ], property: property);
   @override
   Map<String, dynamic> toJson() {
     return {
-      "body": body.toVariantLayoutStruct(),
-      "sourceAccount": sourceAccount?.toVariantLayoutStruct()
+      'body': body.toVariantLayoutStruct(),
+      'sourceAccount': sourceAccount?.toVariantLayoutStruct()
     };
   }
 
@@ -153,8 +153,8 @@ class Operation<T extends OperationBody> extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "body": body.toVariantLayoutStruct(),
-      "sourceAccount": sourceAccount?.toVariantLayoutStruct()
+      'body': body.toVariantLayoutStruct(),
+      'sourceAccount': sourceAccount?.toVariantLayoutStruct()
     };
   }
 }
@@ -225,7 +225,7 @@ abstract class OperationBody extends XDRVariantSerialization {
       case OperationType.restoreFootprint:
         return RestoreFootprintOperation.fromStruct(decode.value);
       default:
-        throw const DartStellarPlugingException("Invalid Operation type.");
+        throw const DartStellarPlugingException('Invalid Operation type.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) =>
@@ -373,7 +373,7 @@ abstract class OperationBody extends XDRVariantSerialization {
                     property: type.name);
               default:
                 throw const DartStellarPlugingException(
-                    "Invalid Operation type.");
+                    'Invalid Operation type.');
             }
           }),
           property: property);
@@ -388,8 +388,8 @@ abstract class OperationBody extends XDRVariantSerialization {
 
   T cast<T extends OperationBody>() {
     if (this is! T) {
-      throw DartStellarPlugingException("Operation body casting failed.",
-          details: {"excepted": "$T", "body": runtimeType.toString()});
+      throw DartStellarPlugingException('Operation body casting failed.',
+          details: {'excepted': '$T', 'body': runtimeType.toString()});
     }
     return this as T;
   }
@@ -414,16 +414,16 @@ class PaymentOperation extends OperationBody {
 
   factory PaymentOperation.fromStruct(Map<String, dynamic> json) {
     return PaymentOperation(
-        destination: MuxedAccount.fromStruct(json.asMap("destination")),
-        asset: StellarAsset.fromStruct(json.asMap("asset")),
-        amount: json.as("amount"));
+        destination: MuxedAccount.fromStruct(json.asMap('destination')),
+        asset: StellarAsset.fromStruct(json.asMap('asset')),
+        amount: json.as('amount'));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      MuxedAccount.layout(property: "destination"),
-      StellarAsset.layout(property: "asset"),
-      LayoutConst.s64be(property: "amount")
+      MuxedAccount.layout(property: 'destination'),
+      StellarAsset.layout(property: 'asset'),
+      LayoutConst.s64be(property: 'amount')
     ], property: property);
   }
 
@@ -435,18 +435,18 @@ class PaymentOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "destination": destination.toVariantLayoutStruct(),
-      "asset": asset.toVariantLayoutStruct(),
-      "amount": amount
+      'destination': destination.toVariantLayoutStruct(),
+      'asset': asset.toVariantLayoutStruct(),
+      'amount': amount
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "destination": destination.address.toString(),
-      "asset": asset.toJson(),
-      "amount": amount
+      'destination': destination.address.toString(),
+      'asset': asset.toJson(),
+      'amount': amount
     };
   }
 }
@@ -467,13 +467,13 @@ class CreateAccountOperation extends OperationBody {
 
   factory CreateAccountOperation.fromStruct(Map<String, dynamic> json) {
     return CreateAccountOperation(
-        destination: StellarPublicKey.fromStruct(json.asMap("destination")),
-        startingBalance: json.as("startingBalance"));
+        destination: StellarPublicKey.fromStruct(json.asMap('destination')),
+        startingBalance: json.as('startingBalance'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "destination"),
-      LayoutConst.s64be(property: "startingBalance")
+      StellarPublicKey.layout(property: 'destination'),
+      LayoutConst.s64be(property: 'startingBalance')
     ], property: property);
   }
 
@@ -485,16 +485,16 @@ class CreateAccountOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "destination": destination.toLayoutStruct(),
-      "startingBalance": startingBalance
+      'destination': destination.toLayoutStruct(),
+      'startingBalance': startingBalance
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "destination": destination.toAddress().toString(),
-      "startingBalance": startingBalance
+      'destination': destination.toAddress().toString(),
+      'startingBalance': startingBalance
     };
   }
 }
@@ -524,13 +524,13 @@ class PathPaymentStrictReceiveOperation extends OperationBody {
   factory PathPaymentStrictReceiveOperation.fromStruct(
       Map<String, dynamic> json) {
     return PathPaymentStrictReceiveOperation(
-      sendAsset: StellarAsset.fromStruct(json.asMap("sendAsset")),
-      sendMax: json.as("sendMax"),
-      destination: MuxedAccount.fromStruct(json.asMap("destination")),
-      destAsset: StellarAsset.fromStruct(json.asMap("destAsset")),
-      destAmount: json.as("destAmount"),
+      sendAsset: StellarAsset.fromStruct(json.asMap('sendAsset')),
+      sendMax: json.as('sendMax'),
+      destination: MuxedAccount.fromStruct(json.asMap('destination')),
+      destAsset: StellarAsset.fromStruct(json.asMap('destAsset')),
+      destAmount: json.as('destAmount'),
       path: json
-          .asListOfMap("path")!
+          .asListOfMap('path')!
           .map((e) => StellarAsset.fromStruct(e))
           .toList(),
     );
@@ -544,16 +544,16 @@ class PathPaymentStrictReceiveOperation extends OperationBody {
       List<StellarAsset> path = const []})
       : sendMax = sendMax.asInt64,
         destAmount = destAmount.asInt64,
-        path = path.immutable.max(5, name: "Path"),
+        path = path.immutable.max(5, name: 'Path'),
         super(OperationType.pathPaymentStrictReceive);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarAsset.layout(property: "sendAsset"),
-      LayoutConst.s64be(property: "sendMax"),
-      MuxedAccount.layout(property: "destination"),
-      StellarAsset.layout(property: "destAsset"),
-      LayoutConst.s64be(property: "destAmount"),
-      LayoutConst.xdrVec(StellarAsset.layout(), property: "path")
+      StellarAsset.layout(property: 'sendAsset'),
+      LayoutConst.s64be(property: 'sendMax'),
+      MuxedAccount.layout(property: 'destination'),
+      StellarAsset.layout(property: 'destAsset'),
+      LayoutConst.s64be(property: 'destAmount'),
+      LayoutConst.xdrVec(StellarAsset.layout(), property: 'path')
     ], property: property);
   }
 
@@ -565,24 +565,24 @@ class PathPaymentStrictReceiveOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "sendAsset": sendAsset.toVariantLayoutStruct(),
-      "sendMax": sendMax,
-      "destination": destination.toVariantLayoutStruct(),
-      "destAsset": destAsset.toVariantLayoutStruct(),
-      "destAmount": destAmount,
-      "path": path.map((e) => e.toVariantLayoutStruct()).toList()
+      'sendAsset': sendAsset.toVariantLayoutStruct(),
+      'sendMax': sendMax,
+      'destination': destination.toVariantLayoutStruct(),
+      'destAsset': destAsset.toVariantLayoutStruct(),
+      'destAmount': destAmount,
+      'path': path.map((e) => e.toVariantLayoutStruct()).toList()
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "sendAsset": sendAsset.toJson(),
-      "sendMax": sendMax,
-      "destination": destination.address.toString(),
-      "destAsset": destAsset.toJson(),
-      "destAmount": destAmount,
-      "path": path.map((e) => e.toJson()).toList()
+      'sendAsset': sendAsset.toJson(),
+      'sendMax': sendMax,
+      'destination': destination.address.toString(),
+      'destAsset': destAsset.toJson(),
+      'destAmount': destAmount,
+      'path': path.map((e) => e.toJson()).toList()
     };
   }
 }
@@ -613,19 +613,19 @@ class ManageSellOfferOperation extends OperationBody {
         super(OperationType.manageSellOffer);
   factory ManageSellOfferOperation.fromStruct(Map<String, dynamic> json) {
     return ManageSellOfferOperation(
-        selling: StellarAsset.fromStruct(json.asMap("selling")),
-        buying: StellarAsset.fromStruct(json.asMap("buying")),
-        amount: json.as("amount"),
-        price: StellarPrice.fromStruct(json.asMap("price")),
-        offerId: json.as("offerId"));
+        selling: StellarAsset.fromStruct(json.asMap('selling')),
+        buying: StellarAsset.fromStruct(json.asMap('buying')),
+        amount: json.as('amount'),
+        price: StellarPrice.fromStruct(json.asMap('price')),
+        offerId: json.as('offerId'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarAsset.layout(property: "selling"),
-      StellarAsset.layout(property: "buying"),
-      LayoutConst.s64be(property: "amount"),
-      StellarPrice.layout(property: "price"),
-      LayoutConst.s64be(property: "offerId"),
+      StellarAsset.layout(property: 'selling'),
+      StellarAsset.layout(property: 'buying'),
+      LayoutConst.s64be(property: 'amount'),
+      StellarPrice.layout(property: 'price'),
+      LayoutConst.s64be(property: 'offerId'),
     ], property: property);
   }
 
@@ -637,22 +637,22 @@ class ManageSellOfferOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "selling": selling.toVariantLayoutStruct(),
-      "buying": buying.toVariantLayoutStruct(),
-      "amount": amount,
-      "price": price.toLayoutStruct(),
-      "offerId": offerId
+      'selling': selling.toVariantLayoutStruct(),
+      'buying': buying.toVariantLayoutStruct(),
+      'amount': amount,
+      'price': price.toLayoutStruct(),
+      'offerId': offerId
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "selling": selling.toJson(),
-      "buying": buying.toJson(),
-      "amount": amount,
-      "price": price.toPrice(7),
-      "offerId": offerId.toString()
+      'selling': selling.toJson(),
+      'buying': buying.toJson(),
+      'amount': amount,
+      'price': price.toPrice(7),
+      'offerId': offerId.toString()
     };
   }
 }
@@ -683,18 +683,18 @@ class CreatePassiveSellOfferOperation extends OperationBody {
   factory CreatePassiveSellOfferOperation.fromStruct(
       Map<String, dynamic> json) {
     return CreatePassiveSellOfferOperation(
-      selling: StellarAsset.fromStruct(json.asMap("selling")),
-      buying: StellarAsset.fromStruct(json.asMap("buying")),
-      amount: json.as("amount"),
-      price: StellarPrice.fromStruct(json.asMap("price")),
+      selling: StellarAsset.fromStruct(json.asMap('selling')),
+      buying: StellarAsset.fromStruct(json.asMap('buying')),
+      amount: json.as('amount'),
+      price: StellarPrice.fromStruct(json.asMap('price')),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarAsset.layout(property: "selling"),
-      StellarAsset.layout(property: "buying"),
-      LayoutConst.s64be(property: "amount"),
-      StellarPrice.layout(property: "price"),
+      StellarAsset.layout(property: 'selling'),
+      StellarAsset.layout(property: 'buying'),
+      LayoutConst.s64be(property: 'amount'),
+      StellarPrice.layout(property: 'price'),
     ], property: property);
   }
 
@@ -706,20 +706,20 @@ class CreatePassiveSellOfferOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "selling": selling.toVariantLayoutStruct(),
-      "buying": buying.toVariantLayoutStruct(),
-      "amount": amount,
-      "price": price.toLayoutStruct()
+      'selling': selling.toVariantLayoutStruct(),
+      'buying': buying.toVariantLayoutStruct(),
+      'amount': amount,
+      'price': price.toLayoutStruct()
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "selling": selling.toJson(),
-      "buying": buying.toJson(),
-      "amount": amount,
-      "price": price.toPrice(7)
+      'selling': selling.toJson(),
+      'buying': buying.toJson(),
+      'amount': amount,
+      'price': price.toPrice(7)
     };
   }
 }
@@ -754,33 +754,33 @@ class SetOptionsOperation extends OperationBody {
   factory SetOptionsOperation.fromStruct(Map<String, dynamic> json) {
     return SetOptionsOperation(
         inflationDest: json.mybeAs<StellarPublicKey, Map<String, dynamic>>(
-            key: "inflationDest",
+            key: 'inflationDest',
             onValue: (e) => StellarPublicKey.fromStruct(e)),
         clearFlags: json.mybeAs<AuthFlag, int>(
-            key: "clearFlags", onValue: (e) => AuthFlag.fromValue(e)),
+            key: 'clearFlags', onValue: (e) => AuthFlag.fromValue(e)),
         setFlags: json.mybeAs<AuthFlag, int>(
-            key: "setFlags", onValue: (e) => AuthFlag.fromValue(e)),
-        masterWeight: json.as("masterWeight"),
-        highThreshold: json.as("highThreshold"),
-        lowThreshold: json.as("lowThreshold"),
-        medThreshold: json.as("medThreshold"),
-        homeDomain: json.as("homeDomain"),
+            key: 'setFlags', onValue: (e) => AuthFlag.fromValue(e)),
+        masterWeight: json.as('masterWeight'),
+        highThreshold: json.as('highThreshold'),
+        lowThreshold: json.as('lowThreshold'),
+        medThreshold: json.as('medThreshold'),
+        homeDomain: json.as('homeDomain'),
         signer: json.mybeAs<Signer, Map<String, dynamic>>(
-            key: "signer", onValue: (e) => Signer.fromStruct(e)));
+            key: 'signer', onValue: (e) => Signer.fromStruct(e)));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.optionalU32Be(StellarPublicKey.layout(),
-          property: "inflationDest"),
-      LayoutConst.optionalU32Be(LayoutConst.u32be(), property: "clearFlags"),
-      LayoutConst.optionalU32Be(LayoutConst.u32be(), property: "setFlags"),
-      LayoutConst.optionalU32Be(LayoutConst.u32be(), property: "masterWeight"),
-      LayoutConst.optionalU32Be(LayoutConst.u32be(), property: "lowThreshold"),
-      LayoutConst.optionalU32Be(LayoutConst.u32be(), property: "medThreshold"),
-      LayoutConst.optionalU32Be(LayoutConst.u32be(), property: "highThreshold"),
+          property: 'inflationDest'),
+      LayoutConst.optionalU32Be(LayoutConst.u32be(), property: 'clearFlags'),
+      LayoutConst.optionalU32Be(LayoutConst.u32be(), property: 'setFlags'),
+      LayoutConst.optionalU32Be(LayoutConst.u32be(), property: 'masterWeight'),
+      LayoutConst.optionalU32Be(LayoutConst.u32be(), property: 'lowThreshold'),
+      LayoutConst.optionalU32Be(LayoutConst.u32be(), property: 'medThreshold'),
+      LayoutConst.optionalU32Be(LayoutConst.u32be(), property: 'highThreshold'),
       LayoutConst.optionalU32Be(LayoutConst.xdrString(),
-          property: "homeDomain"),
-      LayoutConst.optionalU32Be(Signer.layout(), property: "signer"),
+          property: 'homeDomain'),
+      LayoutConst.optionalU32Be(Signer.layout(), property: 'signer'),
     ], property: property);
   }
 
@@ -808,30 +808,30 @@ class SetOptionsOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "inflationDest": inflationDest?.toLayoutStruct(),
-      "clearFlags": clearFlags?.value,
-      "setFlags": setFlags?.value,
-      "masterWeight": masterWeight,
-      "lowThreshold": lowThreshold,
-      "medThreshold": medThreshold,
-      "highThreshold": highThreshold,
-      "homeDomain": homeDomain,
-      "signer": signer?.toLayoutStruct()
+      'inflationDest': inflationDest?.toLayoutStruct(),
+      'clearFlags': clearFlags?.value,
+      'setFlags': setFlags?.value,
+      'masterWeight': masterWeight,
+      'lowThreshold': lowThreshold,
+      'medThreshold': medThreshold,
+      'highThreshold': highThreshold,
+      'homeDomain': homeDomain,
+      'signer': signer?.toLayoutStruct()
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "inflationDest": inflationDest?.toAddress().toString(),
-      "clearFlags": clearFlags?.value,
-      "setFlags": setFlags?.value,
-      "masterWeight": masterWeight,
-      "lowThreshold": lowThreshold,
-      "medThreshold": medThreshold,
-      "highThreshold": highThreshold,
-      "homeDomain": homeDomain,
-      "signer": signer?.toJson()
+      'inflationDest': inflationDest?.toAddress().toString(),
+      'clearFlags': clearFlags?.value,
+      'setFlags': setFlags?.value,
+      'masterWeight': masterWeight,
+      'lowThreshold': lowThreshold,
+      'medThreshold': medThreshold,
+      'highThreshold': highThreshold,
+      'homeDomain': homeDomain,
+      'signer': signer?.toJson()
     };
   }
 
@@ -855,13 +855,13 @@ class ChangeTrustOperation extends OperationBody {
         super(OperationType.changeTrust);
   factory ChangeTrustOperation.fromStruct(Map<String, dynamic> json) {
     return ChangeTrustOperation(
-        asset: ChangeTrustAsset.fromStruct(json.asMap("asset")),
-        limit: json.as("limit"));
+        asset: ChangeTrustAsset.fromStruct(json.asMap('asset')),
+        limit: json.as('limit'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ChangeTrustAsset.layout(property: "asset"),
-      LayoutConst.s64be(property: "limit"),
+      ChangeTrustAsset.layout(property: 'asset'),
+      LayoutConst.s64be(property: 'limit'),
     ], property: property);
   }
 
@@ -872,12 +872,12 @@ class ChangeTrustOperation extends OperationBody {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"asset": asset.toVariantLayoutStruct(), "limit": limit};
+    return {'asset': asset.toVariantLayoutStruct(), 'limit': limit};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"asset": asset.toJson(), "limit": limit.toString()};
+    return {'asset': asset.toJson(), 'limit': limit.toString()};
   }
 }
 
@@ -900,16 +900,16 @@ class AllowTrustOperation extends OperationBody {
       : super(OperationType.allowTrust);
   factory AllowTrustOperation.fromStruct(Map<String, dynamic> json) {
     return AllowTrustOperation(
-        trustor: StellarPublicKey.fromStruct(json.asMap("trustor")),
-        asset: AssetCode.fromStruct(json.asMap("asset")),
-        authorize: TrustAuthFlag.fromValue(json.as("authorize")));
+        trustor: StellarPublicKey.fromStruct(json.asMap('trustor')),
+        asset: AssetCode.fromStruct(json.asMap('asset')),
+        authorize: TrustAuthFlag.fromValue(json.as('authorize')));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "trustor"),
-      AssetCode.layout(property: "asset"),
-      LayoutConst.u32be(property: "authorize")
+      StellarPublicKey.layout(property: 'trustor'),
+      AssetCode.layout(property: 'asset'),
+      LayoutConst.u32be(property: 'authorize')
     ], property: property);
   }
 
@@ -921,18 +921,18 @@ class AllowTrustOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "trustor": trustor.toLayoutStruct(),
-      "asset": asset.toVariantLayoutStruct(),
-      "authorize": authorize.value
+      'trustor': trustor.toLayoutStruct(),
+      'asset': asset.toVariantLayoutStruct(),
+      'authorize': authorize.value
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "trustor": trustor.toAddress().toString(),
-      "asset": asset.toJson(),
-      "authorize": authorize.name
+      'trustor': trustor.toAddress().toString(),
+      'asset': asset.toJson(),
+      'authorize': authorize.name
     };
   }
 
@@ -949,11 +949,11 @@ class AccountMergeOperation extends OperationBody {
   AccountMergeOperation(this.account) : super(OperationType.accountMerge);
   factory AccountMergeOperation.fromStruct(Map<String, dynamic> json) {
     return AccountMergeOperation(
-        MuxedAccount.fromStruct(json.asMap("account")));
+        MuxedAccount.fromStruct(json.asMap('account')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      MuxedAccount.layout(property: "account"),
+      MuxedAccount.layout(property: 'account'),
     ], property: property);
   }
 
@@ -964,12 +964,12 @@ class AccountMergeOperation extends OperationBody {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"account": account.toVariantLayoutStruct()};
+    return {'account': account.toVariantLayoutStruct()};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"account": account.address.toScAddress()};
+    return {'account': account.address.toScAddress()};
   }
 
   @override
@@ -1013,20 +1013,20 @@ class ManageDataOperation extends OperationBody {
   final List<int>? dataValue;
   ManageDataOperation({required String dataName, List<int>? dataValue})
       : dataValue = dataValue?.asImmutableBytes
-            .max(StellarConst.dataValueLength, name: "dataValue"),
+            .max(StellarConst.dataValueLength, name: 'dataValue'),
         dataName = dataName.max(StellarConst.str64),
         super(OperationType.manageData);
 
   factory ManageDataOperation.fromStruct(Map<String, dynamic> json) {
     return ManageDataOperation(
-        dataName: json.as("dataName"), dataValue: json.asBytes("dataValue"));
+        dataName: json.as('dataName'), dataValue: json.asBytes('dataValue'));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.xdrString(property: "dataName"),
+      LayoutConst.xdrString(property: 'dataName'),
       LayoutConst.optionalU32Be(LayoutConst.xdrVecBytes(),
-          property: "dataValue"),
+          property: 'dataValue'),
     ], property: property);
   }
 
@@ -1037,14 +1037,14 @@ class ManageDataOperation extends OperationBody {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"dataName": dataName, "dataValue": dataValue};
+    return {'dataName': dataName, 'dataValue': dataValue};
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "dataName": dataName,
-      "dataValue": BytesUtils.tryToHexString(dataValue)
+      'dataName': dataName,
+      'dataValue': BytesUtils.tryToHexString(dataValue)
     };
   }
 }
@@ -1059,12 +1059,12 @@ class BumpSequenceOperation extends OperationBody {
       : bumpTo = bumpTo.asInt64,
         super(OperationType.bumpSequence);
   factory BumpSequenceOperation.fromStruct(Map<String, dynamic> json) {
-    return BumpSequenceOperation(json.as("bumpTo"));
+    return BumpSequenceOperation(json.as('bumpTo'));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.s64be(property: "bumpTo"),
+      LayoutConst.s64be(property: 'bumpTo'),
     ], property: property);
   }
 
@@ -1075,12 +1075,12 @@ class BumpSequenceOperation extends OperationBody {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"bumpTo": bumpTo};
+    return {'bumpTo': bumpTo};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"bumpTo": bumpTo};
+    return {'bumpTo': bumpTo};
   }
 
   @override
@@ -1113,19 +1113,19 @@ class ManageBuyOfferOperation extends OperationBody {
         super(OperationType.manageBuyOffer);
   factory ManageBuyOfferOperation.fromStruct(Map<String, dynamic> json) {
     return ManageBuyOfferOperation(
-        buyAmount: json.as("buyAmount"),
-        buying: StellarAsset.fromStruct(json.asMap("buying")),
-        selling: StellarAsset.fromStruct(json.asMap("selling")),
-        price: StellarPrice.fromStruct(json.asMap("price")),
-        offerId: json.as("offerId"));
+        buyAmount: json.as('buyAmount'),
+        buying: StellarAsset.fromStruct(json.asMap('buying')),
+        selling: StellarAsset.fromStruct(json.asMap('selling')),
+        price: StellarPrice.fromStruct(json.asMap('price')),
+        offerId: json.as('offerId'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarAsset.layout(property: "selling"),
-      StellarAsset.layout(property: "buying"),
-      LayoutConst.s64be(property: "buyAmount"),
-      StellarPrice.layout(property: "price"),
-      LayoutConst.s64be(property: "offerId"),
+      StellarAsset.layout(property: 'selling'),
+      StellarAsset.layout(property: 'buying'),
+      LayoutConst.s64be(property: 'buyAmount'),
+      StellarPrice.layout(property: 'price'),
+      LayoutConst.s64be(property: 'offerId'),
     ], property: property);
   }
 
@@ -1137,22 +1137,22 @@ class ManageBuyOfferOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "selling": selling.toVariantLayoutStruct(),
-      "buying": buying.toVariantLayoutStruct(),
-      "buyAmount": buyAmount,
-      "price": price.toLayoutStruct(),
-      "offerId": offerId
+      'selling': selling.toVariantLayoutStruct(),
+      'buying': buying.toVariantLayoutStruct(),
+      'buyAmount': buyAmount,
+      'price': price.toLayoutStruct(),
+      'offerId': offerId
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "selling": selling.toJson(),
-      "buying": buying.toJson(),
-      "buyAmount": buyAmount.toString(),
-      "price": price.toPrice(),
-      "offerId": offerId.toString()
+      'selling': selling.toJson(),
+      'buying': buying.toJson(),
+      'buyAmount': buyAmount.toString(),
+      'price': price.toPrice(),
+      'offerId': offerId.toString()
     };
   }
 }
@@ -1176,13 +1176,13 @@ class PathPaymentStrictSendOperation extends OperationBody {
   final List<StellarAsset> path;
   factory PathPaymentStrictSendOperation.fromStruct(Map<String, dynamic> json) {
     return PathPaymentStrictSendOperation(
-        sendAmount: json.as("sendAmount"),
-        destMin: json.as("destMin"),
-        sendAsset: StellarAsset.fromStruct(json.asMap("sendAsset")),
-        destAsset: StellarAsset.fromStruct(json.asMap("destAsset")),
-        destination: MuxedAccount.fromStruct(json.asMap("destination")),
+        sendAmount: json.as('sendAmount'),
+        destMin: json.as('destMin'),
+        sendAsset: StellarAsset.fromStruct(json.asMap('sendAsset')),
+        destAsset: StellarAsset.fromStruct(json.asMap('destAsset')),
+        destination: MuxedAccount.fromStruct(json.asMap('destination')),
         path: json
-            .asListOfMap("path")!
+            .asListOfMap('path')!
             .map((e) => StellarAsset.fromStruct(e))
             .toList());
   }
@@ -1196,16 +1196,16 @@ class PathPaymentStrictSendOperation extends OperationBody {
     List<StellarAsset> path = const [],
   })  : sendAmount = sendAmount.asInt64,
         destMin = destMin.asInt64,
-        path = path.immutable.max(5, name: "Path"),
+        path = path.immutable.max(5, name: 'Path'),
         super(OperationType.pathPaymentStrictSend);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarAsset.layout(property: "sendAsset"),
-      LayoutConst.s64be(property: "sendAmount"),
-      MuxedAccount.layout(property: "destination"),
-      StellarAsset.layout(property: "destAsset"),
-      LayoutConst.s64be(property: "destMin"),
-      LayoutConst.xdrVec(StellarAsset.layout(), property: "path")
+      StellarAsset.layout(property: 'sendAsset'),
+      LayoutConst.s64be(property: 'sendAmount'),
+      MuxedAccount.layout(property: 'destination'),
+      StellarAsset.layout(property: 'destAsset'),
+      LayoutConst.s64be(property: 'destMin'),
+      LayoutConst.xdrVec(StellarAsset.layout(), property: 'path')
     ], property: property);
   }
 
@@ -1217,24 +1217,24 @@ class PathPaymentStrictSendOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "sendAsset": sendAsset.toVariantLayoutStruct(),
-      "sendAmount": sendAmount,
-      "destination": destination.toVariantLayoutStruct(),
-      "destAsset": destAsset.toVariantLayoutStruct(),
-      "destMin": destMin,
-      "path": path.map((e) => e.toVariantLayoutStruct()).toList()
+      'sendAsset': sendAsset.toVariantLayoutStruct(),
+      'sendAmount': sendAmount,
+      'destination': destination.toVariantLayoutStruct(),
+      'destAsset': destAsset.toVariantLayoutStruct(),
+      'destMin': destMin,
+      'path': path.map((e) => e.toVariantLayoutStruct()).toList()
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "sendAsset": sendAsset.toJson(),
-      "sendAmount": sendAmount.toString(),
-      "destination": destination.address.toString(),
-      "destAsset": destAsset.toJson(),
-      "destMin": destMin.toString(),
-      "path": path.map((e) => e.toJson()).toList()
+      'sendAsset': sendAsset.toJson(),
+      'sendAmount': sendAmount.toString(),
+      'destination': destination.address.toString(),
+      'destAsset': destAsset.toJson(),
+      'destMin': destMin.toString(),
+      'path': path.map((e) => e.toJson()).toList()
     };
   }
 }
@@ -1252,24 +1252,24 @@ class CreateClaimableBalanceOperation extends OperationBody {
       required List<Claimant> claimants})
       : amount = amount.asInt64,
         claimants = claimants.immutable
-            .max(10, name: "claimants")
-            .min(1, name: "claimants"),
+            .max(10, name: 'claimants')
+            .min(1, name: 'claimants'),
         super(OperationType.createClaimableBalance);
   factory CreateClaimableBalanceOperation.fromStruct(
       Map<String, dynamic> json) {
     return CreateClaimableBalanceOperation(
-        asset: StellarAsset.fromStruct(json.asMap("asset")),
-        amount: json.as("amount"),
+        asset: StellarAsset.fromStruct(json.asMap('asset')),
+        amount: json.as('amount'),
         claimants: json
-            .asListOfMap("claimants")!
+            .asListOfMap('claimants')!
             .map((e) => Claimant.fromStruct(e))
             .toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarAsset.layout(property: "asset"),
-      LayoutConst.s64be(property: "amount"),
-      LayoutConst.xdrVec(Claimant.layout(), property: "claimants")
+      StellarAsset.layout(property: 'asset'),
+      LayoutConst.s64be(property: 'amount'),
+      LayoutConst.xdrVec(Claimant.layout(), property: 'claimants')
     ], property: property);
   }
 
@@ -1281,18 +1281,18 @@ class CreateClaimableBalanceOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "asset": asset.toVariantLayoutStruct(),
-      "amount": amount,
-      "claimants": claimants.map((e) => e.toVariantLayoutStruct()).toList()
+      'asset': asset.toVariantLayoutStruct(),
+      'amount': amount,
+      'claimants': claimants.map((e) => e.toVariantLayoutStruct()).toList()
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "asset": asset.toJson(),
-      "amount": amount.toString(),
-      "claimants": claimants.map((e) => e.toJson()).toList()
+      'asset': asset.toJson(),
+      'amount': amount.toString(),
+      'claimants': claimants.map((e) => e.toJson()).toList()
     };
   }
 }
@@ -1304,14 +1304,14 @@ class ClaimClaimableBalanceOperation extends OperationBody {
   final ClaimableBalanceId balanceID;
   factory ClaimClaimableBalanceOperation.fromStruct(Map<String, dynamic> json) {
     return ClaimClaimableBalanceOperation(
-        ClaimableBalanceId.fromStruct(json.asMap("balanceID")));
+        ClaimableBalanceId.fromStruct(json.asMap('balanceID')));
   }
   ClaimClaimableBalanceOperation(this.balanceID)
       : super(OperationType.claimClaimableBalance);
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [ClaimableBalanceId.layout(property: "balanceID")],
+        [ClaimableBalanceId.layout(property: 'balanceID')],
         property: property);
   }
 
@@ -1322,12 +1322,12 @@ class ClaimClaimableBalanceOperation extends OperationBody {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"balanceID": balanceID.toVariantLayoutStruct()};
+    return {'balanceID': balanceID.toVariantLayoutStruct()};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"balanceID": balanceID.toJson()};
+    return {'balanceID': balanceID.toJson()};
   }
 
   @override
@@ -1346,11 +1346,11 @@ class BeginSponsoringFutureReservesOperation extends OperationBody {
   factory BeginSponsoringFutureReservesOperation.fromStruct(
       Map<String, dynamic> json) {
     return BeginSponsoringFutureReservesOperation(
-        StellarPublicKey.fromStruct(json.asMap("sponsoredId")));
+        StellarPublicKey.fromStruct(json.asMap('sponsoredId')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [StellarPublicKey.layout(property: "sponsoredId")],
+        [StellarPublicKey.layout(property: 'sponsoredId')],
         property: property);
   }
 
@@ -1361,12 +1361,12 @@ class BeginSponsoringFutureReservesOperation extends OperationBody {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"sponsoredId": sponsoredId.toLayoutStruct()};
+    return {'sponsoredId': sponsoredId.toLayoutStruct()};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"sponsoredId": sponsoredId.toAddress().toString()};
+    return {'sponsoredId': sponsoredId.toAddress().toString()};
   }
 }
 
@@ -1404,11 +1404,11 @@ class RevokeSponsorshipOperation extends OperationBody {
       : super(OperationType.revokeSponsorship);
   factory RevokeSponsorshipOperation.fromStruct(Map<String, dynamic> json) {
     return RevokeSponsorshipOperation(
-        RevokeSponsorship.fromStruct(json.asMap("revokeSponsorship")));
+        RevokeSponsorship.fromStruct(json.asMap('revokeSponsorship')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [RevokeSponsorship.layout(property: "revokeSponsorship")],
+        [RevokeSponsorship.layout(property: 'revokeSponsorship')],
         property: property);
   }
 
@@ -1419,12 +1419,12 @@ class RevokeSponsorshipOperation extends OperationBody {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"revokeSponsorship": revokeSponsorship.toVariantLayoutStruct()};
+    return {'revokeSponsorship': revokeSponsorship.toVariantLayoutStruct()};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"revokeSponsorship": revokeSponsorship.toJson()};
+    return {'revokeSponsorship': revokeSponsorship.toJson()};
   }
 }
 
@@ -1441,15 +1441,15 @@ class ClawbackOperation extends OperationBody {
         super(OperationType.clawback);
   factory ClawbackOperation.fromStruct(Map<String, dynamic> json) {
     return ClawbackOperation(
-        asset: StellarAsset.fromStruct(json.asMap("asset")),
-        amount: json.as("amount"),
-        from: MuxedAccount.fromStruct(json.asMap("from")));
+        asset: StellarAsset.fromStruct(json.asMap('asset')),
+        amount: json.as('amount'),
+        from: MuxedAccount.fromStruct(json.asMap('from')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarAsset.layout(property: "asset"),
-      MuxedAccount.layout(property: "from"),
-      LayoutConst.s64be(property: "amount")
+      StellarAsset.layout(property: 'asset'),
+      MuxedAccount.layout(property: 'from'),
+      LayoutConst.s64be(property: 'amount')
     ], property: property);
   }
 
@@ -1461,18 +1461,18 @@ class ClawbackOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "asset": asset.toVariantLayoutStruct(),
-      "from": from.toVariantLayoutStruct(),
-      "amount": amount,
+      'asset': asset.toVariantLayoutStruct(),
+      'from': from.toVariantLayoutStruct(),
+      'amount': amount,
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "asset": asset.toJson(),
-      "from": from.address.toString(),
-      "amount": amount.toString(),
+      'asset': asset.toJson(),
+      'from': from.address.toString(),
+      'amount': amount.toString(),
     };
   }
 }
@@ -1487,11 +1487,11 @@ class ClawbackClaimableBalanceOperation extends OperationBody {
   factory ClawbackClaimableBalanceOperation.fromStruct(
       Map<String, dynamic> json) {
     return ClawbackClaimableBalanceOperation(
-        ClaimableBalanceId.fromStruct(json.asMap("balanceId")));
+        ClaimableBalanceId.fromStruct(json.asMap('balanceId')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ClaimableBalanceId.layout(property: "balanceId"),
+      ClaimableBalanceId.layout(property: 'balanceId'),
     ], property: property);
   }
 
@@ -1502,12 +1502,12 @@ class ClawbackClaimableBalanceOperation extends OperationBody {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"balanceId": balanceId.toVariantLayoutStruct()};
+    return {'balanceId': balanceId.toVariantLayoutStruct()};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"balanceId": balanceId.toJson()};
+    return {'balanceId': balanceId.toJson()};
   }
 }
 
@@ -1530,17 +1530,17 @@ class SetTrustLineFlagsOperation extends OperationBody {
       : super(OperationType.setTrustLineFlags);
   factory SetTrustLineFlagsOperation.fromStruct(Map<String, dynamic> json) {
     return SetTrustLineFlagsOperation(
-        asset: StellarAsset.fromStruct(json.asMap("asset")),
-        trustor: StellarPublicKey.fromStruct(json.asMap("trustor")),
-        clearFlags: TrustLineFlag.fromValue(json.as("clearFlags")),
-        setFlags: TrustLineFlag.fromValue(json.as("setFlags")));
+        asset: StellarAsset.fromStruct(json.asMap('asset')),
+        trustor: StellarPublicKey.fromStruct(json.asMap('trustor')),
+        clearFlags: TrustLineFlag.fromValue(json.as('clearFlags')),
+        setFlags: TrustLineFlag.fromValue(json.as('setFlags')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "trustor"),
-      StellarAsset.layout(property: "asset"),
-      LayoutConst.u32be(property: "clearFlags"),
-      LayoutConst.u32be(property: "setFlags"),
+      StellarPublicKey.layout(property: 'trustor'),
+      StellarAsset.layout(property: 'asset'),
+      LayoutConst.u32be(property: 'clearFlags'),
+      LayoutConst.u32be(property: 'setFlags'),
     ], property: property);
   }
 
@@ -1552,20 +1552,20 @@ class SetTrustLineFlagsOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "trustor": trustor.toLayoutStruct(),
-      "asset": asset.toVariantLayoutStruct(),
-      "clearFlags": clearFlags.value,
-      "setFlags": setFlags.value
+      'trustor': trustor.toLayoutStruct(),
+      'asset': asset.toVariantLayoutStruct(),
+      'clearFlags': clearFlags.value,
+      'setFlags': setFlags.value
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "trustor": trustor.toAddress().toString(),
-      "asset": asset.toJson(),
-      "clearFlags": clearFlags.name,
-      "setFlags": setFlags.name
+      'trustor': trustor.toAddress().toString(),
+      'asset': asset.toJson(),
+      'clearFlags': clearFlags.name,
+      'setFlags': setFlags.name
     };
   }
 
@@ -1590,27 +1590,27 @@ class LiquidityPoolDepositOperation extends OperationBody {
       required this.minPrice,
       required this.maxPrice})
       : liquidityPoolId = liquidityPoolId.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "liquidityPoolId"),
+            .exc(StellarConst.hash256Length, name: 'liquidityPoolId'),
         maxAmountA = maxAmountA.asInt64,
         maxAmountB = maxAmountB.asInt64,
         super(OperationType.liquidityPoolDeposit);
   factory LiquidityPoolDepositOperation.fromStruct(Map<String, dynamic> json) {
     return LiquidityPoolDepositOperation(
-      liquidityPoolId: json.asBytes("liquidityPoolId"),
-      maxAmountA: json.as("maxAmountA"),
-      maxAmountB: json.as("maxAmountB"),
-      minPrice: StellarPrice.fromStruct(json.asMap("minPrice")),
-      maxPrice: StellarPrice.fromStruct(json.asMap("maxPrice")),
+      liquidityPoolId: json.asBytes('liquidityPoolId'),
+      maxAmountA: json.as('maxAmountA'),
+      maxAmountB: json.as('maxAmountB'),
+      minPrice: StellarPrice.fromStruct(json.asMap('minPrice')),
+      maxPrice: StellarPrice.fromStruct(json.asMap('maxPrice')),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.hash256Length,
-          property: "liquidityPoolId"),
-      LayoutConst.s64be(property: "maxAmountA"),
-      LayoutConst.s64be(property: "maxAmountB"),
-      StellarPrice.layout(property: "minPrice"),
-      StellarPrice.layout(property: "maxPrice")
+          property: 'liquidityPoolId'),
+      LayoutConst.s64be(property: 'maxAmountA'),
+      LayoutConst.s64be(property: 'maxAmountB'),
+      StellarPrice.layout(property: 'minPrice'),
+      StellarPrice.layout(property: 'maxPrice')
     ], property: property);
   }
 
@@ -1622,22 +1622,22 @@ class LiquidityPoolDepositOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "liquidityPoolId": liquidityPoolId,
-      "maxAmountA": maxAmountA,
-      "maxAmountB": maxAmountB,
-      "minPrice": minPrice.toLayoutStruct(),
-      "maxPrice": maxPrice.toLayoutStruct()
+      'liquidityPoolId': liquidityPoolId,
+      'maxAmountA': maxAmountA,
+      'maxAmountB': maxAmountB,
+      'minPrice': minPrice.toLayoutStruct(),
+      'maxPrice': maxPrice.toLayoutStruct()
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "liquidityPoolId": BytesUtils.toHexString(liquidityPoolId, prefix: "0x"),
-      "maxAmountA": maxAmountA.toString(),
-      "maxAmountB": maxAmountB.toString(),
-      "minPrice": minPrice.toPrice(7),
-      "maxPrice": maxPrice.toPrice(7)
+      'liquidityPoolId': BytesUtils.toHexString(liquidityPoolId, prefix: '0x'),
+      'maxAmountA': maxAmountA.toString(),
+      'maxAmountB': maxAmountB.toString(),
+      'minPrice': minPrice.toPrice(7),
+      'maxPrice': maxPrice.toPrice(7)
     };
   }
 }
@@ -1657,26 +1657,26 @@ class LiquidityPoolWithdrawOperation extends OperationBody {
     required BigInt minAmountA,
     required BigInt minAmountB,
   })  : liquidityPoolId = liquidityPoolId.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "liquidityPoolId"),
+            .exc(StellarConst.hash256Length, name: 'liquidityPoolId'),
         amount = amount.asInt64,
         minAmountA = minAmountA.asInt64,
         minAmountB = minAmountB.asInt64,
         super(OperationType.liquidityPoolWithdraw);
   factory LiquidityPoolWithdrawOperation.fromStruct(Map<String, dynamic> json) {
     return LiquidityPoolWithdrawOperation(
-      liquidityPoolId: json.asBytes("liquidityPoolId"),
-      amount: json.as("amount"),
-      minAmountA: json.as("minAmountA"),
-      minAmountB: json.as("minAmountB"),
+      liquidityPoolId: json.asBytes('liquidityPoolId'),
+      amount: json.as('amount'),
+      minAmountA: json.as('minAmountA'),
+      minAmountB: json.as('minAmountB'),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.hash256Length,
-          property: "liquidityPoolId"),
-      LayoutConst.s64be(property: "amount"),
-      LayoutConst.s64be(property: "minAmountA"),
-      LayoutConst.s64be(property: "minAmountB"),
+          property: 'liquidityPoolId'),
+      LayoutConst.s64be(property: 'amount'),
+      LayoutConst.s64be(property: 'minAmountA'),
+      LayoutConst.s64be(property: 'minAmountB'),
     ], property: property);
   }
 
@@ -1688,20 +1688,20 @@ class LiquidityPoolWithdrawOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "liquidityPoolId": liquidityPoolId,
-      "amount": amount,
-      "minAmountA": minAmountA,
-      "minAmountB": minAmountB,
+      'liquidityPoolId': liquidityPoolId,
+      'amount': amount,
+      'minAmountA': minAmountA,
+      'minAmountB': minAmountB,
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "liquidityPoolId": BytesUtils.toHexString(liquidityPoolId, prefix: "0x"),
-      "amount": amount.toString(),
-      "minAmountA": minAmountA.toString(),
-      "minAmountB": minAmountB.toString(),
+      'liquidityPoolId': BytesUtils.toHexString(liquidityPoolId, prefix: '0x'),
+      'amount': amount.toString(),
+      'minAmountA': minAmountA.toString(),
+      'minAmountB': minAmountB.toString(),
     };
   }
 }
@@ -1722,9 +1722,9 @@ class InvokeHostFunctionOperation extends OperationBody {
         super(OperationType.invokeHostFunction);
   factory InvokeHostFunctionOperation.fromStruct(Map<String, dynamic> json) {
     return InvokeHostFunctionOperation(
-        hostFunction: HostFunction.fromStruct(json.asMap("hostFunction")),
+        hostFunction: HostFunction.fromStruct(json.asMap('hostFunction')),
         auth: json
-            .asListOfMap("auth")!
+            .asListOfMap('auth')!
             .map((e) => SorobanAuthorizationEntry.fromStruct(e))
             .toList());
   }
@@ -1738,8 +1738,8 @@ class InvokeHostFunctionOperation extends OperationBody {
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      HostFunction.layout(property: "hostFunction"),
-      LayoutConst.xdrVec(SorobanAuthorizationEntry.layout(), property: "auth")
+      HostFunction.layout(property: 'hostFunction'),
+      LayoutConst.xdrVec(SorobanAuthorizationEntry.layout(), property: 'auth')
     ], property: property);
   }
 
@@ -1751,16 +1751,16 @@ class InvokeHostFunctionOperation extends OperationBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "hostFunction": hostFunction.toVariantLayoutStruct(),
-      "auth": auth.map((e) => e.toLayoutStruct()).toList()
+      'hostFunction': hostFunction.toVariantLayoutStruct(),
+      'auth': auth.map((e) => e.toLayoutStruct()).toList()
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "hostFunction": hostFunction.toJson(),
-      "auth": auth.map((e) => e.toJson()).toList()
+      'hostFunction': hostFunction.toJson(),
+      'auth': auth.map((e) => e.toJson()).toList()
     };
   }
 }
@@ -1778,13 +1778,13 @@ class ExtendFootprintTTLOperation extends OperationBody {
         super(OperationType.extendFootprintTtl);
   factory ExtendFootprintTTLOperation.fromStruct(Map<String, dynamic> json) {
     return ExtendFootprintTTLOperation(
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")),
-        extendTo: json.as("extendTo"));
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')),
+        extendTo: json.as('extendTo'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ExtentionPointVoid.layout(property: "ext"),
-      LayoutConst.u32be(property: "extendTo"),
+      ExtentionPointVoid.layout(property: 'ext'),
+      LayoutConst.u32be(property: 'extendTo'),
     ], property: property);
   }
 
@@ -1795,12 +1795,12 @@ class ExtendFootprintTTLOperation extends OperationBody {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"extendTo": extendTo, "ext": ext.toVariantLayoutStruct()};
+    return {'extendTo': extendTo, 'ext': ext.toVariantLayoutStruct()};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"extendTo": extendTo};
+    return {'extendTo': extendTo};
   }
 
   @override
@@ -1817,10 +1817,10 @@ class RestoreFootprintOperation extends OperationBody {
 
   factory RestoreFootprintOperation.fromStruct(Map<String, dynamic> json) {
     return RestoreFootprintOperation(
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")));
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([ExtentionPointVoid.layout(property: "ext")],
+    return LayoutConst.struct([ExtentionPointVoid.layout(property: 'ext')],
         property: property);
   }
 
@@ -1831,7 +1831,7 @@ class RestoreFootprintOperation extends OperationBody {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"ext": ext.toVariantLayoutStruct()};
+    return {'ext': ext.toVariantLayoutStruct()};
   }
 
   @override

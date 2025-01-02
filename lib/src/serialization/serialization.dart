@@ -35,14 +35,14 @@ abstract class XDRSerialization {
 
 class XDRVariantDecodeResult {
   final Map<String, dynamic> result;
-  String get variantName => result["key"];
-  Map<String, dynamic> get value => result["value"];
+  String get variantName => result['key'];
+  Map<String, dynamic> get value => result['value'];
   XDRVariantDecodeResult(Map<String, dynamic> result)
       : result = result.immutable;
 
   @override
   String toString() {
-    return "$variantName: $value";
+    return '$variantName: $value';
   }
 }
 
@@ -50,9 +50,9 @@ abstract class XDRVariantSerialization extends XDRSerialization {
   const XDRVariantSerialization();
   static XDRVariantDecodeResult toVariantDecodeResult(
       Map<String, dynamic> json) {
-    if (json["key"] is! String || !json.containsKey("value")) {
+    if (json['key'] is! String || !json.containsKey('value')) {
       throw const DartStellarPlugingException(
-          "Invalid variant layout. only use enum layout to deserialize with `XDRVariantSerialization.deserialize` method.");
+          'Invalid variant layout. only use enum layout to deserialize with `XDRVariantSerialization.deserialize` method.');
     }
     return XDRVariantDecodeResult(json);
   }
@@ -61,9 +61,9 @@ abstract class XDRVariantSerialization extends XDRSerialization {
       {required List<int> bytes,
       required Layout<Map<String, dynamic>> layout}) {
     final json = layout.deserialize(bytes).value;
-    if (json["key"] is! String || !json.containsKey("value")) {
+    if (json['key'] is! String || !json.containsKey('value')) {
       throw const DartStellarPlugingException(
-          "Invalid variant layout. only use enum layout to deserialize with `XDRVariantSerialization.deserialize` method.");
+          'Invalid variant layout. only use enum layout to deserialize with `XDRVariantSerialization.deserialize` method.');
     }
     return json;
   }

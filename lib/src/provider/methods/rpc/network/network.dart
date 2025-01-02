@@ -5,7 +5,7 @@ import 'package:stellar_dart/src/provider/core/core.dart';
 /// This response will contain all the information needed to successfully submit transactions to the network this node serves.
 /// https://developers.stellar.org/docs/data/rpc/api-reference/methods/getNetwork
 class SorobanRequestGetNetwork
-    extends SorobanRequestParam<SorobanNetworkResponse, Map<String, dynamic>> {
+    extends SorobanRequest<SorobanNetworkResponse, Map<String, dynamic>> {
   SorobanRequestGetNetwork();
 
   @override

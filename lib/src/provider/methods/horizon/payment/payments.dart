@@ -10,7 +10,7 @@ import 'package:stellar_dart/src/provider/models/request/request_types.dart';
 /// by this endpoint include: create_account, payment, path_payment_strict_recieve, path_payment_strict_send, and account_merge
 /// https://developers.stellar.org/docs/data/horizon/api-reference/list-all-payments
 class HorizonRequestPayments
-    extends HorizonRequestParam<Map<String, dynamic>, Map<String, dynamic>> {
+    extends HorizonRequest<Map<String, dynamic>, Map<String, dynamic>> {
   const HorizonRequestPayments(
       {HorizonPaymentPaginationParams? paginationParams})
       : super(paginationParams: paginationParams);

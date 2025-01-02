@@ -1,11 +1,10 @@
 import 'package:stellar_dart/src/provider/core/core/core.dart';
 import 'package:stellar_dart/src/provider/core/core/methods.dart';
-import 'package:stellar_dart/src/provider/models/request/request_types.dart';
 
 /// This endpoint lists all available claimable balances.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/list-all-claimable-balances
 class HorizonRequestClaimableBalances
-    extends HorizonRequestParam<Map<String, dynamic>, Map<String, dynamic>> {
+    extends HorizonRequest<Map<String, dynamic>, Map<String, dynamic>> {
   /// Account ID of the sponsor. Every account in the response will either be sponsored by
   /// the given account ID or have a subentry (trustline, offer, or data entry) which is sponsored by the given account ID.
   final String? sponser;
@@ -20,8 +19,8 @@ class HorizonRequestClaimableBalances
     this.sponser,
     this.asset,
     this.claimant,
-    HorizonPaginationParams? paginationParams,
-  }) : super(paginationParams: paginationParams);
+    super.paginationParams,
+  });
 
   @override
   String get method => StellarHorizonMethods.claimableBalances.url;
@@ -31,5 +30,5 @@ class HorizonRequestClaimableBalances
 
   @override
   Map<String, dynamic> get queryParameters =>
-      {"sponser": sponser, "asset": asset, "claimant": claimant};
+      {'sponser': sponser, 'asset': asset, 'claimant': claimant};
 }

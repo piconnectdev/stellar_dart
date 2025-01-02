@@ -8,7 +8,7 @@ import 'package:stellar_dart/src/provider/models/request/request_types.dart';
 /// in which case it will start from that cursor. By setting the cursor value to now, you can stream transactions created since your request time.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/lp-retrieve-related-transactions
 class HorizonRequestLiquidityPoolTransactions
-    extends HorizonRequestParam<Map<String, dynamic>, Map<String, dynamic>> {
+    extends HorizonRequest<Map<String, dynamic>, Map<String, dynamic>> {
   /// A unique identifier for this liquidity pool.
   final String liquidityPoolId;
   const HorizonRequestLiquidityPoolTransactions(this.liquidityPoolId,

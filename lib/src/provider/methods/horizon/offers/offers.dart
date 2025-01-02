@@ -11,8 +11,8 @@ import 'package:stellar_dart/src/provider/models/response/offer.dart';
 ///  you must use a combination of selling_asset_type, selling_asset_issuer, and selling_asset_code
 /// for the selling asset, or a combination of buying_asset_type, buying_asset_issuer, and buying_asset_code for the buying asset.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/get-all-offers
-class HorizonRequestOffers extends HorizonRequestParam<
-    List<StellarOfferResponse>, Map<String, dynamic>> {
+class HorizonRequestOffers
+    extends HorizonRequest<List<StellarOfferResponse>, Map<String, dynamic>> {
   // Account ID of the sponsor. Every account in the response will either be sponsored by
   //the given account ID or have a subentry (trustline, offer, or data entry) which is sponsored by the given account ID.
   final String? sponser;
@@ -51,8 +51,7 @@ class HorizonRequestOffers extends HorizonRequestParam<
       this.buyingAssetType,
       this.buyingAssetIssuer,
       this.buyingAssetCode,
-      HorizonPaginationParams? paginationParams})
-      : super(paginationParams: paginationParams);
+      super.paginationParams});
 
   @override
   String get method => StellarHorizonMethods.offers.url;
@@ -62,19 +61,19 @@ class HorizonRequestOffers extends HorizonRequestParam<
 
   @override
   Map<String, dynamic> get queryParameters => {
-        "sponser": sponser,
-        "seller": seller,
-        "selling_asset_type": sellingAssetType?.name,
-        "selling_asset_issuer": sellingAssetIssuer,
-        "selling_asset_code": sellingAssetCode,
-        "buying_asset_type": buyingAssetType?.name,
-        "buying_asset_issuer": buyingAssetIssuer,
-        "buying_asset_code": buyingAssetCode
+        'sponser': sponser,
+        'seller': seller,
+        'selling_asset_type': sellingAssetType?.name,
+        'selling_asset_issuer': sellingAssetIssuer,
+        'selling_asset_code': sellingAssetCode,
+        'buying_asset_type': buyingAssetType?.name,
+        'buying_asset_issuer': buyingAssetIssuer,
+        'buying_asset_code': buyingAssetCode
       };
 
   @override
   List<StellarOfferResponse> onResonse(Map<String, dynamic> result) {
-    final records = (result["_embedded"]?["records"] as List?) ?? [];
+    final records = (result['_embedded']?['records'] as List?) ?? [];
     return records.map((e) => StellarOfferResponse.fromJson(e)).toList();
   }
 }

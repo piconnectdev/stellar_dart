@@ -3,11 +3,10 @@ import 'package:stellar_dart/stellar_dart.dart';
 import 'test_provider.dart';
 
 void main() async {
-  final sorbanTokenContract = File(
-      "/Users/macbookpro/Downloads/soroban-examples-21.6.0/token/target/wasm32-unknown-unknown/release/soroban_token_contract.wasm");
+  final sorbanTokenContract = File("path to wasm file");
   final wasmBytes = await sorbanTokenContract.readAsBytes();
 
-  final rpc = HorizonProvider(StellarHTTPProvider(
+  final rpc = StellarProvider(StellarHTTPProvider(
       url: "https://horizon-testnet.stellar.org",
       soroban: "https://soroban-testnet.stellar.org"));
 

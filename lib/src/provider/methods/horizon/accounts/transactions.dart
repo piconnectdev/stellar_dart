@@ -9,7 +9,7 @@ import 'package:stellar_dart/src/provider/models/request/request_types.dart';
 /// transactions created since your request time.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/get-transactions-by-account-id
 class HorizonRequestAccountTransactions
-    extends HorizonRequestParam<Map<String, dynamic>, Map<String, dynamic>> {
+    extends HorizonRequest<Map<String, dynamic>, Map<String, dynamic>> {
   const HorizonRequestAccountTransactions(this.accountId,
       {HorizonTransactionPaginationParams? paginationParams})
       : super(paginationParams: paginationParams);

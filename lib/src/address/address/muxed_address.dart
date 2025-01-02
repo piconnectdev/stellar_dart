@@ -41,14 +41,14 @@ class StellarMuxedAddress extends StellarAddress {
       {required List<int> publicKey, required BigInt accountId}) {
     try {
       final address = XlmAddrEncoder().encodeKey(publicKey,
-          {"addr_type": XlmAddrTypes.pubKey, "account_id": accountId});
+          {'addr_type': XlmAddrTypes.pubKey, 'account_id': accountId});
       final muxedAddress = XlmAddrEncoder().encodeKey(publicKey,
-          {"addr_type": XlmAddrTypes.muxed, "account_id": accountId});
+          {'addr_type': XlmAddrTypes.muxed, 'account_id': accountId});
       return StellarMuxedAddress._(
           address: address, accountId: accountId, muxedAddress: muxedAddress);
     } catch (e) {
-      throw StellarAddressException("Invalid public key.",
-          details: {"stack": e.toString()});
+      throw StellarAddressException('Invalid public key.',
+          details: {'stack': e.toString()});
     }
   }
 
@@ -61,9 +61,9 @@ class StellarMuxedAddress extends StellarAddress {
     try {
       final decode = XlmAddrDecoder().decode(address);
       if (decode.type != XlmAddrTypes.muxed) {
-        throw StellarAddressException("Incorrect address type.", details: {
-          "expected": XlmAddrTypes.muxed.name,
-          "type": decode.type.toString()
+        throw StellarAddressException('Incorrect address type.', details: {
+          'expected': XlmAddrTypes.muxed.name,
+          'type': decode.type.toString()
         });
       }
 
@@ -74,8 +74,8 @@ class StellarMuxedAddress extends StellarAddress {
     } on StellarAddressException {
       rethrow;
     } catch (e, s) {
-      throw StellarAddressException("Invalid Muxed address.",
-          details: {"error": e.toString(), "stack": s.toString()});
+      throw StellarAddressException('Invalid Muxed address.',
+          details: {'error': e.toString(), 'stack': s.toString()});
     }
   }
 
@@ -92,7 +92,7 @@ class StellarMuxedAddress extends StellarAddress {
 
   /// Equality operator for comparing two `StellarMuxedAddress` instances.
   @override
-  operator ==(other) {
+  bool operator ==(other) {
     if (other is! StellarMuxedAddress) return false;
     return other.accountId == accountId && other.muxedAddress == muxedAddress;
   }

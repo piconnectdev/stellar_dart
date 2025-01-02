@@ -8,10 +8,10 @@ class ResourcesCostResponse {
   const ResourcesCostResponse({required this.cpuInsns, required this.memBytes});
   factory ResourcesCostResponse.fromJson(Map<String, dynamic> json) {
     return ResourcesCostResponse(
-        cpuInsns: json["cpuInsns"], memBytes: json["memBytes"]);
+        cpuInsns: json['cpuInsns'], memBytes: json['memBytes']);
   }
   Map<String, dynamic> toJson() {
-    return {"cpuInsns": cpuInsns, "memBytes": memBytes};
+    return {'cpuInsns': cpuInsns, 'memBytes': memBytes};
   }
 }
 
@@ -65,9 +65,9 @@ class SorobanSimulateResponse {
     return SorobanSimulateResponse(
       latestLedger: json['latestLedger'] as int,
       minResourceFee: json['minResourceFee'] as String?,
-      cost: json["cost"] == null
+      cost: json['cost'] == null
           ? null
-          : ResourcesCostResponse.fromJson(json["cost"]),
+          : ResourcesCostResponse.fromJson(json['cost']),
       results: (json['results'] as List?)
           ?.map((result) => HostFunctionInvocationResult.fromJson(result))
           .toList(),
@@ -94,7 +94,7 @@ class HostFunctionInvocationResult {
 
   factory HostFunctionInvocationResult.fromJson(Map<String, dynamic> json) {
     return HostFunctionInvocationResult(
-        xdr: json['xdr'], auth: (json["auth"] as List).cast());
+        xdr: json['xdr'], auth: (json['auth'] as List).cast());
   }
   ScVal? get xdrResult {
     return ScVal.fromXdr(StringUtils.encode(xdr, type: StringEncoding.base64));
@@ -130,11 +130,11 @@ class StateChangeType {
   final int value;
   const StateChangeType._({required this.name, required this.value});
   static const StateChangeType created =
-      StateChangeType._(name: "created", value: 1);
+      StateChangeType._(name: 'created', value: 1);
   static const StateChangeType updated =
-      StateChangeType._(name: "updated", value: 2);
+      StateChangeType._(name: 'updated', value: 2);
   static const StateChangeType deleted =
-      StateChangeType._(name: "deleted", value: 1);
+      StateChangeType._(name: 'deleted', value: 1);
   // created (1), updated (2), or deleted (3)
   static const List<StateChangeType> values = [created, updated, deleted];
 
@@ -142,14 +142,14 @@ class StateChangeType {
     return values.firstWhere(
       (e) => e.value == type || e.name == type,
       orElse: () => throw DartStellarPlugingException(
-          "Invalid StateChange type.",
-          details: {"type": type}),
+          'Invalid StateChange type.',
+          details: {'type': type}),
     );
   }
 
   @override
   String toString() {
-    return "StateChangeType.$name";
+    return 'StateChangeType.$name';
   }
 }
 

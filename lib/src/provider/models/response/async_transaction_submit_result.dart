@@ -25,17 +25,17 @@ class StellarTxStatus {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ScAddress type not found.",
+          'ScAddress type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "StellarTxStatus.$name";
+    return 'StellarTxStatus.$name';
   }
 }
 
@@ -50,9 +50,9 @@ class AsyncTransactionSubmissionResponse {
   factory AsyncTransactionSubmissionResponse.fromJson(
       Map<String, dynamic> json) {
     return AsyncTransactionSubmissionResponse(
-        errorResultXdr: json["errorResultXdr"],
-        txStatus: StellarTxStatus.fromName(json["tx_status"]),
-        hash: json["hash"]);
+        errorResultXdr: json['errorResultXdr'],
+        txStatus: StellarTxStatus.fromName(json['tx_status']),
+        hash: json['hash']);
   }
 
   TransactionResult? get errorResult {

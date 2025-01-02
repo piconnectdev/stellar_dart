@@ -11,28 +11,28 @@ class StellarNetwork {
   static const StellarNetwork mainnet = StellarNetwork._(
       passphrase: _StellarNetworkConst.mainnet,
       passphraseHash: _StellarNetworkConst.mainnetHash,
-      name: "Mainnet");
+      name: 'Mainnet');
   static const StellarNetwork testnet = StellarNetwork._(
       passphrase: _StellarNetworkConst.testnet,
       passphraseHash: _StellarNetworkConst.testnetHash,
-      name: "Testnet");
+      name: 'Testnet');
   static const StellarNetwork futurenet = StellarNetwork._(
       passphrase: _StellarNetworkConst.future,
       passphraseHash: _StellarNetworkConst.futureHash,
-      name: "Futurenet");
+      name: 'Futurenet');
   static const List<StellarNetwork> values = [mainnet, testnet, futurenet];
   static StellarNetwork fromPassphrase(String? passphrase) {
     return values.firstWhere((e) => e.passphrase == passphrase,
         orElse: () => throw DartStellarPlugingException(
-            "Network not found with the provided passphrase.",
-            details: {"passphrase": passphrase}));
+            'Network not found with the provided passphrase.',
+            details: {'passphrase': passphrase}));
   }
 }
 
 class _StellarNetworkConst {
-  static const mainnet = "Public Global Stellar Network ; September 2015";
-  static const testnet = "Test SDF Network ; September 2015";
-  static const future = "Test SDF Future Network ; October 2022";
+  static const mainnet = 'Public Global Stellar Network ; September 2015';
+  static const testnet = 'Test SDF Network ; September 2015';
+  static const future = 'Test SDF Future Network ; October 2022';
 
   static const List<int> mainnetHash = [
     122,

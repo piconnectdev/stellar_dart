@@ -71,7 +71,7 @@ class StellarHelper {
 
     if (finalNumerator == BigInt.zero || finalDenominator == BigInt.zero) {
       throw DartStellarPlugingException("Couldn't find approximation",
-          details: {"price": price});
+          details: {'price': price});
     }
 
     return StellarPrice(
@@ -83,10 +83,10 @@ class StellarHelper {
       {required String code, required int length}) {
     final codeBytes = StringUtils.encode(code);
     if (code.length > length) {
-      throw DartStellarPlugingException("Invalid asset code length.", details: {
-        "excepted": length,
-        "length": codeBytes.length,
-        "code": code
+      throw DartStellarPlugingException('Invalid asset code length.', details: {
+        'excepted': length,
+        'length': codeBytes.length,
+        'code': code
       });
     }
     final toBytes = List<int>.filled(length, 0);
@@ -107,7 +107,7 @@ class StellarHelper {
       return val.toString();
     }
     if (val is List<int>) {
-      return BytesUtils.tryToHexString(val, prefix: "0x") ?? val;
+      return BytesUtils.tryToHexString(val, prefix: '0x') ?? val;
     }
     if (val is List) {
       return val.map(toReadableObject).toList();

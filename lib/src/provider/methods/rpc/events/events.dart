@@ -12,7 +12,7 @@ import 'package:stellar_dart/src/provider/core/core.dart';
 /// By default soroban-rpc retains the most recent 24 hours of events.
 /// https://developers.stellar.org/docs/data/rpc/api-reference/methods/getEvents
 class SorobanRequestGetEvents
-    extends SorobanRequestParam<SorobanEventResponse, Map<String, dynamic>> {
+    extends SorobanRequest<SorobanEventResponse, Map<String, dynamic>> {
   /// Ledger sequence number to start fetching responses from (inclusive).
   /// This method will return an error if startLedger is less than the oldest ledger stored in this node,
   /// or greater than the latest ledger seen by this node. If a cursor is included in the request, startLedger must be omitted.
@@ -25,15 +25,14 @@ class SorobanRequestGetEvents
   SorobanRequestGetEvents({
     required this.startLedger,
     required List<SorobanEventFilter> filters,
-    SorobanPaginationParams? pagination,
-  })  : filters = filters.immutable.max(5, name: "filters"),
-        super(pagination: pagination);
+    super.pagination,
+  }) : filters = filters.immutable.max(5, name: 'filters');
 
   @override
   Map<String, dynamic> get params => {
-        "startLedger": startLedger,
-        "filters": filters.map((e) => e.toJson()).toList(),
-        "pagination": pagination?.toJson()
+        'startLedger': startLedger,
+        'filters': filters.map((e) => e.toJson()).toList(),
+        'pagination': pagination?.toJson()
       };
 
   @override

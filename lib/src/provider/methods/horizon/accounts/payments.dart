@@ -8,7 +8,7 @@ import 'package:stellar_dart/src/provider/models/request/request_types.dart';
 //in which case it will start from that cursor. By setting the cursor value to now, you can stream payments created since your request time.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/get-payments-by-account-id
 class HorizonRequestAccountPayments
-    extends HorizonRequestParam<Map<String, dynamic>, Map<String, dynamic>> {
+    extends HorizonRequest<Map<String, dynamic>, Map<String, dynamic>> {
   const HorizonRequestAccountPayments(this.accountId,
       {HorizonPaymentPaginationParams? paginationParams})
       : super(paginationParams: paginationParams);

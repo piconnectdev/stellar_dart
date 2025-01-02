@@ -1,7 +1,7 @@
 /// Support for doing something awesome.
 ///
 /// More dartdocs go here.
-library stellar_dart;
+library;
 
 export 'src/stellar_dart.dart';
 

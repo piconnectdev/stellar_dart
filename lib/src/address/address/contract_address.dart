@@ -8,9 +8,8 @@ import 'package:stellar_dart/src/models/models.dart';
 /// Extends `StellarAddress` and provides additional functionality specific to contract addresses.
 class StellarContractAddress extends StellarAddress {
   /// Private constructor that initializes the contract address and type.
-  StellarContractAddress._(
-      {required String address, required XlmAddrTypes type})
-      : super(baseAddress: address, type: type);
+  StellarContractAddress._({required String address, required super.type})
+      : super(baseAddress: address);
 
   /// Creates a `StellarContractAddress` from a raw contract ID byte array.
   ///
@@ -21,12 +20,12 @@ class StellarContractAddress extends StellarAddress {
   factory StellarContractAddress.fromBytes(List<int> contractId) {
     try {
       final encode = XlmAddrEncoder()
-          .encodeKey(contractId, {"addr_type": XlmAddrTypes.contract});
+          .encodeKey(contractId, {'addr_type': XlmAddrTypes.contract});
       return StellarContractAddress._(
           address: encode, type: XlmAddrTypes.contract);
     } catch (s, e) {
-      throw StellarAddressException("Invalid contract address bytes.",
-          details: {"error": e.toString(), "stack": s.toString()});
+      throw StellarAddressException('Invalid contract address bytes.',
+          details: {'error': e.toString(), 'stack': s.toString()});
     }
   }
 
@@ -40,17 +39,17 @@ class StellarContractAddress extends StellarAddress {
     try {
       final decode = XlmAddrDecoder().decode(address);
       if (decode.type != XlmAddrTypes.contract) {
-        throw StellarAddressException("Incorrect address type.", details: {
-          "expected": XlmAddrTypes.contract.name,
-          "type": decode.type.toString()
+        throw StellarAddressException('Incorrect address type.', details: {
+          'expected': XlmAddrTypes.contract.name,
+          'type': decode.type.toString()
         });
       }
       return StellarContractAddress._(address: address, type: decode.type);
     } on StellarAddressException {
       rethrow;
     } catch (e, s) {
-      throw StellarAddressException("Invalid Stellar contract address.",
-          details: {"error": e.toString(), "stack": s.toString()});
+      throw StellarAddressException('Invalid Stellar contract address.',
+          details: {'error': e.toString(), 'stack': s.toString()});
     }
   }
 
@@ -62,7 +61,7 @@ class StellarContractAddress extends StellarAddress {
 
   /// Equality operator for comparing two `StellarContractAddress` instances.
   @override
-  operator ==(other) {
+  bool operator ==(other) {
     if (other is! StellarContractAddress) return false;
     return other.baseAddress == baseAddress;
   }

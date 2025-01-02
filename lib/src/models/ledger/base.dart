@@ -4,6 +4,7 @@ import 'package:stellar_dart/src/constants/constant.dart';
 import 'package:stellar_dart/src/exception/exception.dart';
 import 'package:stellar_dart/src/helper/helper.dart';
 import 'package:stellar_dart/src/keypair/keypair.dart';
+import 'package:stellar_dart/src/models/models.dart';
 import 'package:stellar_dart/src/models/operations/operation.dart';
 import 'package:stellar_dart/src/serialization/serialization.dart';
 import 'package:stellar_dart/src/utils/validator.dart';
@@ -44,17 +45,17 @@ class LedgerEntryType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "LedgerEntry type not found.",
+          'LedgerEntry type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "LedgerEntryType.$name";
+    return 'LedgerEntryType.$name';
   }
 }
 
@@ -90,8 +91,8 @@ abstract class LedgerEntryData extends XDRVariantSerialization {
       case LedgerEntryType.ttl:
         return TTLEntery.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid LedgerEntry type.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Invalid LedgerEntry type.',
+            details: {'type': type.name});
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -150,8 +151,8 @@ abstract class LedgerEntryData extends XDRVariantSerialization {
                   property: type.name,
                   index: type.value);
             default:
-              throw DartStellarPlugingException("Invalid LedgerEntry type.",
-                  details: {"type": type.name});
+              throw DartStellarPlugingException('Invalid LedgerEntry type.',
+                  details: {'type': type.name});
           }
         }),
         property: property);
@@ -173,12 +174,12 @@ class Liabilities extends XDRSerialization {
       : buying = buying.asInt64,
         selling = selling.asInt64;
   factory Liabilities.fromStruct(Map<String, dynamic> json) {
-    return Liabilities(buying: json.as("buying"), selling: json.as("selling"));
+    return Liabilities(buying: json.as('buying'), selling: json.as('selling'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.s64be(property: "buying"),
-      LayoutConst.s64be(property: "selling"),
+      LayoutConst.s64be(property: 'buying'),
+      LayoutConst.s64be(property: 'selling'),
     ], property: property);
   }
 
@@ -189,7 +190,7 @@ class Liabilities extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"buying": buying, "selling": selling};
+    return {'buying': buying, 'selling': selling};
   }
 }
 
@@ -222,7 +223,7 @@ class AccountEntry extends LedgerEntryData {
       required List<Signer> signers,
       required this.ext})
       : homeDomain = homeDomain.max(32),
-        thresholds = thresholds.asImmutableBytes.max(4, name: "thresholds"),
+        thresholds = thresholds.asImmutableBytes.max(4, name: 'thresholds'),
         signers = signers.immutable,
         balance = balance.asInt64,
         seqNum = seqNum.asInt64,
@@ -231,36 +232,36 @@ class AccountEntry extends LedgerEntryData {
         super(LedgerEntryType.account);
   factory AccountEntry.fromStruct(Map<String, dynamic> json) {
     return AccountEntry(
-        accountId: StellarPublicKey.fromStruct(json.asMap("accountId")),
-        balance: json.as("balance"),
-        seqNum: json.as("seqNum"),
-        numSubEntries: json.as("numSubEntries"),
-        flags: json.as("flags"),
-        homeDomain: json.as("homeDomain"),
+        accountId: StellarPublicKey.fromStruct(json.asMap('accountId')),
+        balance: json.as('balance'),
+        seqNum: json.as('seqNum'),
+        numSubEntries: json.as('numSubEntries'),
+        flags: json.as('flags'),
+        homeDomain: json.as('homeDomain'),
         signers: json
-            .asListOfMap("signers")!
+            .asListOfMap('signers')!
             .map((e) => Signer.fromStruct(e))
             .toList(),
-        thresholds: json.asBytes("thresholds"),
-        ext: AccountEntryExt.fromStruct(json.asMap("ext")),
+        thresholds: json.asBytes('thresholds'),
+        ext: AccountEntryExt.fromStruct(json.asMap('ext')),
         inflationDest: json.mybeAs<StellarPublicKey, Map<String, dynamic>>(
-            key: "inflationDest",
+            key: 'inflationDest',
             onValue: (p0) => StellarPublicKey.fromStruct(p0)));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "accountId"),
-      LayoutConst.s64be(property: "balance"),
-      LayoutConst.s64be(property: "seqNum"),
-      LayoutConst.u32be(property: "numSubEntries"),
+      StellarPublicKey.layout(property: 'accountId'),
+      LayoutConst.s64be(property: 'balance'),
+      LayoutConst.s64be(property: 'seqNum'),
+      LayoutConst.u32be(property: 'numSubEntries'),
       LayoutConst.optionalU32Be(StellarPublicKey.layout(),
-          property: "inflationDest"),
-      LayoutConst.u32be(property: "flags"),
-      LayoutConst.xdrString(property: "homeDomain"),
+          property: 'inflationDest'),
+      LayoutConst.u32be(property: 'flags'),
+      LayoutConst.xdrString(property: 'homeDomain'),
       LayoutConst.fixedBlobN(StellarConst.thresHoldsLen,
-          property: "thresholds"),
-      LayoutConst.xdrVec(Signer.layout(), property: "signers"),
-      AccountEntryExt.layout(property: "ext")
+          property: 'thresholds'),
+      LayoutConst.xdrVec(Signer.layout(), property: 'signers'),
+      AccountEntryExt.layout(property: 'ext')
     ], property: property);
   }
 
@@ -272,16 +273,16 @@ class AccountEntry extends LedgerEntryData {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "ext": ext.toVariantLayoutStruct(),
-      "signers": signers.map((e) => e.toLayoutStruct()).toList(),
-      "thresholds": thresholds,
-      "homeDomain": homeDomain,
-      "flags": flags,
-      "inflationDest": inflationDest?.toLayoutStruct(),
-      "numSubEntries": numSubEntries,
-      "seqNum": seqNum,
-      "balance": balance,
-      "accountId": accountId.toLayoutStruct(),
+      'ext': ext.toVariantLayoutStruct(),
+      'signers': signers.map((e) => e.toLayoutStruct()).toList(),
+      'thresholds': thresholds,
+      'homeDomain': homeDomain,
+      'flags': flags,
+      'inflationDest': inflationDest?.toLayoutStruct(),
+      'numSubEntries': numSubEntries,
+      'seqNum': seqNum,
+      'balance': balance,
+      'accountId': accountId.toLayoutStruct(),
     };
   }
 }
@@ -339,15 +340,15 @@ class AccountEntryExtensionV3 extends XDRSerialization {
         seqLedger = seqLedger.asUint32;
   factory AccountEntryExtensionV3.fromStruct(Map<String, dynamic> json) {
     return AccountEntryExtensionV3(
-        seqLedger: json.as("seqLedger"),
-        seqTime: json.as("seqTime"),
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")));
+        seqLedger: json.as('seqLedger'),
+        seqTime: json.as('seqTime'),
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ExtentionPointVoid.layout(property: "ext"),
-      LayoutConst.u32be(property: "seqLedger"),
-      LayoutConst.u64be(property: "seqTime")
+      ExtentionPointVoid.layout(property: 'ext'),
+      LayoutConst.u32be(property: 'seqLedger'),
+      LayoutConst.u64be(property: 'seqTime')
     ], property: property);
   }
 
@@ -359,9 +360,9 @@ class AccountEntryExtensionV3 extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "ext": ext.toVariantLayoutStruct(),
-      "seqLedger": seqLedger,
-      "seqTime": seqTime
+      'ext': ext.toVariantLayoutStruct(),
+      'seqLedger': seqLedger,
+      'seqTime': seqTime
     };
   }
 }
@@ -386,7 +387,7 @@ class AccountEntryExtensionV3Ext extends XDRVariantSerialization {
             v3: AccountEntryExtensionV3.fromStruct(decode.value));
       default:
         throw const DartStellarPlugingException(
-            "Invalid AccountEntryExtensionV3Ext extension.");
+            'Invalid AccountEntryExtensionV3Ext extension.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -440,34 +441,34 @@ class AccountEntryExtensionV2 extends XDRSerialization {
   })  : numSponsored = numSponsored.asUint32,
         numSponsoring = numSponsoring.asUint32,
         signerSponsoringIDs =
-            signerSponsoringIDs.immutable.max(20, name: "signerSponsoringIDs");
+            signerSponsoringIDs.immutable.max(20, name: 'signerSponsoringIDs');
   factory AccountEntryExtensionV2.fromStruct(Map<String, dynamic> json) {
     return AccountEntryExtensionV2(
-        numSponsored: json.as("numSponsored"),
-        numSponsoring: json.as("numSponsoring"),
-        signerSponsoringIDs: json.as<List>("signerSponsoringIDs").map((e) {
+        numSponsored: json.as('numSponsored'),
+        numSponsoring: json.as('numSponsoring'),
+        signerSponsoringIDs: json.as<List>('signerSponsoringIDs').map((e) {
           if (e == null) return null;
           try {
             final data = Map<String, dynamic>.from(e);
             return StellarPublicKey.fromStruct(data);
           } catch (e, s) {
-            throw DartStellarPlugingException("Incorrect value.", details: {
-              "key": "signerSponsoringIDs",
-              "data": json["signerSponsoringIDs"],
-              "error": e.toString(),
-              "stack": s.toString()
+            throw DartStellarPlugingException('Incorrect value.', details: {
+              'key': 'signerSponsoringIDs',
+              'data': json['signerSponsoringIDs'],
+              'error': e.toString(),
+              'stack': s.toString()
             });
           }
         }).toList(),
-        ext: AccountEntryExtensionV3Ext.fromStruct(json.asMap("ext")));
+        ext: AccountEntryExtensionV3Ext.fromStruct(json.asMap('ext')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "numSponsored"),
-      LayoutConst.u32be(property: "numSponsoring"),
+      LayoutConst.u32be(property: 'numSponsored'),
+      LayoutConst.u32be(property: 'numSponsoring'),
       LayoutConst.xdrVec(LayoutConst.optionalU32Be(StellarPublicKey.layout()),
-          property: "signerSponsoringIDs"),
-      AccountEntryExtensionV3Ext.layout(property: "ext")
+          property: 'signerSponsoringIDs'),
+      AccountEntryExtensionV3Ext.layout(property: 'ext')
     ], property: property);
   }
 
@@ -479,11 +480,11 @@ class AccountEntryExtensionV2 extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "numSponsored": numSponsored,
-      "numSponsoring": numSponsoring,
-      "signerSponsoringIDs":
+      'numSponsored': numSponsored,
+      'numSponsoring': numSponsoring,
+      'signerSponsoringIDs':
           signerSponsoringIDs.map((e) => e?.toLayoutStruct()).toList(),
-      "ext": ext.toVariantLayoutStruct()
+      'ext': ext.toVariantLayoutStruct()
     };
   }
 }
@@ -508,7 +509,7 @@ class AccountEntryExtensionV2Ext extends XDRVariantSerialization {
             v2: AccountEntryExtensionV2.fromStruct(decode.value));
       default:
         throw const DartStellarPlugingException(
-            "Invalid AccountEntryExtensionV2 extension.");
+            'Invalid AccountEntryExtensionV2 extension.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -555,14 +556,14 @@ class AccountEntryExtensionV1 extends XDRSerialization {
   const AccountEntryExtensionV1({required this.liabilities, required this.ext});
   factory AccountEntryExtensionV1.fromStruct(Map<String, dynamic> json) {
     return AccountEntryExtensionV1(
-      liabilities: Liabilities.fromStruct(json.asMap("liabilities")),
-      ext: AccountEntryExtensionV2Ext.fromStruct(json.asMap("ext")),
+      liabilities: Liabilities.fromStruct(json.asMap('liabilities')),
+      ext: AccountEntryExtensionV2Ext.fromStruct(json.asMap('ext')),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      Liabilities.layout(property: "liabilities"),
-      AccountEntryExtensionV2Ext.layout(property: "ext"),
+      Liabilities.layout(property: 'liabilities'),
+      AccountEntryExtensionV2Ext.layout(property: 'ext'),
     ], property: property);
   }
 
@@ -574,8 +575,8 @@ class AccountEntryExtensionV1 extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "liabilities": liabilities.toLayoutStruct(),
-      "ext": ext.toVariantLayoutStruct()
+      'liabilities': liabilities.toLayoutStruct(),
+      'ext': ext.toVariantLayoutStruct()
     };
   }
 }
@@ -599,7 +600,7 @@ class AccountEntryExt extends XDRVariantSerialization {
             v1: AccountEntryExtensionV1.fromStruct(decode.value));
       default:
         throw const DartStellarPlugingException(
-            "Invalid AccountEntry extension.");
+            'Invalid AccountEntry extension.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -649,13 +650,13 @@ class TrustLineEntryExtensionV2 extends XDRSerialization {
       : liquidityPoolUseCount = liquidityPoolUseCount.asInt32;
   factory TrustLineEntryExtensionV2.fromStruct(Map<String, dynamic> json) {
     return TrustLineEntryExtensionV2(
-        liquidityPoolUseCount: json.as("liquidityPoolUseCount"),
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")));
+        liquidityPoolUseCount: json.as('liquidityPoolUseCount'),
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.s32be(property: "liquidityPoolUseCount"),
-      ExtentionPointVoid.layout(property: "ext"),
+      LayoutConst.s32be(property: 'liquidityPoolUseCount'),
+      ExtentionPointVoid.layout(property: 'ext'),
     ], property: property);
   }
 
@@ -667,8 +668,8 @@ class TrustLineEntryExtensionV2 extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "liquidityPoolUseCount": liquidityPoolUseCount,
-      "ext": ext.toVariantLayoutStruct()
+      'liquidityPoolUseCount': liquidityPoolUseCount,
+      'ext': ext.toVariantLayoutStruct()
     };
   }
 }
@@ -687,7 +688,7 @@ class TrustLineEntryV2Ext extends XDRVariantSerialization {
             v2: TrustLineEntryExtensionV2.fromStruct(decode.value));
       default:
         throw const DartStellarPlugingException(
-            "Invalid TrustLineEntryExtensionV2 extension.");
+            'Invalid TrustLineEntryExtensionV2 extension.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -734,13 +735,13 @@ class TrustLineEntryV1 extends XDRSerialization {
   const TrustLineEntryV1({required this.liabilities, required this.ext});
   factory TrustLineEntryV1.fromStruct(Map<String, dynamic> json) {
     return TrustLineEntryV1(
-        liabilities: Liabilities.fromStruct(json.asMap("liabilities")),
-        ext: TrustLineEntryV2Ext.fromStruct(json.asMap("ext")));
+        liabilities: Liabilities.fromStruct(json.asMap('liabilities')),
+        ext: TrustLineEntryV2Ext.fromStruct(json.asMap('ext')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      Liabilities.layout(property: "liabilities"),
-      TrustLineEntryV2Ext.layout(property: "ext"),
+      Liabilities.layout(property: 'liabilities'),
+      TrustLineEntryV2Ext.layout(property: 'ext'),
     ], property: property);
   }
 
@@ -752,8 +753,8 @@ class TrustLineEntryV1 extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "liabilities": liabilities.toLayoutStruct(),
-      "ext": ext.toVariantLayoutStruct(),
+      'liabilities': liabilities.toLayoutStruct(),
+      'ext': ext.toVariantLayoutStruct(),
     };
   }
 }
@@ -771,7 +772,7 @@ class TrustLineEntryExt extends XDRVariantSerialization {
         return TrustLineEntryExt(v1: TrustLineEntryV1.fromStruct(decode.value));
       default:
         throw const DartStellarPlugingException(
-            "Invalid TrustLineEntryV1 extension.");
+            'Invalid TrustLineEntryV1 extension.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -846,21 +847,21 @@ class TrustLineEntry extends LedgerEntryData {
         super(LedgerEntryType.trustline);
   factory TrustLineEntry.fromStruct(Map<String, dynamic> json) {
     return TrustLineEntry(
-        accountId: StellarPublicKey.fromStruct(json.asMap("accountId")),
-        asset: StellarAsset.fromStruct(json.asMap("asset")),
-        balance: json.as("balance"),
-        limit: json.as("limit"),
-        flags: json.as("flags"),
-        ext: TrustLineEntryExt.fromStruct(json.asMap("ext")));
+        accountId: StellarPublicKey.fromStruct(json.asMap('accountId')),
+        asset: StellarAsset.fromStruct(json.asMap('asset')),
+        balance: json.as('balance'),
+        limit: json.as('limit'),
+        flags: json.as('flags'),
+        ext: TrustLineEntryExt.fromStruct(json.asMap('ext')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "accountId"),
-      StellarAsset.layout(property: "asset"),
-      LayoutConst.s64be(property: "balance"),
-      LayoutConst.s64be(property: "limit"),
-      LayoutConst.u32be(property: "flags"),
-      TrustLineEntryExt.layout(property: "ext")
+      StellarPublicKey.layout(property: 'accountId'),
+      StellarAsset.layout(property: 'asset'),
+      LayoutConst.s64be(property: 'balance'),
+      LayoutConst.s64be(property: 'limit'),
+      LayoutConst.u32be(property: 'flags'),
+      TrustLineEntryExt.layout(property: 'ext')
     ], property: property);
   }
 
@@ -872,12 +873,12 @@ class TrustLineEntry extends LedgerEntryData {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "accountId": accountId.toLayoutStruct(),
-      "asset": asset.toVariantLayoutStruct(),
-      "balance": balance,
-      "limit": limit,
-      "flags": flags,
-      "ext": ext.toVariantLayoutStruct()
+      'accountId': accountId.toLayoutStruct(),
+      'asset': asset.toVariantLayoutStruct(),
+      'balance': balance,
+      'limit': limit,
+      'flags': flags,
+      'ext': ext.toVariantLayoutStruct()
     };
   }
 }
@@ -893,12 +894,12 @@ class StellarPrice extends XDRSerialization {
   }
   factory StellarPrice.fromStruct(Map<String, dynamic> json) {
     return StellarPrice(
-        numerator: json.as("numerator"), denominator: json.as("denominator"));
+        numerator: json.as('numerator'), denominator: json.as('denominator'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.s32be(property: "numerator"),
-      LayoutConst.s32be(property: "denominator"),
+      LayoutConst.s32be(property: 'numerator'),
+      LayoutConst.s32be(property: 'denominator'),
     ], property: property);
   }
 
@@ -909,7 +910,7 @@ class StellarPrice extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"numerator": numerator, "denominator": denominator};
+    return {'numerator': numerator, 'denominator': denominator};
   }
 
   BigRational toBigRational() {
@@ -954,25 +955,25 @@ class OfferEntry extends LedgerEntryData {
         super(LedgerEntryType.offer);
   factory OfferEntry.fromStruct(Map<String, dynamic> json) {
     return OfferEntry(
-        amount: json.as("amount"),
-        buying: StellarAsset.fromStruct(json.asMap("buying")),
-        selling: StellarAsset.fromStruct(json.asMap("selling")),
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")),
-        flags: json.as("flags"),
-        offerId: json.as("offerId"),
-        price: StellarPrice.fromStruct(json.asMap("price")),
-        sellerId: StellarPublicKey.fromStruct(json.asMap("sellerId")));
+        amount: json.as('amount'),
+        buying: StellarAsset.fromStruct(json.asMap('buying')),
+        selling: StellarAsset.fromStruct(json.asMap('selling')),
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')),
+        flags: json.as('flags'),
+        offerId: json.as('offerId'),
+        price: StellarPrice.fromStruct(json.asMap('price')),
+        sellerId: StellarPublicKey.fromStruct(json.asMap('sellerId')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "sellerId"),
-      LayoutConst.s64be(property: "offerId"),
-      StellarAsset.layout(property: "selling"),
-      StellarAsset.layout(property: "buying"),
-      LayoutConst.s64be(property: "amount"),
-      StellarPrice.layout(property: "price"),
-      LayoutConst.u32be(property: "flags"),
-      ExtentionPointVoid.layout(property: "ext")
+      StellarPublicKey.layout(property: 'sellerId'),
+      LayoutConst.s64be(property: 'offerId'),
+      StellarAsset.layout(property: 'selling'),
+      StellarAsset.layout(property: 'buying'),
+      LayoutConst.s64be(property: 'amount'),
+      StellarPrice.layout(property: 'price'),
+      LayoutConst.u32be(property: 'flags'),
+      ExtentionPointVoid.layout(property: 'ext')
     ], property: property);
   }
 
@@ -984,14 +985,14 @@ class OfferEntry extends LedgerEntryData {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "sellerId": sellerId.toLayoutStruct(),
-      "offerId": offerId,
-      "selling": selling.toVariantLayoutStruct(),
-      "buying": buying.toVariantLayoutStruct(),
-      "amount": amount,
-      "price": price.toLayoutStruct(),
-      "flags": flags,
-      "ext": ext.toVariantLayoutStruct()
+      'sellerId': sellerId.toLayoutStruct(),
+      'offerId': offerId,
+      'selling': selling.toVariantLayoutStruct(),
+      'buying': buying.toVariantLayoutStruct(),
+      'amount': amount,
+      'price': price.toLayoutStruct(),
+      'flags': flags,
+      'ext': ext.toVariantLayoutStruct()
     };
   }
 }
@@ -1008,21 +1009,21 @@ class DataEntry extends LedgerEntryData {
       this.ext = const ExtentionPointVoid()})
       : dataName = dataName.max(StellarConst.str64),
         dataValue = dataValue.asImmutableBytes
-            .max(StellarConst.dataValueLength, name: "dataValue"),
+            .max(StellarConst.dataValueLength, name: 'dataValue'),
         super(LedgerEntryType.data);
   factory DataEntry.fromStruct(Map<String, dynamic> json) {
     return DataEntry(
-        accountId: StellarPublicKey.fromStruct(json.asMap("accountId")),
-        dataName: json.as("dataName"),
-        dataValue: json.asBytes("dataValue"),
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")));
+        accountId: StellarPublicKey.fromStruct(json.asMap('accountId')),
+        dataName: json.as('dataName'),
+        dataValue: json.asBytes('dataValue'),
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "accountId"),
-      LayoutConst.xdrString(property: "dataName"),
-      LayoutConst.xdrVecBytes(property: "dataValue"),
-      ExtentionPointVoid.layout(property: "ext"),
+      StellarPublicKey.layout(property: 'accountId'),
+      LayoutConst.xdrString(property: 'dataName'),
+      LayoutConst.xdrVecBytes(property: 'dataValue'),
+      ExtentionPointVoid.layout(property: 'ext'),
     ], property: property);
   }
 
@@ -1034,10 +1035,10 @@ class DataEntry extends LedgerEntryData {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "accountId": accountId.createLayout(),
-      "dataName": dataName,
-      "dataValue": dataValue,
-      "ext": ext.toVariantLayoutStruct()
+      'accountId': accountId.createLayout(),
+      'dataName': dataName,
+      'dataValue': dataValue,
+      'ext': ext.toVariantLayoutStruct()
     };
   }
 }
@@ -1051,13 +1052,13 @@ class ClaimableBalanceEntryExtensionV1 extends XDRSerialization {
   factory ClaimableBalanceEntryExtensionV1.fromStruct(
       Map<String, dynamic> json) {
     return ClaimableBalanceEntryExtensionV1(
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")),
-        flags: json.as("flags"));
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')),
+        flags: json.as('flags'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ExtentionPointVoid.layout(property: "ext"),
-      LayoutConst.u32be(property: "flags"),
+      ExtentionPointVoid.layout(property: 'ext'),
+      LayoutConst.u32be(property: 'flags'),
     ], property: property);
   }
 
@@ -1068,7 +1069,7 @@ class ClaimableBalanceEntryExtensionV1 extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"ext": ext.toVariantLayoutStruct(), "flags": flags};
+    return {'ext': ext.toVariantLayoutStruct(), 'flags': flags};
   }
 }
 
@@ -1086,7 +1087,7 @@ class ClaimableBalanceEntryExt extends XDRVariantSerialization {
             v1: ClaimableBalanceEntryExtensionV1.fromStruct(decode.value));
       default:
         throw const DartStellarPlugingException(
-            "Invalid TrustLineEntryV1 extension.");
+            'Invalid TrustLineEntryV1 extension.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -1132,23 +1133,23 @@ class ClaimableBalanceIdType {
   final int value;
   const ClaimableBalanceIdType._({required this.name, required this.value});
   static const ClaimableBalanceIdType v0 =
-      ClaimableBalanceIdType._(name: "V0", value: 0);
+      ClaimableBalanceIdType._(name: 'V0', value: 0);
   static const List<ClaimableBalanceIdType> values = [v0];
   static ClaimableBalanceIdType fromName(String? name) {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ClaimableBalanceId not found.",
+          'ClaimableBalanceId not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "ClaimableBalanceIdType.$name";
+    return 'ClaimableBalanceIdType.$name';
   }
 }
 
@@ -1163,8 +1164,8 @@ abstract class ClaimableBalanceId extends XDRVariantSerialization {
       case ClaimableBalanceIdType.v0:
         return ClaimableBalanceIdV0.fromStruct(decode.value);
       default:
-        throw StellarAddressException("Invalid ClaimableBalanceId type.",
-            details: {"type": type.name});
+        throw StellarAddressException('Invalid ClaimableBalanceId type.',
+            details: {'type': type.name});
     }
   }
 
@@ -1187,15 +1188,15 @@ class ClaimableBalanceIdV0 extends ClaimableBalanceId {
   final List<int> hash;
   ClaimableBalanceIdV0(List<int> hash)
       : hash = hash.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "ClaimableBalanceIdV0 Hash"),
+            .exc(StellarConst.hash256Length, name: 'ClaimableBalanceIdV0 Hash'),
         super(ClaimableBalanceIdType.v0);
   factory ClaimableBalanceIdV0.fromStruct(Map<String, dynamic> json) {
-    return ClaimableBalanceIdV0(json.asBytes("hash"));
+    return ClaimableBalanceIdV0(json.asBytes('hash'));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "hash")],
+        [LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'hash')],
         property: property);
   }
 
@@ -1206,7 +1207,7 @@ class ClaimableBalanceIdV0 extends ClaimableBalanceId {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"hash": hash};
+    return {'hash': hash};
   }
 }
 
@@ -1214,23 +1215,23 @@ class ClaimantType {
   final String name;
   final int value;
   const ClaimantType._({required this.name, required this.value});
-  static const ClaimantType v0 = ClaimantType._(name: "V0", value: 0);
+  static const ClaimantType v0 = ClaimantType._(name: 'V0', value: 0);
   static const List<ClaimantType> values = [v0];
   static ClaimantType fromName(String? name) {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "Claimant type not found.",
+          'Claimant type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "ClaimantType.$name";
+    return 'ClaimantType.$name';
   }
 }
 
@@ -1250,7 +1251,7 @@ abstract class Claimant extends XDRVariantSerialization {
       case ClaimantType.v0:
         return ClaimantV0.fromStruct(decode.value);
       default:
-        throw const DartStellarPlugingException("Invalid Claimant type.");
+        throw const DartStellarPlugingException('Invalid Claimant type.');
     }
   }
 
@@ -1270,13 +1271,13 @@ class ClaimantV0 extends Claimant {
       : super(ClaimantType.v0);
   factory ClaimantV0.fromStruct(Map<String, dynamic> json) {
     return ClaimantV0(
-        destination: StellarPublicKey.fromStruct(json.asMap("destination")),
-        predicate: ClaimPredicate.fromStruct(json.asMap("predicate")));
+        destination: StellarPublicKey.fromStruct(json.asMap('destination')),
+        predicate: ClaimPredicate.fromStruct(json.asMap('predicate')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "destination"),
-      ClaimPredicate.layout(property: "predicate"),
+      StellarPublicKey.layout(property: 'destination'),
+      ClaimPredicate.layout(property: 'predicate'),
     ], property: property);
   }
 
@@ -1293,8 +1294,8 @@ class ClaimantV0 extends Claimant {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "destination": destination.toLayoutStruct(),
-      "predicate": predicate.toVariantLayoutStruct(),
+      'destination': destination.toLayoutStruct(),
+      'predicate': predicate.toVariantLayoutStruct(),
     };
   }
 }
@@ -1304,17 +1305,17 @@ class ClaimPredicateType {
   final int value;
   const ClaimPredicateType._({required this.name, required this.value});
   static const ClaimPredicateType unconditional =
-      ClaimPredicateType._(name: "Unconditional", value: 0);
+      ClaimPredicateType._(name: 'Unconditional', value: 0);
   static const ClaimPredicateType and =
-      ClaimPredicateType._(name: "And", value: 1);
+      ClaimPredicateType._(name: 'And', value: 1);
   static const ClaimPredicateType or =
-      ClaimPredicateType._(name: "Or", value: 2);
+      ClaimPredicateType._(name: 'Or', value: 2);
   static const ClaimPredicateType not =
-      ClaimPredicateType._(name: "Not", value: 3);
+      ClaimPredicateType._(name: 'Not', value: 3);
   static const ClaimPredicateType beforeAbsoluteTime =
-      ClaimPredicateType._(name: "BeforeAbsoluteTime", value: 4);
+      ClaimPredicateType._(name: 'BeforeAbsoluteTime', value: 4);
   static const ClaimPredicateType beforeRelativeTime =
-      ClaimPredicateType._(name: "BeforeRelativeTime", value: 5);
+      ClaimPredicateType._(name: 'BeforeRelativeTime', value: 5);
   static const List<ClaimPredicateType> values = [
     unconditional,
     and,
@@ -1327,17 +1328,17 @@ class ClaimPredicateType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ClaimPredicate type not found.",
+          'ClaimPredicate type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "ClaimPredicateType.$name";
+    return 'ClaimPredicateType.$name';
   }
 }
 
@@ -1362,7 +1363,7 @@ abstract class ClaimPredicate extends XDRVariantSerialization {
         return ClaimPredicateBeforeRelativeTime.fromStruct(decode.value);
 
       default:
-        throw const DartStellarPlugingException("Invalid ClaimPredicate type.");
+        throw const DartStellarPlugingException('Invalid ClaimPredicate type.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -1403,7 +1404,7 @@ abstract class ClaimPredicate extends XDRVariantSerialization {
 
             default:
               throw const DartStellarPlugingException(
-                  "Invalid ClaimPredicate type.");
+                  'Invalid ClaimPredicate type.');
           }
         }),
         property: property);
@@ -1442,17 +1443,17 @@ class ClaimPredicateUnconditional extends ClaimPredicate {
 class ClaimPredicateAnd extends ClaimPredicate {
   final List<ClaimPredicate> andPredicates;
   ClaimPredicateAnd(List<ClaimPredicate> value)
-      : andPredicates = value.immutable.max(2, name: "ClaimPredicate"),
+      : andPredicates = value.immutable.max(2, name: 'ClaimPredicate'),
         super(ClaimPredicateType.and);
   factory ClaimPredicateAnd.fromStruct(Map<String, dynamic> json) {
     return ClaimPredicateAnd(json
-        .asListOfMap("andPredicates")!
+        .asListOfMap('andPredicates')!
         .map((e) => ClaimPredicate.fromStruct(e))
         .toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.xdrVec(ClaimPredicate.layout(), property: "andPredicates")
+      LayoutConst.xdrVec(ClaimPredicate.layout(), property: 'andPredicates')
     ], property: property);
   }
 
@@ -1464,7 +1465,7 @@ class ClaimPredicateAnd extends ClaimPredicate {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "andPredicates":
+      'andPredicates':
           andPredicates.map((e) => e.toVariantLayoutStruct()).toList()
     };
   }
@@ -1473,17 +1474,17 @@ class ClaimPredicateAnd extends ClaimPredicate {
 class ClaimPredicateOr extends ClaimPredicate {
   final List<ClaimPredicate> orPredicates;
   ClaimPredicateOr(List<ClaimPredicate> orPredicates)
-      : orPredicates = orPredicates.immutable.max(2, name: "ClaimPredicate"),
+      : orPredicates = orPredicates.immutable.max(2, name: 'ClaimPredicate'),
         super(ClaimPredicateType.or);
   factory ClaimPredicateOr.fromStruct(Map<String, dynamic> json) {
     return ClaimPredicateOr(json
-        .asListOfMap("orPredicates")!
+        .asListOfMap('orPredicates')!
         .map((e) => ClaimPredicate.fromStruct(e))
         .toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [LayoutConst.xdrVec(ClaimPredicate.layout(), property: "orPredicates")],
+        [LayoutConst.xdrVec(ClaimPredicate.layout(), property: 'orPredicates')],
         property: property);
   }
 
@@ -1495,7 +1496,7 @@ class ClaimPredicateOr extends ClaimPredicate {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "orPredicates":
+      'orPredicates':
           orPredicates.map((e) => e.toVariantLayoutStruct()).toList()
     };
   }
@@ -1507,13 +1508,13 @@ class ClaimPredicateNot extends ClaimPredicate {
   factory ClaimPredicateNot.fromStruct(Map<String, dynamic> json) {
     return ClaimPredicateNot(
       json.mybeAs<ClaimPredicate, Map<String, dynamic>>(
-          key: "notPredicate", onValue: (e) => ClaimPredicate.fromStruct(e)),
+          key: 'notPredicate', onValue: (e) => ClaimPredicate.fromStruct(e)),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.optionalU32Be(ClaimPredicate.layout(),
-          property: "notPredicate")
+          property: 'notPredicate')
     ], property: property);
   }
 
@@ -1524,7 +1525,7 @@ class ClaimPredicateNot extends ClaimPredicate {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"notPredicate": notPredicate?.toVariantLayoutStruct()};
+    return {'notPredicate': notPredicate?.toVariantLayoutStruct()};
   }
 }
 
@@ -1535,10 +1536,10 @@ class ClaimPredicateBeforeAbsoluteTime extends ClaimPredicate {
         super(ClaimPredicateType.beforeAbsoluteTime);
   factory ClaimPredicateBeforeAbsoluteTime.fromStruct(
       Map<String, dynamic> json) {
-    return ClaimPredicateBeforeAbsoluteTime(json.as("absBefore"));
+    return ClaimPredicateBeforeAbsoluteTime(json.as('absBefore'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([LayoutConst.s64be(property: "absBefore")],
+    return LayoutConst.struct([LayoutConst.s64be(property: 'absBefore')],
         property: property);
   }
 
@@ -1549,7 +1550,7 @@ class ClaimPredicateBeforeAbsoluteTime extends ClaimPredicate {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"absBefore": absBefore};
+    return {'absBefore': absBefore};
   }
 }
 
@@ -1560,11 +1561,11 @@ class ClaimPredicateBeforeRelativeTime extends ClaimPredicate {
         super(ClaimPredicateType.beforeRelativeTime);
   factory ClaimPredicateBeforeRelativeTime.fromStruct(
       Map<String, dynamic> json) {
-    return ClaimPredicateBeforeRelativeTime(json.as("relBefore"));
+    return ClaimPredicateBeforeRelativeTime(json.as('relBefore'));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([LayoutConst.s64be(property: "relBefore")],
+    return LayoutConst.struct([LayoutConst.s64be(property: 'relBefore')],
         property: property);
   }
 
@@ -1575,7 +1576,7 @@ class ClaimPredicateBeforeRelativeTime extends ClaimPredicate {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"relBefore": relBefore};
+    return {'relBefore': relBefore};
   }
 }
 
@@ -1591,27 +1592,27 @@ class ClaimableBalanceEntry extends LedgerEntryData {
       required this.asset,
       required BigInt amount,
       required this.ext})
-      : claimants = claimants.immutable.max(10, name: "claimants"),
+      : claimants = claimants.immutable.max(10, name: 'claimants'),
         amount = amount.asInt64,
         super(LedgerEntryType.claimableBalance);
   factory ClaimableBalanceEntry.fromStruct(Map<String, dynamic> json) {
     return ClaimableBalanceEntry(
-        amount: json.as("amount"),
-        balanceId: ClaimableBalanceId.fromStruct(json.asMap("balanceId")),
-        asset: StellarAsset.fromStruct(json.asMap("asset")),
+        amount: json.as('amount'),
+        balanceId: ClaimableBalanceId.fromStruct(json.asMap('balanceId')),
+        asset: StellarAsset.fromStruct(json.asMap('asset')),
         claimants: json
-            .asListOfMap("claimants")!
+            .asListOfMap('claimants')!
             .map((e) => Claimant.fromStruct(e))
             .toList(),
-        ext: ClaimableBalanceEntryExt.fromStruct(json.asMap("ext")));
+        ext: ClaimableBalanceEntryExt.fromStruct(json.asMap('ext')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ClaimableBalanceId.layout(property: "balanceId"),
-      LayoutConst.xdrVec(Claimant.layout(), property: "claimants"),
-      StellarAsset.layout(property: "asset"),
-      LayoutConst.u64(property: "amount"),
-      ClaimableBalanceEntryExt.layout(property: "ext")
+      ClaimableBalanceId.layout(property: 'balanceId'),
+      LayoutConst.xdrVec(Claimant.layout(), property: 'claimants'),
+      StellarAsset.layout(property: 'asset'),
+      LayoutConst.u64(property: 'amount'),
+      ClaimableBalanceEntryExt.layout(property: 'ext')
     ], property: property);
   }
 
@@ -1623,11 +1624,11 @@ class ClaimableBalanceEntry extends LedgerEntryData {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "balanceId": balanceId.toVariantLayoutStruct(),
-      "claimants": claimants.map((e) => e.toVariantLayoutStruct()).toList(),
-      "asset": asset.toVariantLayoutStruct(),
-      "amount": amount,
-      "ext": ext.toVariantLayoutStruct()
+      'balanceId': balanceId.toVariantLayoutStruct(),
+      'claimants': claimants.map((e) => e.toVariantLayoutStruct()).toList(),
+      'asset': asset.toVariantLayoutStruct(),
+      'amount': amount,
+      'ext': ext.toVariantLayoutStruct()
     };
   }
 }
@@ -1637,23 +1638,23 @@ class LiquidityPoolType {
   final String name;
   const LiquidityPoolType._({required this.value, required this.name});
   static const LiquidityPoolType liquidityPoolConstantProduct =
-      LiquidityPoolType._(name: "liquidityPoolConstantProduct", value: 0);
+      LiquidityPoolType._(name: 'liquidityPoolConstantProduct', value: 0);
   static const List<LiquidityPoolType> values = [liquidityPoolConstantProduct];
   static LiquidityPoolType fromName(String? name) {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "LiquidityPool type not found.",
+          'LiquidityPool type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "LiquidityPoolType.$name";
+    return 'LiquidityPoolType.$name';
   }
 }
 
@@ -1667,8 +1668,8 @@ abstract class LiquidityPoolEntryBody extends XDRVariantSerialization {
       case LiquidityPoolType.liquidityPoolConstantProduct:
         return LiquidityPoolEntryConstantProduct.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid LiquidityPool type.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Invalid LiquidityPool type.',
+            details: {'type': type.name});
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -1701,15 +1702,15 @@ class LiquidityPoolConstantProductParameters extends XDRSerialization {
   factory LiquidityPoolConstantProductParameters.fromStruct(
       Map<String, dynamic> json) {
     return LiquidityPoolConstantProductParameters(
-        assetA: StellarAsset.fromStruct(json.asMap("assetA")),
-        assetB: StellarAsset.fromStruct(json.asMap("assetB")),
-        fee: json.as("fee"));
+        assetA: StellarAsset.fromStruct(json.asMap('assetA')),
+        assetB: StellarAsset.fromStruct(json.asMap('assetB')),
+        fee: json.as('fee'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarAsset.layout(property: "assetA"),
-      StellarAsset.layout(property: "assetB"),
-      LayoutConst.s32be(property: "fee")
+      StellarAsset.layout(property: 'assetA'),
+      StellarAsset.layout(property: 'assetB'),
+      LayoutConst.s32be(property: 'fee')
     ], property: property);
   }
 
@@ -1721,9 +1722,9 @@ class LiquidityPoolConstantProductParameters extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "assetA": assetA.toVariantLayoutStruct(),
-      "assetB": assetB.toVariantLayoutStruct(),
-      "fee": fee
+      'assetA': assetA.toVariantLayoutStruct(),
+      'assetB': assetB.toVariantLayoutStruct(),
+      'fee': fee
     };
   }
 }
@@ -1757,20 +1758,20 @@ class LiquidityPoolEntryConstantProduct extends LiquidityPoolEntryBody {
       Map<String, dynamic> json) {
     return LiquidityPoolEntryConstantProduct(
       param: LiquidityPoolConstantProductParameters.fromStruct(
-          json.asMap("param")),
-      poolSharesTrustLineCount: json.as("poolSharesTrustLineCount"),
-      reserveA: json.as("reserveA"),
-      reserveB: json.as("reserveB"),
-      totalPoolShares: json.as("totalPoolShares"),
+          json.asMap('param')),
+      poolSharesTrustLineCount: json.as('poolSharesTrustLineCount'),
+      reserveA: json.as('reserveA'),
+      reserveB: json.as('reserveB'),
+      totalPoolShares: json.as('totalPoolShares'),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LiquidityPoolConstantProductParameters.layout(property: "param"),
-      LayoutConst.s64be(property: "reserveA"),
-      LayoutConst.s64be(property: "reserveB"),
-      LayoutConst.s64be(property: "totalPoolShares"),
-      LayoutConst.s64be(property: "poolSharesTrustLineCount"),
+      LiquidityPoolConstantProductParameters.layout(property: 'param'),
+      LayoutConst.s64be(property: 'reserveA'),
+      LayoutConst.s64be(property: 'reserveB'),
+      LayoutConst.s64be(property: 'totalPoolShares'),
+      LayoutConst.s64be(property: 'poolSharesTrustLineCount'),
     ], property: property);
   }
 
@@ -1782,11 +1783,11 @@ class LiquidityPoolEntryConstantProduct extends LiquidityPoolEntryBody {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "param": param.toLayoutStruct(),
-      "reserveA": reserveA,
-      "reserveB": reserveB,
-      "totalPoolShares": totalPoolShares,
-      "poolSharesTrustLineCount": poolSharesTrustLineCount
+      'param': param.toLayoutStruct(),
+      'reserveA': reserveA,
+      'reserveB': reserveB,
+      'totalPoolShares': totalPoolShares,
+      'poolSharesTrustLineCount': poolSharesTrustLineCount
     };
   }
 }
@@ -1796,18 +1797,18 @@ class LiquidityPoolEntry extends LedgerEntryData {
   final LiquidityPoolEntryBody body;
   LiquidityPoolEntry({required List<int> liquidityPoolId, required this.body})
       : liquidityPoolId = liquidityPoolId.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "liquidityPoolId"),
+            .exc(StellarConst.hash256Length, name: 'liquidityPoolId'),
         super(LedgerEntryType.liquidityPool);
   factory LiquidityPoolEntry.fromStruct(Map<String, dynamic> json) {
     return LiquidityPoolEntry(
-        liquidityPoolId: json.asBytes("liquidityPoolId"),
-        body: LiquidityPoolEntryBody.fromStruct(json.asMap("body")));
+        liquidityPoolId: json.asBytes('liquidityPoolId'),
+        body: LiquidityPoolEntryBody.fromStruct(json.asMap('body')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.hash256Length,
-          property: "liquidityPoolId"),
-      LiquidityPoolEntryBody.layout(property: "body")
+          property: 'liquidityPoolId'),
+      LiquidityPoolEntryBody.layout(property: 'body')
     ], property: property);
   }
 
@@ -1819,8 +1820,8 @@ class LiquidityPoolEntry extends LedgerEntryData {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "liquidityPoolId": liquidityPoolId,
-      "body": body.toVariantLayoutStruct()
+      'liquidityPoolId': liquidityPoolId,
+      'body': body.toVariantLayoutStruct()
     };
   }
 }
@@ -1830,25 +1831,25 @@ class ScAddressType {
   final int value;
   const ScAddressType._({required this.name, required this.value});
   static const ScAddressType account =
-      ScAddressType._(name: "account", value: 0);
+      ScAddressType._(name: 'account', value: 0);
   static const ScAddressType contract =
-      ScAddressType._(name: "contract", value: 1);
+      ScAddressType._(name: 'contract', value: 1);
   static const List<ScAddressType> values = [account, contract];
   static ScAddressType fromName(String? name) {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ScAddress type not found.",
+          'ScAddress type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "ScAddressType.$name";
+    return 'ScAddressType.$name';
   }
 }
 
@@ -1864,8 +1865,8 @@ abstract class ScAddress extends XDRVariantSerialization {
       case XlmAddrTypes.muxed:
         return ScAddressAccountId(address.toPublicKey());
       default:
-        throw DartStellarPlugingException("Invalid address type.",
-            details: {"type": address.type.name});
+        throw DartStellarPlugingException('Invalid address type.',
+            details: {'type': address.type.name});
     }
   }
   factory ScAddress.fromBase32Address(String address) {
@@ -1887,8 +1888,8 @@ abstract class ScAddress extends XDRVariantSerialization {
       case ScAddressType.contract:
         return ScAddressContract.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid ScAddress type.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Invalid ScAddress type.',
+            details: {'type': type.name});
     }
   }
 
@@ -1906,7 +1907,7 @@ class ScAddressAccountId extends ScAddress {
   const ScAddressAccountId(this.accountId) : super(ScAddressType.account);
   factory ScAddressAccountId.fromStruct(Map<String, dynamic> json) {
     return ScAddressAccountId(
-        StellarPublicKey.fromStruct(json.asMap("accountId")));
+        StellarPublicKey.fromStruct(json.asMap('accountId')));
   }
   factory ScAddressAccountId.fromAddress(StellarAddress address) {
     return ScAddressAccountId(address.toPublicKey());
@@ -1916,7 +1917,7 @@ class ScAddressAccountId extends ScAddress {
         StellarAddress.fromBase32Addr(address));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([StellarPublicKey.layout(property: "accountId")],
+    return LayoutConst.struct([StellarPublicKey.layout(property: 'accountId')],
         property: property);
   }
 
@@ -1927,7 +1928,7 @@ class ScAddressAccountId extends ScAddress {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"accountId": accountId.toLayoutStruct()};
+    return {'accountId': accountId.toLayoutStruct()};
   }
 
   @override
@@ -1945,11 +1946,11 @@ class ScAddressContract extends ScAddress {
   }
   factory ScAddressContract.fromStruct(Map<String, dynamic> json) {
     return ScAddressContract(
-        StellarContractAddress.fromBytes(json.asBytes("contractId")));
+        StellarContractAddress.fromBytes(json.asBytes('contractId')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "contractId")
+      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'contractId')
     ], property: property);
   }
 
@@ -1960,7 +1961,7 @@ class ScAddressContract extends ScAddress {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"contractId": contractId.keyBytes()};
+    return {'contractId': contractId.keyBytes()};
   }
 
   @override
@@ -1968,7 +1969,7 @@ class ScAddressContract extends ScAddress {
 
   @override
   Map<String, dynamic> toJson() {
-    return {"contractId": contractId.toString()};
+    return {'contractId': contractId.toString()};
   }
 }
 
@@ -2029,17 +2030,17 @@ class ScValueType {
   static ScValueType fromName(String? name) {
     return values.firstWhere(
       (e) => e.name == name,
-      orElse: () => throw DartStellarPlugingException("ScValue type not found.",
+      orElse: () => throw DartStellarPlugingException('ScValue type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "ScValueType.$name";
+    return 'ScValueType.$name';
   }
 }
 
@@ -2124,12 +2125,12 @@ abstract class ScVal<T> extends XDRVariantSerialization {
         val = ScValNonceKey.fromStruct(decode.value);
         break;
       default:
-        throw const DartStellarPlugingException("Invalid ScVal type.");
+        throw const DartStellarPlugingException('Invalid ScVal type.');
     }
 
     if (val is! ScVal<T>) {
-      throw DartStellarPlugingException("Incorrect SCval type casting.",
-          details: {"excepted": "$T", "ScVal": val.runtimeType});
+      throw DartStellarPlugingException('Incorrect SCval type casting.',
+          details: {'excepted': '$T', 'ScVal': val.runtimeType});
     }
     return val;
   }
@@ -2250,7 +2251,7 @@ abstract class ScVal<T> extends XDRVariantSerialization {
                   layout: ScValNonceKey.layout,
                   property: type.name);
             default:
-              throw const DartStellarPlugingException("Invalid ScVal type.");
+              throw const DartStellarPlugingException('Invalid ScVal type.');
           }
         }),
         property: property);
@@ -2266,8 +2267,8 @@ abstract class ScVal<T> extends XDRVariantSerialization {
 
   E cast<E extends ScVal>() {
     if (this is! E) {
-      throw DartStellarPlugingException("ScVal Casting failed.",
-          details: {"excepted": "$T", "type": "$runtimeType"});
+      throw DartStellarPlugingException('ScVal Casting failed.',
+          details: {'excepted': '$T', 'type': '$runtimeType'});
     }
     return this as E;
   }
@@ -2304,17 +2305,17 @@ class ScErrorType {
   static ScErrorType fromName(String? name) {
     return values.firstWhere(
       (e) => e.name == name,
-      orElse: () => throw DartStellarPlugingException("ScError type not found.",
+      orElse: () => throw DartStellarPlugingException('ScError type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "ScErrorType.$name";
+    return 'ScErrorType.$name';
   }
 }
 
@@ -2366,12 +2367,12 @@ class ScErrorContract extends ScError {
       : contractCode = contractCode.asUint32,
         super(ScErrorType.contract);
   factory ScErrorContract.fromStruct(Map<String, dynamic> json) {
-    return ScErrorContract(json.as("contractCode"));
+    return ScErrorContract(json.as('contractCode'));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "contractCode"),
+      LayoutConst.u32be(property: 'contractCode'),
     ], property: property);
   }
 
@@ -2382,16 +2383,16 @@ class ScErrorContract extends ScError {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"contractCode": contractCode};
+    return {'contractCode': contractCode};
   }
 }
 
 class ScErrorCode extends ScError {
-  ScErrorCode._(ScErrorType code) : super(code);
+  ScErrorCode._(super.code);
   factory ScErrorCode(ScErrorType code) {
     if (code == ScErrorType.contract) {
       throw const DartStellarPlugingException(
-          "Use `ScErrorContract` instead `ScErrorCode` for user-defined error code.");
+          'Use `ScErrorContract` instead `ScErrorCode` for user-defined error code.');
     }
     return ScErrorCode._(code);
   }
@@ -2415,12 +2416,12 @@ class ScValBoolean extends ScVal<bool> {
   ScValBoolean(bool bool) : super(type: ScValueType.boolType, value: bool);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.boolean32Be(property: "value"),
+      LayoutConst.boolean32Be(property: 'value'),
     ], property: property);
   }
 
   factory ScValBoolean.fromStruct(Map<String, dynamic> json) {
-    return ScValBoolean(json.as("value"));
+    return ScValBoolean(json.as('value'));
   }
 
   @override
@@ -2430,19 +2431,19 @@ class ScValBoolean extends ScVal<bool> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value};
+    return {'value': value};
   }
 }
 
 class ScValError extends ScVal<ScError> {
   ScValError(ScError value) : super(type: ScValueType.error, value: value);
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([ScError.layout(property: "value")],
+    return LayoutConst.struct([ScError.layout(property: 'value')],
         property: property);
   }
 
   factory ScValError.fromStruct(Map<String, dynamic> json) {
-    return ScValError(ScError.fromStruct(json.asMap("value")));
+    return ScValError(ScError.fromStruct(json.asMap('value')));
   }
 
   @override
@@ -2453,7 +2454,7 @@ class ScValError extends ScVal<ScError> {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "value": value.toVariantLayoutStruct(),
+      'value': value.toVariantLayoutStruct(),
     };
   }
 }
@@ -2462,12 +2463,12 @@ class ScValU32 extends ScVal<int> {
   ScValU32(int value) : super(type: ScValueType.u32, value: value.asUint32);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "value"),
+      LayoutConst.u32be(property: 'value'),
     ], property: property);
   }
 
   factory ScValU32.fromStruct(Map<String, dynamic> json) {
-    return ScValU32(json.as("value"));
+    return ScValU32(json.as('value'));
   }
 
   @override
@@ -2477,19 +2478,19 @@ class ScValU32 extends ScVal<int> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value};
+    return {'value': value};
   }
 }
 
 class ScValI32 extends ScVal<int> {
   ScValI32(int value) : super(type: ScValueType.i32, value: value.asInt32);
   factory ScValI32.fromStruct(Map<String, dynamic> json) {
-    return ScValI32(json.as("value"));
+    return ScValI32(json.as('value'));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.s32be(property: "value"),
+      LayoutConst.s32be(property: 'value'),
     ], property: property);
   }
 
@@ -2500,18 +2501,18 @@ class ScValI32 extends ScVal<int> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value};
+    return {'value': value};
   }
 }
 
 class ScValU64 extends ScVal<BigInt> {
   ScValU64(BigInt value) : super(type: ScValueType.u64, value: value.asUint64);
   factory ScValU64.fromStruct(Map<String, dynamic> json) {
-    return ScValU64(json.as("value"));
+    return ScValU64(json.as('value'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u64be(property: "value"),
+      LayoutConst.u64be(property: 'value'),
     ], property: property);
   }
 
@@ -2522,18 +2523,18 @@ class ScValU64 extends ScVal<BigInt> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value};
+    return {'value': value};
   }
 }
 
 class ScValI64 extends ScVal<BigInt> {
   ScValI64(BigInt value) : super(type: ScValueType.i64, value: value.asInt64);
   factory ScValI64.fromStruct(Map<String, dynamic> json) {
-    return ScValI64(json.as("value"));
+    return ScValI64(json.as('value'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.s64be(property: "value"),
+      LayoutConst.s64be(property: 'value'),
     ], property: property);
   }
 
@@ -2544,7 +2545,7 @@ class ScValI64 extends ScVal<BigInt> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value};
+    return {'value': value};
   }
 }
 
@@ -2552,11 +2553,11 @@ class ScValTimePoint extends ScVal<BigInt> {
   ScValTimePoint(BigInt value)
       : super(type: ScValueType.timepoint, value: value.asUint64);
   factory ScValTimePoint.fromStruct(Map<String, dynamic> json) {
-    return ScValTimePoint(json.as("value"));
+    return ScValTimePoint(json.as('value'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u64be(property: "value"),
+      LayoutConst.u64be(property: 'value'),
     ], property: property);
   }
 
@@ -2567,7 +2568,7 @@ class ScValTimePoint extends ScVal<BigInt> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value};
+    return {'value': value};
   }
 }
 
@@ -2579,16 +2580,16 @@ class UInt128Parts extends XDRSerialization {
         lo = lo.asUint64;
 
   factory UInt128Parts.fromStruct(Map<String, dynamic> json) {
-    return UInt128Parts(hi: json.as("hi"), lo: json.as("lo"));
+    return UInt128Parts(hi: json.as('hi'), lo: json.as('lo'));
   }
   factory UInt128Parts.fromNumber(BigInt number) {
     if (number.isNegative || number.bitLength > 128) {
       if (number.isNegative) {
-        throw DartStellarPlugingException("Invalid Unsigned int.",
-            details: {"number": number.toString()});
+        throw DartStellarPlugingException('Invalid Unsigned int.',
+            details: {'number': number.toString()});
       }
-      throw DartStellarPlugingException("Number is to large for `Int256Parts`",
-          details: {"number": number.toString()});
+      throw DartStellarPlugingException('Number is to large for `Int256Parts`',
+          details: {'number': number.toString()});
     }
     final BigInt hi = (number >> 64).toUnsigned(64);
     final BigInt lo = number.toUnsigned(64);
@@ -2596,8 +2597,8 @@ class UInt128Parts extends XDRSerialization {
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u64be(property: "hi"),
-      LayoutConst.u64be(property: "lo"),
+      LayoutConst.u64be(property: 'hi'),
+      LayoutConst.u64be(property: 'lo'),
     ], property: property);
   }
 
@@ -2614,7 +2615,7 @@ class UInt128Parts extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"hi": hi, "lo": lo};
+    return {'hi': hi, 'lo': lo};
   }
 
   @override
@@ -2631,20 +2632,20 @@ class Int128Parts extends XDRSerialization {
         lo = lo.asUint64;
   factory Int128Parts.fromNumber(BigInt number) {
     if (number.bitLength > 128) {
-      throw DartStellarPlugingException("Number is to large for `Int256Parts`",
-          details: {"number": number.toString()});
+      throw DartStellarPlugingException('Number is to large for `Int256Parts`',
+          details: {'number': number.toString()});
     }
     final BigInt hi = (number >> 64).toSigned(64);
     final BigInt lo = number.toUnsigned(64);
     return Int128Parts(hi: hi, lo: lo);
   }
   factory Int128Parts.fromStruct(Map<String, dynamic> json) {
-    return Int128Parts(hi: json.as("hi"), lo: json.as("lo"));
+    return Int128Parts(hi: json.as('hi'), lo: json.as('lo'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.s64be(property: "hi"),
-      LayoutConst.u64be(property: "lo"),
+      LayoutConst.s64be(property: 'hi'),
+      LayoutConst.u64be(property: 'lo'),
     ], property: property);
   }
 
@@ -2661,7 +2662,7 @@ class Int128Parts extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"hi": hi, "lo": lo};
+    return {'hi': hi, 'lo': lo};
   }
 
   @override
@@ -2686,20 +2687,20 @@ class UInt256Parts extends XDRSerialization {
         loLo = loLo.asUint64;
   factory UInt256Parts.fromStruct(Map<String, dynamic> json) {
     return UInt256Parts(
-      hiHi: json.as("hiHi"),
-      hiLo: json.as("hiLo"),
-      loHi: json.as("loHi"),
-      loLo: json.as("loLo"),
+      hiHi: json.as('hiHi'),
+      hiLo: json.as('hiLo'),
+      loHi: json.as('loHi'),
+      loLo: json.as('loLo'),
     );
   }
   factory UInt256Parts.fromNumber(BigInt number) {
     if (number.isNegative || number.bitLength > 256) {
       if (number.isNegative) {
-        throw DartStellarPlugingException("Invalid Unsigned int.",
-            details: {"number": number.toString()});
+        throw DartStellarPlugingException('Invalid Unsigned int.',
+            details: {'number': number.toString()});
       }
-      throw DartStellarPlugingException("Number is to large for `Int256Parts`",
-          details: {"number": number.toString()});
+      throw DartStellarPlugingException('Number is to large for `Int256Parts`',
+          details: {'number': number.toString()});
     }
     final BigInt hiHi = (number >> 192).toUnsigned(64);
     final BigInt hiLo = (number >> 128).toUnsigned(64);
@@ -2710,10 +2711,10 @@ class UInt256Parts extends XDRSerialization {
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u64be(property: "hiHi"),
-      LayoutConst.u64be(property: "hiLo"),
-      LayoutConst.u64be(property: "loHi"),
-      LayoutConst.u64be(property: "loLo"),
+      LayoutConst.u64be(property: 'hiHi'),
+      LayoutConst.u64be(property: 'hiLo'),
+      LayoutConst.u64be(property: 'loHi'),
+      LayoutConst.u64be(property: 'loLo'),
     ], property: property);
   }
 
@@ -2733,7 +2734,7 @@ class UInt256Parts extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"hiHi": hiHi, "hiLo": hiLo, "loHi": loHi, "loLo": loLo};
+    return {'hiHi': hiHi, 'hiLo': hiLo, 'loHi': loHi, 'loLo': loLo};
   }
 
   @override
@@ -2758,16 +2759,16 @@ class Int256Parts extends XDRSerialization {
         loLo = loLo.asUint64;
   factory Int256Parts.fromStruct(Map<String, dynamic> json) {
     return Int256Parts(
-      hiHi: json.as("hiHi"),
-      hiLo: json.as("hiLo"),
-      loHi: json.as("loHi"),
-      loLo: json.as("loLo"),
+      hiHi: json.as('hiHi'),
+      hiLo: json.as('hiLo'),
+      loHi: json.as('loHi'),
+      loLo: json.as('loLo'),
     );
   }
   factory Int256Parts.fromNumber(BigInt number) {
     if (number.bitLength > 256) {
       throw const DartStellarPlugingException(
-          "Number is to large for `Int256Parts`");
+          'Number is to large for `Int256Parts`');
     }
     final BigInt hiHi = (number >> 192).toSigned(64);
     final BigInt hiLo = (number >> 128).toUnsigned(64);
@@ -2777,10 +2778,10 @@ class Int256Parts extends XDRSerialization {
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.s64be(property: "hiHi"),
-      LayoutConst.u64be(property: "hiLo"),
-      LayoutConst.u64be(property: "loHi"),
-      LayoutConst.u64be(property: "loLo"),
+      LayoutConst.s64be(property: 'hiHi'),
+      LayoutConst.u64be(property: 'hiLo'),
+      LayoutConst.u64be(property: 'loHi'),
+      LayoutConst.u64be(property: 'loLo'),
     ], property: property);
   }
 
@@ -2800,7 +2801,7 @@ class Int256Parts extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"hiHi": hiHi, "hiLo": hiLo, "loHi": loHi, "loLo": loLo};
+    return {'hiHi': hiHi, 'hiLo': hiLo, 'loHi': loHi, 'loLo': loLo};
   }
 
   @override
@@ -2813,11 +2814,11 @@ class ScValDuration extends ScVal<BigInt> {
   ScValDuration(BigInt value)
       : super(type: ScValueType.duration, value: value.asUint64);
   factory ScValDuration.fromStruct(Map<String, dynamic> json) {
-    return ScValDuration(json.as("value"));
+    return ScValDuration(json.as('value'));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([LayoutConst.u64be(property: "value")],
+    return LayoutConst.struct([LayoutConst.u64be(property: 'value')],
         property: property);
   }
 
@@ -2828,7 +2829,7 @@ class ScValDuration extends ScVal<BigInt> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value};
+    return {'value': value};
   }
 }
 
@@ -2838,10 +2839,10 @@ class ScValU128 extends ScVal<UInt128Parts> {
     return ScValU128(UInt128Parts.fromNumber(num));
   }
   factory ScValU128.fromStruct(Map<String, dynamic> json) {
-    return ScValU128(UInt128Parts.fromStruct(json.asMap("value")));
+    return ScValU128(UInt128Parts.fromStruct(json.asMap('value')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([UInt128Parts.layout(property: "value")],
+    return LayoutConst.struct([UInt128Parts.layout(property: 'value')],
         property: property);
   }
 
@@ -2852,20 +2853,20 @@ class ScValU128 extends ScVal<UInt128Parts> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value.toLayoutStruct()};
+    return {'value': value.toLayoutStruct()};
   }
 }
 
 class ScValI128 extends ScVal<Int128Parts> {
   ScValI128(Int128Parts value) : super(type: ScValueType.i128, value: value);
   factory ScValI128.fromStruct(Map<String, dynamic> json) {
-    return ScValI128(Int128Parts.fromStruct(json.asMap("value")));
+    return ScValI128(Int128Parts.fromStruct(json.asMap('value')));
   }
   factory ScValI128.fromNumber(BigInt num) {
     return ScValI128(Int128Parts.fromNumber(num));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([Int128Parts.layout(property: "value")],
+    return LayoutConst.struct([Int128Parts.layout(property: 'value')],
         property: property);
   }
 
@@ -2876,20 +2877,20 @@ class ScValI128 extends ScVal<Int128Parts> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value.toLayoutStruct()};
+    return {'value': value.toLayoutStruct()};
   }
 }
 
 class ScValU256 extends ScVal<UInt256Parts> {
   ScValU256(UInt256Parts value) : super(type: ScValueType.u256, value: value);
   factory ScValU256.fromStruct(Map<String, dynamic> json) {
-    return ScValU256(UInt256Parts.fromStruct(json.asMap("value")));
+    return ScValU256(UInt256Parts.fromStruct(json.asMap('value')));
   }
   factory ScValU256.fromNumber(BigInt num) {
     return ScValU256(UInt256Parts.fromNumber(num));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([UInt256Parts.layout(property: "value")],
+    return LayoutConst.struct([UInt256Parts.layout(property: 'value')],
         property: property);
   }
 
@@ -2900,20 +2901,20 @@ class ScValU256 extends ScVal<UInt256Parts> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value.toLayoutStruct()};
+    return {'value': value.toLayoutStruct()};
   }
 }
 
 class ScValI256 extends ScVal<Int256Parts> {
   ScValI256(Int256Parts value) : super(type: ScValueType.i256, value: value);
   factory ScValI256.fromStruct(Map<String, dynamic> json) {
-    return ScValI256(Int256Parts.fromStruct(json.asMap("value")));
+    return ScValI256(Int256Parts.fromStruct(json.asMap('value')));
   }
   factory ScValI256.fromNumber(BigInt num) {
     return ScValI256(Int256Parts.fromNumber(num));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([Int256Parts.layout(property: "value")],
+    return LayoutConst.struct([Int256Parts.layout(property: 'value')],
         property: property);
   }
 
@@ -2924,7 +2925,7 @@ class ScValI256 extends ScVal<Int256Parts> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value.toLayoutStruct()};
+    return {'value': value.toLayoutStruct()};
   }
 }
 
@@ -2935,10 +2936,10 @@ class ScValBytes extends ScVal<List<int>> {
     return ScValBytes(BytesUtils.fromHexString(hexBytes));
   }
   factory ScValBytes.fromStruct(Map<String, dynamic> json) {
-    return ScValBytes(json.asBytes("value"));
+    return ScValBytes(json.asBytes('value'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([LayoutConst.xdrVecBytes(property: "value")],
+    return LayoutConst.struct([LayoutConst.xdrVecBytes(property: 'value')],
         property: property);
   }
 
@@ -2949,17 +2950,17 @@ class ScValBytes extends ScVal<List<int>> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value};
+    return {'value': value};
   }
 }
 
 class ScValString extends ScVal<String> {
   ScValString(String str) : super(type: ScValueType.string, value: str);
   factory ScValString.fromStruct(Map<String, dynamic> json) {
-    return ScValString(json.as("value"));
+    return ScValString(json.as('value'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([LayoutConst.xdrString(property: "value")],
+    return LayoutConst.struct([LayoutConst.xdrString(property: 'value')],
         property: property);
   }
 
@@ -2970,18 +2971,18 @@ class ScValString extends ScVal<String> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value};
+    return {'value': value};
   }
 }
 
 class ScValSymbol extends ScVal<String> {
   ScValSymbol(String sym) : super(type: ScValueType.symbol, value: sym.max(32));
   factory ScValSymbol.fromStruct(Map<String, dynamic> json) {
-    return ScValSymbol(json.as("value"));
+    return ScValSymbol(json.as('value'));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([LayoutConst.xdrString(property: "value")],
+    return LayoutConst.struct([LayoutConst.xdrString(property: 'value')],
         property: property);
   }
 
@@ -2992,7 +2993,7 @@ class ScValSymbol extends ScVal<String> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value};
+    return {'value': value};
   }
 }
 
@@ -3001,14 +3002,14 @@ class ScMapEntry<K extends ScVal, V extends ScVal> extends XDRSerialization {
   final V value;
   const ScMapEntry(this.key, this.value);
   factory ScMapEntry.fromStruct(Map<String, dynamic> json) {
-    return ScMapEntry(ScVal.fromStruct(json.asMap("key")) as K,
-        ScVal.fromStruct(json.asMap("value")) as V);
+    return ScMapEntry(ScVal.fromStruct(json.asMap('key')) as K,
+        ScVal.fromStruct(json.asMap('value')) as V);
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ScVal.layout(property: "key"),
-      ScVal.layout(property: "value"),
+      ScVal.layout(property: 'key'),
+      ScVal.layout(property: 'value'),
     ], property: property);
   }
 
@@ -3020,14 +3021,14 @@ class ScMapEntry<K extends ScVal, V extends ScVal> extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "key": key.toVariantLayoutStruct(),
-      "value": value.toVariantLayoutStruct()
+      'key': key.toVariantLayoutStruct(),
+      'value': value.toVariantLayoutStruct()
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"key": key.toJson(), "value": value.toJson()};
+    return {'key': key.toJson(), 'value': value.toJson()};
   }
 }
 
@@ -3035,10 +3036,10 @@ class ScNonceKey extends XDRSerialization {
   final BigInt nonce;
   ScNonceKey(BigInt nonce) : nonce = nonce.asInt64;
   factory ScNonceKey.fromStruct(Map<String, dynamic> json) {
-    return ScNonceKey(json.as("nonce"));
+    return ScNonceKey(json.as('nonce'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([LayoutConst.s64be(property: "nonce")],
+    return LayoutConst.struct([LayoutConst.s64be(property: 'nonce')],
         property: property);
   }
 
@@ -3049,7 +3050,7 @@ class ScNonceKey extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"nonce": nonce};
+    return {'nonce': nonce};
   }
 }
 
@@ -3059,14 +3060,14 @@ class ScValVec extends ScVal<List<ScVal>?> {
   factory ScValVec.fromStruct(Map<String, dynamic> json) {
     return ScValVec(
         value: json
-            .asListOfMap("value", throwOnNull: false)
+            .asListOfMap('value', throwOnNull: false)
             ?.map((e) => ScVal.fromStruct(e))
             .toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.optionalU32Be(LayoutConst.xdrVec(ScVal.layout()),
-          property: "value"),
+          property: 'value'),
     ], property: property);
   }
 
@@ -3078,7 +3079,7 @@ class ScValVec extends ScVal<List<ScVal>?> {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "value": value?.map((e) => e.toVariantLayoutStruct()).toList() ?? const []
+      'value': value?.map((e) => e.toVariantLayoutStruct()).toList() ?? const []
     };
   }
 }
@@ -3089,14 +3090,14 @@ class ScValMap extends ScVal<List<ScMapEntry>?> {
   factory ScValMap.fromStruct(Map<String, dynamic> json) {
     return ScValMap(
         value: json
-            .asListOfMap("value", throwOnNull: false)
+            .asListOfMap('value', throwOnNull: false)
             ?.map((e) => ScMapEntry.fromStruct(e))
             .toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.optionalU32Be(LayoutConst.xdrVec(ScMapEntry.layout()),
-          property: "value"),
+          property: 'value'),
     ], property: property);
   }
 
@@ -3108,7 +3109,7 @@ class ScValMap extends ScVal<List<ScMapEntry>?> {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "value": value?.map((e) => e.toLayoutStruct()).toList() ?? const [],
+      'value': value?.map((e) => e.toLayoutStruct()).toList() ?? const [],
     };
   }
 }
@@ -3120,10 +3121,10 @@ class ScValAddress extends ScVal<ScAddress> {
     return ScValAddress(ScAddress.fromBase32Address(address));
   }
   factory ScValAddress.fromStruct(Map<String, dynamic> json) {
-    return ScValAddress(ScAddress.fromStruct(json.asMap("value")));
+    return ScValAddress(ScAddress.fromStruct(json.asMap('value')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([ScAddress.layout(property: "value")],
+    return LayoutConst.struct([ScAddress.layout(property: 'value')],
         property: property);
   }
 
@@ -3134,7 +3135,7 @@ class ScValAddress extends ScVal<ScAddress> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value.toVariantLayoutStruct()};
+    return {'value': value.toVariantLayoutStruct()};
   }
 }
 
@@ -3142,10 +3143,10 @@ class ScValNonceKey extends ScVal<ScNonceKey> {
   ScValNonceKey(ScNonceKey value)
       : super(type: ScValueType.ledgerKeyNonce, value: value);
   factory ScValNonceKey.fromStruct(Map<String, dynamic> json) {
-    return ScValNonceKey(ScNonceKey.fromStruct(json.asMap("value")));
+    return ScValNonceKey(ScNonceKey.fromStruct(json.asMap('value')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([ScNonceKey.layout(property: "value")],
+    return LayoutConst.struct([ScNonceKey.layout(property: 'value')],
         property: property);
   }
 
@@ -3156,7 +3157,7 @@ class ScValNonceKey extends ScVal<ScNonceKey> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value.toLayoutStruct()};
+    return {'value': value.toLayoutStruct()};
   }
 }
 
@@ -3165,10 +3166,10 @@ class ScValInstance extends ScVal<ScContractInstance> {
       : super(type: ScValueType.contractInstance, value: value);
 
   factory ScValInstance.fromStruct(Map<String, dynamic> json) {
-    return ScValInstance(ScContractInstance.fromStruct(json.asMap("value")));
+    return ScValInstance(ScContractInstance.fromStruct(json.asMap('value')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([ScContractInstance.layout(property: "value")],
+    return LayoutConst.struct([ScContractInstance.layout(property: 'value')],
         property: property);
   }
 
@@ -3179,7 +3180,7 @@ class ScValInstance extends ScVal<ScContractInstance> {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"value": value.toLayoutStruct()};
+    return {'value': value.toLayoutStruct()};
   }
 }
 
@@ -3229,9 +3230,9 @@ class ContractExecutableType {
   final int value;
   const ContractExecutableType._({required this.name, required this.value});
   static const ContractExecutableType executableWasm =
-      ContractExecutableType._(name: "ExecutableWasm", value: 0);
+      ContractExecutableType._(name: 'ExecutableWasm', value: 0);
   static const ContractExecutableType executableStellarAsset =
-      ContractExecutableType._(name: "ExecutableStellarAsset", value: 1);
+      ContractExecutableType._(name: 'ExecutableStellarAsset', value: 1);
   static const List<ContractExecutableType> values = [
     executableWasm,
     executableStellarAsset
@@ -3240,17 +3241,17 @@ class ContractExecutableType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ContractExecutable type not found.",
+          'ContractExecutable type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "ContractExecutableType.$name";
+    return 'ContractExecutableType.$name';
   }
 }
 
@@ -3267,7 +3268,7 @@ abstract class ContractExecutable extends XDRVariantSerialization {
         return ContractExecutableWasmHash.fromStruct(decode.value);
       default:
         throw const DartStellarPlugingException(
-            "Invalid ContractExecutable type.");
+            'Invalid ContractExecutable type.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -3292,14 +3293,14 @@ class ContractExecutableWasmHash extends ContractExecutable {
   final List<int> hash;
   ContractExecutableWasmHash(List<int> hash)
       : hash = hash.asImmutableBytes.exc(StellarConst.hash256Length,
-            name: "ContractExecutableWasmHash"),
+            name: 'ContractExecutableWasmHash'),
         super(ContractExecutableType.executableWasm);
   factory ContractExecutableWasmHash.fromStruct(Map<String, dynamic> json) {
-    return ContractExecutableWasmHash(json.asBytes("hash"));
+    return ContractExecutableWasmHash(json.asBytes('hash'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "hash"),
+      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'hash'),
     ], property: property);
   }
 
@@ -3310,12 +3311,12 @@ class ContractExecutableWasmHash extends ContractExecutable {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"hash": hash};
+    return {'hash': hash};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"hash": BytesUtils.toHexString(hash, prefix: "0x")};
+    return {'hash': BytesUtils.toHexString(hash, prefix: '0x')};
   }
 }
 
@@ -3347,17 +3348,17 @@ class ScContractInstance extends XDRSerialization {
       : storage = storage?.immutable;
   factory ScContractInstance.fromStruct(Map<String, dynamic> json) {
     return ScContractInstance(
-        executable: ContractExecutable.fromStruct(json.asMap("executable")),
+        executable: ContractExecutable.fromStruct(json.asMap('executable')),
         storage: json
-            .asListOfMap("storage", throwOnNull: false)
+            .asListOfMap('storage', throwOnNull: false)
             ?.map((e) => ScMapEntry.fromStruct(e))
             .toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ContractExecutable.layout(property: "executable"),
+      ContractExecutable.layout(property: 'executable'),
       LayoutConst.optionalU32Be(LayoutConst.xdrVec(ScMapEntry.layout()),
-          property: "storage"),
+          property: 'storage'),
     ], property: property);
   }
 
@@ -3369,16 +3370,16 @@ class ScContractInstance extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "executable": executable.toVariantLayoutStruct(),
-      "storage": storage?.map((e) => e.toLayoutStruct()).toList(),
+      'executable': executable.toVariantLayoutStruct(),
+      'storage': storage?.map((e) => e.toLayoutStruct()).toList(),
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "executable": executable.toJson(),
-      "storage": storage?.map((e) => e.toJson()).toList(),
+      'executable': executable.toJson(),
+      'storage': storage?.map((e) => e.toJson()).toList(),
     };
   }
 }
@@ -3388,25 +3389,25 @@ class ContractDataDurability {
   final int value;
   const ContractDataDurability._({required this.name, required this.value});
   static const ContractDataDurability temporary =
-      ContractDataDurability._(name: "temporary", value: 0);
+      ContractDataDurability._(name: 'temporary', value: 0);
   static const ContractDataDurability persistent =
-      ContractDataDurability._(name: "persistent", value: 1);
+      ContractDataDurability._(name: 'persistent', value: 1);
   static const List<ContractDataDurability> values = [temporary, persistent];
   static ContractDataDurability fromValue(int? value) {
     return values.firstWhere(
       (e) => e.value == value,
       orElse: () => throw DartStellarPlugingException(
-          "ContractDataDurability not found.",
+          'ContractDataDurability not found.',
           details: {
-            "value": value,
-            "values": values.map((e) => e.value).join(", ")
+            'value': value,
+            'values': values.map((e) => e.value).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "ContractDataDurability.$name";
+    return 'ContractDataDurability.$name';
   }
 }
 
@@ -3425,19 +3426,19 @@ class ContractDataEntry extends LedgerEntryData {
       : super(LedgerEntryType.contractData);
   factory ContractDataEntry.fromStruct(Map<String, dynamic> json) {
     return ContractDataEntry(
-        contract: ScAddress.fromStruct(json.asMap("contract")),
-        durability: ContractDataDurability.fromValue(json.as("durability")),
-        key: ScVal.fromStruct(json.asMap("key")),
-        val: ScVal.fromStruct(json.asMap("val")),
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")));
+        contract: ScAddress.fromStruct(json.asMap('contract')),
+        durability: ContractDataDurability.fromValue(json.as('durability')),
+        key: ScVal.fromStruct(json.asMap('key')),
+        val: ScVal.fromStruct(json.asMap('val')),
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ExtentionPointVoid.layout(property: "ext"),
-      ScAddress.layout(property: "contract"),
-      ScVal.layout(property: "key"),
-      LayoutConst.u32be(property: "durability"),
-      ScVal.layout(property: "val"),
+      ExtentionPointVoid.layout(property: 'ext'),
+      ScAddress.layout(property: 'contract'),
+      ScVal.layout(property: 'key'),
+      LayoutConst.u32be(property: 'durability'),
+      ScVal.layout(property: 'val'),
     ], property: property);
   }
 
@@ -3449,11 +3450,11 @@ class ContractDataEntry extends LedgerEntryData {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "ext": ext.toVariantLayoutStruct(),
-      "contract": contract.toVariantLayoutStruct(),
-      "key": key.toVariantLayoutStruct(),
-      "durability": durability.value,
-      "val": val.toVariantLayoutStruct()
+      'ext': ext.toVariantLayoutStruct(),
+      'contract': contract.toVariantLayoutStruct(),
+      'key': key.toVariantLayoutStruct(),
+      'durability': durability.value,
+      'val': val.toVariantLayoutStruct()
     };
   }
 }
@@ -3494,32 +3495,32 @@ class ContractCodeCostInputs extends XDRSerialization {
         nDataSegmentBytes = nDataSegmentBytes.asUint32;
   factory ContractCodeCostInputs.fromStruct(Map<String, dynamic> json) {
     return ContractCodeCostInputs(
-      ext: ExtentionPointVoid.fromStruct(json.asMap("ext")),
-      nDataSegmentBytes: json.as("nDataSegmentBytes"),
-      nDataSegments: json.as("nDataSegments"),
-      nElemSegments: json.as("nElemSegments"),
-      nExports: json.as("nExports"),
-      nFunctions: json.as("nFunctions"),
-      nGlobals: json.as("nGlobals"),
-      nImports: json.as("nImports"),
-      nInstructions: json.as("nInstructions"),
-      nTableEntries: json.as("nTableEntries"),
-      nTypes: json.as("nTypes"),
+      ext: ExtentionPointVoid.fromStruct(json.asMap('ext')),
+      nDataSegmentBytes: json.as('nDataSegmentBytes'),
+      nDataSegments: json.as('nDataSegments'),
+      nElemSegments: json.as('nElemSegments'),
+      nExports: json.as('nExports'),
+      nFunctions: json.as('nFunctions'),
+      nGlobals: json.as('nGlobals'),
+      nImports: json.as('nImports'),
+      nInstructions: json.as('nInstructions'),
+      nTableEntries: json.as('nTableEntries'),
+      nTypes: json.as('nTypes'),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ExtentionPointVoid.layout(property: "ext"),
-      LayoutConst.u32be(property: "nInstructions"),
-      LayoutConst.u32be(property: "nFunctions"),
-      LayoutConst.u32be(property: "nGlobals"),
-      LayoutConst.u32be(property: "nTableEntries"),
-      LayoutConst.u32be(property: "nTypes"),
-      LayoutConst.u32be(property: "nDataSegments"),
-      LayoutConst.u32be(property: "nElemSegments"),
-      LayoutConst.u32be(property: "nImports"),
-      LayoutConst.u32be(property: "nExports"),
-      LayoutConst.u32be(property: "nDataSegmentBytes"),
+      ExtentionPointVoid.layout(property: 'ext'),
+      LayoutConst.u32be(property: 'nInstructions'),
+      LayoutConst.u32be(property: 'nFunctions'),
+      LayoutConst.u32be(property: 'nGlobals'),
+      LayoutConst.u32be(property: 'nTableEntries'),
+      LayoutConst.u32be(property: 'nTypes'),
+      LayoutConst.u32be(property: 'nDataSegments'),
+      LayoutConst.u32be(property: 'nElemSegments'),
+      LayoutConst.u32be(property: 'nImports'),
+      LayoutConst.u32be(property: 'nExports'),
+      LayoutConst.u32be(property: 'nDataSegmentBytes'),
     ], property: property);
   }
 
@@ -3531,17 +3532,17 @@ class ContractCodeCostInputs extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "ext": ext.toVariantLayoutStruct(),
-      "nInstructions": nInstructions,
-      "nFunctions": nFunctions,
-      "nGlobals": nGlobals,
-      "nTableEntries": nTableEntries,
-      "nTypes": nTypes,
-      "nElemSegments": nElemSegments,
-      "nDataSegments": nDataSegments,
-      "nImports": nImports,
-      "nDataSegmentBytes": nDataSegmentBytes,
-      "nExports": nExports,
+      'ext': ext.toVariantLayoutStruct(),
+      'nInstructions': nInstructions,
+      'nFunctions': nFunctions,
+      'nGlobals': nGlobals,
+      'nTableEntries': nTableEntries,
+      'nTypes': nTypes,
+      'nElemSegments': nElemSegments,
+      'nDataSegments': nDataSegments,
+      'nImports': nImports,
+      'nDataSegmentBytes': nDataSegmentBytes,
+      'nExports': nExports,
     };
   }
 }
@@ -3553,9 +3554,9 @@ class ContractCodeEntryV1 extends XDRSerialization {
       {required this.costInputs, this.ext = const ExtentionPointVoid()});
   factory ContractCodeEntryV1.fromStruct(Map<String, dynamic> json) {
     return ContractCodeEntryV1(
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")),
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')),
         costInputs:
-            ContractCodeCostInputs.fromStruct(json.asMap("costInputs")));
+            ContractCodeCostInputs.fromStruct(json.asMap('costInputs')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([], property: property);
@@ -3569,8 +3570,8 @@ class ContractCodeEntryV1 extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "ext": ext.toVariantLayoutStruct(),
-      "costInputs": costInputs.toLayoutStruct()
+      'ext': ext.toVariantLayoutStruct(),
+      'costInputs': costInputs.toLayoutStruct()
     };
   }
 }
@@ -3589,7 +3590,7 @@ class ContractCodeEntryExt extends XDRVariantSerialization {
             v1: ContractCodeEntryV1.fromStruct(decode.value));
       default:
         throw const DartStellarPlugingException(
-            "Invalid ContractCodeEntry extension.");
+            'Invalid ContractCodeEntry extension.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -3638,19 +3639,19 @@ class ContractCodeEntry extends LedgerEntryData {
       {required this.ext, required List<int> hash, required List<int> code})
       : code = code.asImmutableBytes,
         hash = hash.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "ContractCodeEntry Hash"),
+            .exc(StellarConst.hash256Length, name: 'ContractCodeEntry Hash'),
         super(LedgerEntryType.contractCode);
   factory ContractCodeEntry.fromStruct(Map<String, dynamic> json) {
     return ContractCodeEntry(
-        code: json.asBytes("code"),
-        ext: ContractCodeEntryExt.fromStruct(json.asMap("ext")),
-        hash: json.asBytes("hash"));
+        code: json.asBytes('code'),
+        ext: ContractCodeEntryExt.fromStruct(json.asMap('ext')),
+        hash: json.asBytes('hash'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ContractCodeEntryExt.layout(property: "ext"),
-      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "hash"),
-      LayoutConst.xdrVecBytes(property: "code")
+      ContractCodeEntryExt.layout(property: 'ext'),
+      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'hash'),
+      LayoutConst.xdrVecBytes(property: 'code')
     ], property: property);
   }
 
@@ -3662,9 +3663,9 @@ class ContractCodeEntry extends LedgerEntryData {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "hash": hash,
-      "code": code,
-      "ext": ext.toVariantLayoutStruct(),
+      'hash': hash,
+      'code': code,
+      'ext': ext.toVariantLayoutStruct(),
     };
   }
 }
@@ -3723,10 +3724,10 @@ class ConfigSettingId {
     return values.firstWhere(
       (e) => e.value == value,
       orElse: () => throw DartStellarPlugingException(
-          "ConfigSettingId not found.",
+          'ConfigSettingId not found.',
           details: {
-            "value": value,
-            "values": values.map((e) => e.name).join(", ")
+            'value': value,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -3735,17 +3736,17 @@ class ConfigSettingId {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ConfigSettingId not found.",
+          'ConfigSettingId not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "ConfigSettingId.$name";
+    return 'ConfigSettingId.$name';
   }
 }
 
@@ -3754,10 +3755,10 @@ class ConfigSettingEntry extends LedgerEntryData {
   ConfigSettingEntry(this.configSetting) : super(LedgerEntryType.configSetting);
   factory ConfigSettingEntry.fromStruct(Map<String, dynamic> json) {
     return ConfigSettingEntry(
-        ConfigSetting.fromStruct(json.asMap("configSetting")));
+        ConfigSetting.fromStruct(json.asMap('configSetting')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([ConfigSetting.layout(property: "configSetting")],
+    return LayoutConst.struct([ConfigSetting.layout(property: 'configSetting')],
         property: property);
   }
 
@@ -3768,7 +3769,7 @@ class ConfigSettingEntry extends LedgerEntryData {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"configSetting": configSetting.toVariantLayoutStruct()};
+    return {'configSetting': configSetting.toVariantLayoutStruct()};
   }
 }
 
@@ -3821,7 +3822,7 @@ abstract class ConfigSetting extends XDRVariantSerialization {
 
       default:
         throw DartStellarPlugingException('Invalid ConfigSettingId.',
-            details: {"ConfigSettingId": type.name});
+            details: {'ConfigSettingId': type.name});
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -3904,7 +3905,7 @@ abstract class ConfigSetting extends XDRVariantSerialization {
                   index: type.value);
             default:
               throw DartStellarPlugingException('Invalid ConfigSettingId.',
-                  details: {"ConfigSettingId": type.name});
+                  details: {'ConfigSettingId': type.name});
           }
         }),
         property: property);
@@ -3926,11 +3927,11 @@ class ConfingSettingContractMaxSizeBytes extends ConfigSetting {
         super(ConfigSettingId.contractMaxSizeBytes);
   factory ConfingSettingContractMaxSizeBytes.fromStruct(
       Map<String, dynamic> json) {
-    return ConfingSettingContractMaxSizeBytes(json.as("contractMaxSizeBytes"));
+    return ConfingSettingContractMaxSizeBytes(json.as('contractMaxSizeBytes'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "contractMaxSizeBytes"),
+      LayoutConst.u32be(property: 'contractMaxSizeBytes'),
     ], property: property);
   }
 
@@ -3941,7 +3942,7 @@ class ConfingSettingContractMaxSizeBytes extends ConfigSetting {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"contractMaxSizeBytes": contractMaxSizeBytes};
+    return {'contractMaxSizeBytes': contractMaxSizeBytes};
   }
 }
 
@@ -3972,18 +3973,18 @@ class ConfigSettingContractComputeV0 extends ConfigSetting {
   factory ConfigSettingContractComputeV0.fromStruct(Map<String, dynamic> json) {
     return ConfigSettingContractComputeV0(
       feeRatePerInstructionsIncrement:
-          json.as("feeRatePerInstructionsIncrement"),
-      ledgerMaxInstructions: json.as("ledgerMaxInstructions"),
-      txMaxInstructions: json.as("txMaxInstructions"),
-      txMemoryLimit: json.as("txMemoryLimit"),
+          json.as('feeRatePerInstructionsIncrement'),
+      ledgerMaxInstructions: json.as('ledgerMaxInstructions'),
+      txMaxInstructions: json.as('txMaxInstructions'),
+      txMemoryLimit: json.as('txMemoryLimit'),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.s64be(property: "ledgerMaxInstructions"),
-      LayoutConst.s64be(property: "txMaxInstructions"),
-      LayoutConst.s64be(property: "feeRatePerInstructionsIncrement"),
-      LayoutConst.u32be(property: "txMemoryLimit"),
+      LayoutConst.s64be(property: 'ledgerMaxInstructions'),
+      LayoutConst.s64be(property: 'txMaxInstructions'),
+      LayoutConst.s64be(property: 'feeRatePerInstructionsIncrement'),
+      LayoutConst.u32be(property: 'txMemoryLimit'),
     ], property: property);
   }
 
@@ -3995,10 +3996,10 @@ class ConfigSettingContractComputeV0 extends ConfigSetting {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "txMaxInstructions": txMaxInstructions,
-      "ledgerMaxInstructions": ledgerMaxInstructions,
-      "feeRatePerInstructionsIncrement": feeRatePerInstructionsIncrement,
-      "txMemoryLimit": txMemoryLimit
+      'txMaxInstructions': txMaxInstructions,
+      'ledgerMaxInstructions': ledgerMaxInstructions,
+      'feeRatePerInstructionsIncrement': feeRatePerInstructionsIncrement,
+      'txMemoryLimit': txMemoryLimit
     };
   }
 }
@@ -4086,40 +4087,40 @@ class ConfigSettingContractLedgerCostV0 extends ConfigSetting {
   factory ConfigSettingContractLedgerCostV0.fromStruct(
       Map<String, dynamic> json) {
     return ConfigSettingContractLedgerCostV0(
-      bucketListTargetSizeBytes: json.as("bucketListTargetSizeBytes"),
-      bucketListWriteFeeGrowthFactor: json.as("bucketListWriteFeeGrowthFactor"),
-      feeRead1Kb: json.as("feeRead1Kb"),
-      feeReadLedgerEntry: json.as("feeReadLedgerEntry"),
-      feeWriteLedgerEntry: json.as("feeWriteLedgerEntry"),
-      ledgerMaxReadBytes: json.as("ledgerMaxReadBytes"),
-      ledgerMaxReadLedgerEntries: json.as("ledgerMaxReadLedgerEntries"),
-      ledgerMaxWriteBytes: json.as("ledgerMaxWriteBytes"),
-      ledgerMaxWriteLedgerEntries: json.as("ledgerMaxWriteLedgerEntries"),
-      txMaxReadBytes: json.as("txMaxReadBytes"),
-      txMaxReadLedgerEntries: json.as("txMaxReadLedgerEntries"),
-      txMaxWriteBytes: json.as("txMaxWriteBytes"),
-      txMaxWriteLedgerEntries: json.as("txMaxWriteLedgerEntries"),
-      writeFee1KbBucketListHigh: json.as("writeFee1KbBucketListHigh"),
-      writeFee1KbBucketListLow: json.as("writeFee1KbBucketListLow"),
+      bucketListTargetSizeBytes: json.as('bucketListTargetSizeBytes'),
+      bucketListWriteFeeGrowthFactor: json.as('bucketListWriteFeeGrowthFactor'),
+      feeRead1Kb: json.as('feeRead1Kb'),
+      feeReadLedgerEntry: json.as('feeReadLedgerEntry'),
+      feeWriteLedgerEntry: json.as('feeWriteLedgerEntry'),
+      ledgerMaxReadBytes: json.as('ledgerMaxReadBytes'),
+      ledgerMaxReadLedgerEntries: json.as('ledgerMaxReadLedgerEntries'),
+      ledgerMaxWriteBytes: json.as('ledgerMaxWriteBytes'),
+      ledgerMaxWriteLedgerEntries: json.as('ledgerMaxWriteLedgerEntries'),
+      txMaxReadBytes: json.as('txMaxReadBytes'),
+      txMaxReadLedgerEntries: json.as('txMaxReadLedgerEntries'),
+      txMaxWriteBytes: json.as('txMaxWriteBytes'),
+      txMaxWriteLedgerEntries: json.as('txMaxWriteLedgerEntries'),
+      writeFee1KbBucketListHigh: json.as('writeFee1KbBucketListHigh'),
+      writeFee1KbBucketListLow: json.as('writeFee1KbBucketListLow'),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "ledgerMaxReadLedgerEntries"),
-      LayoutConst.u32be(property: "ledgerMaxReadBytes"),
-      LayoutConst.u32be(property: "ledgerMaxWriteLedgerEntries"),
-      LayoutConst.u32be(property: "ledgerMaxWriteBytes"),
-      LayoutConst.u32be(property: "txMaxReadLedgerEntries"),
-      LayoutConst.u32be(property: "txMaxReadBytes"),
-      LayoutConst.u32be(property: "txMaxWriteLedgerEntries"),
-      LayoutConst.u32be(property: "txMaxWriteBytes"),
-      LayoutConst.s64be(property: "feeReadLedgerEntry"),
-      LayoutConst.s64be(property: "feeWriteLedgerEntry"),
-      LayoutConst.s64be(property: "feeRead1Kb"),
-      LayoutConst.s64be(property: "bucketListTargetSizeBytes"),
-      LayoutConst.s64be(property: "writeFee1KbBucketListLow"),
-      LayoutConst.s64be(property: "writeFee1KbBucketListHigh"),
-      LayoutConst.u32be(property: "bucketListWriteFeeGrowthFactor"),
+      LayoutConst.u32be(property: 'ledgerMaxReadLedgerEntries'),
+      LayoutConst.u32be(property: 'ledgerMaxReadBytes'),
+      LayoutConst.u32be(property: 'ledgerMaxWriteLedgerEntries'),
+      LayoutConst.u32be(property: 'ledgerMaxWriteBytes'),
+      LayoutConst.u32be(property: 'txMaxReadLedgerEntries'),
+      LayoutConst.u32be(property: 'txMaxReadBytes'),
+      LayoutConst.u32be(property: 'txMaxWriteLedgerEntries'),
+      LayoutConst.u32be(property: 'txMaxWriteBytes'),
+      LayoutConst.s64be(property: 'feeReadLedgerEntry'),
+      LayoutConst.s64be(property: 'feeWriteLedgerEntry'),
+      LayoutConst.s64be(property: 'feeRead1Kb'),
+      LayoutConst.s64be(property: 'bucketListTargetSizeBytes'),
+      LayoutConst.s64be(property: 'writeFee1KbBucketListLow'),
+      LayoutConst.s64be(property: 'writeFee1KbBucketListHigh'),
+      LayoutConst.u32be(property: 'bucketListWriteFeeGrowthFactor'),
     ], property: property);
   }
 
@@ -4131,21 +4132,21 @@ class ConfigSettingContractLedgerCostV0 extends ConfigSetting {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "ledgerMaxReadLedgerEntries": ledgerMaxReadLedgerEntries,
-      "ledgerMaxReadBytes": ledgerMaxReadBytes,
-      "ledgerMaxWriteLedgerEntries": ledgerMaxWriteLedgerEntries,
-      "ledgerMaxWriteBytes": ledgerMaxWriteBytes,
-      "txMaxReadLedgerEntries": txMaxReadLedgerEntries,
-      "txMaxReadBytes": txMaxReadBytes,
-      "txMaxWriteLedgerEntries": txMaxWriteLedgerEntries,
-      "txMaxWriteBytes": txMaxWriteBytes,
-      "feeReadLedgerEntry": feeReadLedgerEntry,
-      "feeWriteLedgerEntry": feeWriteLedgerEntry,
-      "feeRead1Kb": feeRead1Kb,
-      "bucketListTargetSizeBytes": bucketListTargetSizeBytes,
-      "writeFee1KbBucketListLow": writeFee1KbBucketListLow,
-      "writeFee1KbBucketListHigh": writeFee1KbBucketListHigh,
-      "bucketListWriteFeeGrowthFactor": bucketListWriteFeeGrowthFactor,
+      'ledgerMaxReadLedgerEntries': ledgerMaxReadLedgerEntries,
+      'ledgerMaxReadBytes': ledgerMaxReadBytes,
+      'ledgerMaxWriteLedgerEntries': ledgerMaxWriteLedgerEntries,
+      'ledgerMaxWriteBytes': ledgerMaxWriteBytes,
+      'txMaxReadLedgerEntries': txMaxReadLedgerEntries,
+      'txMaxReadBytes': txMaxReadBytes,
+      'txMaxWriteLedgerEntries': txMaxWriteLedgerEntries,
+      'txMaxWriteBytes': txMaxWriteBytes,
+      'feeReadLedgerEntry': feeReadLedgerEntry,
+      'feeWriteLedgerEntry': feeWriteLedgerEntry,
+      'feeRead1Kb': feeRead1Kb,
+      'bucketListTargetSizeBytes': bucketListTargetSizeBytes,
+      'writeFee1KbBucketListLow': writeFee1KbBucketListLow,
+      'writeFee1KbBucketListHigh': writeFee1KbBucketListHigh,
+      'bucketListWriteFeeGrowthFactor': bucketListWriteFeeGrowthFactor,
     };
   }
 }
@@ -4159,10 +4160,10 @@ class ConfigSettingContractHistoricalDataV0 extends ConfigSetting {
         super(ConfigSettingId.contractHistoricalDataV0);
   factory ConfigSettingContractHistoricalDataV0.fromStruct(
       Map<String, dynamic> json) {
-    return ConfigSettingContractHistoricalDataV0(json.as("feeHistorical1Kb"));
+    return ConfigSettingContractHistoricalDataV0(json.as('feeHistorical1Kb'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([LayoutConst.s64be(property: "feeHistorical1Kb")],
+    return LayoutConst.struct([LayoutConst.s64be(property: 'feeHistorical1Kb')],
         property: property);
   }
 
@@ -4173,7 +4174,7 @@ class ConfigSettingContractHistoricalDataV0 extends ConfigSetting {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"feeHistorical1Kb": feeHistorical1Kb};
+    return {'feeHistorical1Kb': feeHistorical1Kb};
   }
 }
 
@@ -4192,13 +4193,13 @@ class ConfigSettingContractEventsV0 extends ConfigSetting {
         super(ConfigSettingId.contractEventsV0);
   factory ConfigSettingContractEventsV0.fromStruct(Map<String, dynamic> json) {
     return ConfigSettingContractEventsV0(
-        feeContractEvents1Kb: json.as("feeContractEvents1Kb"),
-        txMaxContractEventsSizeBytes: json.as("txMaxContractEventsSizeBytes"));
+        feeContractEvents1Kb: json.as('feeContractEvents1Kb'),
+        txMaxContractEventsSizeBytes: json.as('txMaxContractEventsSizeBytes'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "txMaxContractEventsSizeBytes"),
-      LayoutConst.s64be(property: "feeContractEvents1Kb"),
+      LayoutConst.u32be(property: 'txMaxContractEventsSizeBytes'),
+      LayoutConst.s64be(property: 'feeContractEvents1Kb'),
     ], property: property);
   }
 
@@ -4210,8 +4211,8 @@ class ConfigSettingContractEventsV0 extends ConfigSetting {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "txMaxContractEventsSizeBytes": txMaxContractEventsSizeBytes,
-      "feeContractEvents1Kb": feeContractEvents1Kb
+      'txMaxContractEventsSizeBytes': txMaxContractEventsSizeBytes,
+      'feeContractEvents1Kb': feeContractEvents1Kb
     };
   }
 }
@@ -4239,15 +4240,15 @@ class ConfigSettingContractBandwidthV0 extends ConfigSetting {
   factory ConfigSettingContractBandwidthV0.fromStruct(
       Map<String, dynamic> json) {
     return ConfigSettingContractBandwidthV0(
-        feeTxSize1Kb: json.as("feeTxSize1Kb"),
-        ledgerMaxTxsSizeBytes: json.as("ledgerMaxTxsSizeBytes"),
-        txMaxSizeBytes: json.as("txMaxSizeBytes"));
+        feeTxSize1Kb: json.as('feeTxSize1Kb'),
+        ledgerMaxTxsSizeBytes: json.as('ledgerMaxTxsSizeBytes'),
+        txMaxSizeBytes: json.as('txMaxSizeBytes'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "ledgerMaxTxsSizeBytes"),
-      LayoutConst.u32be(property: "txMaxSizeBytes"),
-      LayoutConst.s64be(property: "feeTxSize1Kb"),
+      LayoutConst.u32be(property: 'ledgerMaxTxsSizeBytes'),
+      LayoutConst.u32be(property: 'txMaxSizeBytes'),
+      LayoutConst.s64be(property: 'feeTxSize1Kb'),
     ], property: property);
   }
 
@@ -4259,9 +4260,9 @@ class ConfigSettingContractBandwidthV0 extends ConfigSetting {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "ledgerMaxTxsSizeBytes": ledgerMaxTxsSizeBytes,
-      "txMaxSizeBytes": txMaxSizeBytes,
-      "feeTxSize1Kb": feeTxSize1Kb
+      'ledgerMaxTxsSizeBytes': ledgerMaxTxsSizeBytes,
+      'txMaxSizeBytes': txMaxSizeBytes,
+      'feeTxSize1Kb': feeTxSize1Kb
     };
   }
 }
@@ -4279,15 +4280,15 @@ class ContractCostParamEntry extends XDRSerialization {
         linearTerm = linearTerm.asInt64;
   factory ContractCostParamEntry.fromStruct(Map<String, dynamic> json) {
     return ContractCostParamEntry(
-        constTerm: json.as("constTerm"),
-        linearTerm: json.as("linearTerm"),
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")));
+        constTerm: json.as('constTerm'),
+        linearTerm: json.as('linearTerm'),
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ExtentionPointVoid.layout(property: "ext"),
-      LayoutConst.s64be(property: "constTerm"),
-      LayoutConst.s64be(property: "linearTerm"),
+      ExtentionPointVoid.layout(property: 'ext'),
+      LayoutConst.s64be(property: 'constTerm'),
+      LayoutConst.s64be(property: 'linearTerm'),
     ], property: property);
   }
 
@@ -4299,9 +4300,9 @@ class ContractCostParamEntry extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "constTerm": constTerm,
-      "linearTerm": linearTerm,
-      "ext": ext.toVariantLayoutStruct()
+      'constTerm': constTerm,
+      'linearTerm': linearTerm,
+      'ext': ext.toVariantLayoutStruct()
     };
   }
 }
@@ -4315,13 +4316,13 @@ class ConfingSettingContractCostParamsCpuInstructions extends ConfigSetting {
   factory ConfingSettingContractCostParamsCpuInstructions.fromStruct(
       Map<String, dynamic> json) {
     return ConfingSettingContractCostParamsCpuInstructions(json
-        .asListOfMap("params")!
+        .asListOfMap('params')!
         .map((e) => ContractCostParamEntry.fromStruct(e))
         .toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [LayoutConst.xdrVec(ContractCostParamEntry.layout(property: "params"))],
+        [LayoutConst.xdrVec(ContractCostParamEntry.layout(property: 'params'))],
         property: property);
   }
 
@@ -4332,7 +4333,7 @@ class ConfingSettingContractCostParamsCpuInstructions extends ConfigSetting {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"params": params.map((e) => e.toLayoutStruct()).toList()};
+    return {'params': params.map((e) => e.toLayoutStruct()).toList()};
   }
 }
 
@@ -4341,18 +4342,18 @@ class ConfingSettingContractCostParamsMemoryBytes extends ConfigSetting {
   ConfingSettingContractCostParamsMemoryBytes(
       List<ContractCostParamEntry> params)
       : params = params.immutable.max(1024,
-            name: "ConfingSettingContractCostParamsMemoryBytes Params"),
+            name: 'ConfingSettingContractCostParamsMemoryBytes Params'),
         super(ConfigSettingId.contractCostParamsMemoryBytes);
   factory ConfingSettingContractCostParamsMemoryBytes.fromStruct(
       Map<String, dynamic> json) {
     return ConfingSettingContractCostParamsMemoryBytes(json
-        .asListOfMap("params")!
+        .asListOfMap('params')!
         .map((e) => ContractCostParamEntry.fromStruct(e))
         .toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [LayoutConst.xdrVec(ContractCostParamEntry.layout(property: "params"))],
+        [LayoutConst.xdrVec(ContractCostParamEntry.layout(property: 'params'))],
         property: property);
   }
 
@@ -4363,7 +4364,7 @@ class ConfingSettingContractCostParamsMemoryBytes extends ConfigSetting {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"params": params.map((e) => e.toLayoutStruct()).toList()};
+    return {'params': params.map((e) => e.toLayoutStruct()).toList()};
   }
 }
 
@@ -4375,11 +4376,11 @@ class ConfingSettingContractDataKeySizeBytes extends ConfigSetting {
   factory ConfingSettingContractDataKeySizeBytes.fromStruct(
       Map<String, dynamic> json) {
     return ConfingSettingContractDataKeySizeBytes(
-        json.as("contractDataKeySizeBytes"));
+        json.as('contractDataKeySizeBytes'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "contractDataKeySizeBytes"),
+      LayoutConst.u32be(property: 'contractDataKeySizeBytes'),
     ], property: property);
   }
 
@@ -4390,7 +4391,7 @@ class ConfingSettingContractDataKeySizeBytes extends ConfigSetting {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"contractDataKeySizeBytes": contractDataKeySizeBytes};
+    return {'contractDataKeySizeBytes': contractDataKeySizeBytes};
   }
 }
 
@@ -4402,11 +4403,11 @@ class ConfingSettingContractDataEnterySizeBytes extends ConfigSetting {
   factory ConfingSettingContractDataEnterySizeBytes.fromStruct(
       Map<String, dynamic> json) {
     return ConfingSettingContractDataEnterySizeBytes(
-        json.as("contractDataEnterySizeBytes"));
+        json.as('contractDataEnterySizeBytes'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "contractDataEnterySizeBytes"),
+      LayoutConst.u32be(property: 'contractDataEnterySizeBytes'),
     ], property: property);
   }
 
@@ -4417,7 +4418,7 @@ class ConfingSettingContractDataEnterySizeBytes extends ConfigSetting {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"contractDataEnterySizeBytes": contractDataEnterySizeBytes};
+    return {'contractDataEnterySizeBytes': contractDataEnterySizeBytes};
   }
 }
 
@@ -4446,30 +4447,30 @@ class StateArchivalSettings extends XDRSerialization {
   final int startingEvictionScanLevel;
   factory StateArchivalSettings.fromStruct(Map<String, dynamic> json) {
     return StateArchivalSettings(
-      bucketListSizeWindowSampleSize: json.as("bucketListSizeWindowSampleSize"),
-      bucketListWindowSamplePeriod: json.as("bucketListWindowSamplePeriod"),
-      evictionScanSize: json.as("evictionScanSize"),
-      maxEntriesToArchive: json.as("maxEntriesToArchive"),
-      maxEntryTtl: json.as("maxEntryTtl"),
-      minPersistentTtl: json.as("minPersistentTtl"),
-      minTemporaryTtl: json.as("minTemporaryTtl"),
-      persistentRentRateDenominator: json.as("persistentRentRateDenominator"),
-      startingEvictionScanLevel: json.as("startingEvictionScanLevel"),
-      tempRentRateDenominator: json.as("tempRentRateDenominator"),
+      bucketListSizeWindowSampleSize: json.as('bucketListSizeWindowSampleSize'),
+      bucketListWindowSamplePeriod: json.as('bucketListWindowSamplePeriod'),
+      evictionScanSize: json.as('evictionScanSize'),
+      maxEntriesToArchive: json.as('maxEntriesToArchive'),
+      maxEntryTtl: json.as('maxEntryTtl'),
+      minPersistentTtl: json.as('minPersistentTtl'),
+      minTemporaryTtl: json.as('minTemporaryTtl'),
+      persistentRentRateDenominator: json.as('persistentRentRateDenominator'),
+      startingEvictionScanLevel: json.as('startingEvictionScanLevel'),
+      tempRentRateDenominator: json.as('tempRentRateDenominator'),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "maxEntryTtl"),
-      LayoutConst.u32be(property: "minTemporaryTtl"),
-      LayoutConst.u32be(property: "minPersistentTtl"),
-      LayoutConst.s64be(property: "persistentRentRateDenominator"),
-      LayoutConst.s64be(property: "tempRentRateDenominator"),
-      LayoutConst.u32be(property: "maxEntriesToArchive"),
-      LayoutConst.u32be(property: "bucketListSizeWindowSampleSize"),
-      LayoutConst.u32be(property: "bucketListWindowSamplePeriod"),
-      LayoutConst.u32be(property: "evictionScanSize"),
-      LayoutConst.u32be(property: "startingEvictionScanLevel"),
+      LayoutConst.u32be(property: 'maxEntryTtl'),
+      LayoutConst.u32be(property: 'minTemporaryTtl'),
+      LayoutConst.u32be(property: 'minPersistentTtl'),
+      LayoutConst.s64be(property: 'persistentRentRateDenominator'),
+      LayoutConst.s64be(property: 'tempRentRateDenominator'),
+      LayoutConst.u32be(property: 'maxEntriesToArchive'),
+      LayoutConst.u32be(property: 'bucketListSizeWindowSampleSize'),
+      LayoutConst.u32be(property: 'bucketListWindowSamplePeriod'),
+      LayoutConst.u32be(property: 'evictionScanSize'),
+      LayoutConst.u32be(property: 'startingEvictionScanLevel'),
     ], property: property);
   }
 
@@ -4481,16 +4482,16 @@ class StateArchivalSettings extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "maxEntryTtl": maxEntryTtl,
-      "minTemporaryTtl": minTemporaryTtl,
-      "minPersistentTtl": minPersistentTtl,
-      "persistentRentRateDenominator": persistentRentRateDenominator,
-      "tempRentRateDenominator": tempRentRateDenominator,
-      "maxEntriesToArchive": maxEntriesToArchive,
-      "bucketListSizeWindowSampleSize": bucketListSizeWindowSampleSize,
-      "bucketListWindowSamplePeriod": bucketListWindowSamplePeriod,
-      "evictionScanSize": evictionScanSize,
-      "startingEvictionScanLevel": startingEvictionScanLevel
+      'maxEntryTtl': maxEntryTtl,
+      'minTemporaryTtl': minTemporaryTtl,
+      'minPersistentTtl': minPersistentTtl,
+      'persistentRentRateDenominator': persistentRentRateDenominator,
+      'tempRentRateDenominator': tempRentRateDenominator,
+      'maxEntriesToArchive': maxEntriesToArchive,
+      'bucketListSizeWindowSampleSize': bucketListSizeWindowSampleSize,
+      'bucketListWindowSamplePeriod': bucketListWindowSamplePeriod,
+      'evictionScanSize': evictionScanSize,
+      'startingEvictionScanLevel': startingEvictionScanLevel
     };
   }
 
@@ -4525,11 +4526,11 @@ class ConfigSettingContractStateArchivalSettings extends ConfigSetting {
   factory ConfigSettingContractStateArchivalSettings.fromStruct(
       Map<String, dynamic> json) {
     return ConfigSettingContractStateArchivalSettings(
-        StateArchivalSettings.fromStruct(json.asMap("settings")));
+        StateArchivalSettings.fromStruct(json.asMap('settings')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [StateArchivalSettings.layout(property: "settings")],
+        [StateArchivalSettings.layout(property: 'settings')],
         property: property);
   }
 
@@ -4540,7 +4541,7 @@ class ConfigSettingContractStateArchivalSettings extends ConfigSetting {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"settings": settings.toLayoutStruct()};
+    return {'settings': settings.toLayoutStruct()};
   }
 }
 
@@ -4553,10 +4554,10 @@ class ConfigSettingContractExecutionLanesV0 extends ConfigSetting {
         super(ConfigSettingId.contractExecutionLanes);
   factory ConfigSettingContractExecutionLanesV0.fromStruct(
       Map<String, dynamic> json) {
-    return ConfigSettingContractExecutionLanesV0(json.as("ledgerMaxTxCount"));
+    return ConfigSettingContractExecutionLanesV0(json.as('ledgerMaxTxCount'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([LayoutConst.u32be(property: "ledgerMaxTxCount")],
+    return LayoutConst.struct([LayoutConst.u32be(property: 'ledgerMaxTxCount')],
         property: property);
   }
 
@@ -4567,7 +4568,7 @@ class ConfigSettingContractExecutionLanesV0 extends ConfigSetting {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"ledgerMaxTxCount": ledgerMaxTxCount};
+    return {'ledgerMaxTxCount': ledgerMaxTxCount};
   }
 }
 
@@ -4580,13 +4581,13 @@ class ConfigSettingBucketlistSizeWindow extends ConfigSetting {
   factory ConfigSettingBucketlistSizeWindow.fromStruct(
       Map<String, dynamic> json) {
     return ConfigSettingBucketlistSizeWindow(
-        json.as<List>("ledgerMaxTxCount").map((e) {
+        json.as<List>('ledgerMaxTxCount').map((e) {
       if (e is! BigInt) {
-        throw DartStellarPlugingException("Incorrect value.", details: {
-          "key": "ledgerMaxTxCount",
-          "excepted": "BigInt",
-          "value": e.runtimeType,
-          "data": json["ledgerMaxTxCount"]
+        throw DartStellarPlugingException('Incorrect value.', details: {
+          'key': 'ledgerMaxTxCount',
+          'excepted': 'BigInt',
+          'value': e.runtimeType,
+          'data': json['ledgerMaxTxCount']
         });
       }
       return e;
@@ -4594,7 +4595,7 @@ class ConfigSettingBucketlistSizeWindow extends ConfigSetting {
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.xdrVec(LayoutConst.u64be(), property: "bucketlistSizeWindow")
+      LayoutConst.xdrVec(LayoutConst.u64be(), property: 'bucketlistSizeWindow')
     ], property: property);
   }
 
@@ -4605,7 +4606,7 @@ class ConfigSettingBucketlistSizeWindow extends ConfigSetting {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"bucketlistSizeWindow": bucketlistSizeWindow};
+    return {'bucketlistSizeWindow': bucketlistSizeWindow};
   }
 }
 
@@ -4621,15 +4622,15 @@ class EvictionIterator extends XDRSerialization {
         bucketFileOffset = bucketFileOffset.asUint64;
   factory EvictionIterator.fromStruct(Map<String, dynamic> json) {
     return EvictionIterator(
-        bucketFileOffset: json.as("bucketFileOffset"),
-        bucketListLevel: json.as("bucketListLevel"),
-        isCurrBucket: json.as("isCurrBucket"));
+        bucketFileOffset: json.as('bucketFileOffset'),
+        bucketListLevel: json.as('bucketListLevel'),
+        isCurrBucket: json.as('isCurrBucket'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "bucketListLevel"),
-      LayoutConst.boolean32Be(property: "isCurrBucket"),
-      LayoutConst.u64be(property: "bucketFileOffset"),
+      LayoutConst.u32be(property: 'bucketListLevel'),
+      LayoutConst.boolean32Be(property: 'isCurrBucket'),
+      LayoutConst.u64be(property: 'bucketFileOffset'),
     ], property: property);
   }
 
@@ -4641,9 +4642,9 @@ class EvictionIterator extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "bucketFileOffset": bucketFileOffset,
-      "isCurrBucket": isCurrBucket,
-      "bucketListLevel": bucketListLevel
+      'bucketFileOffset': bucketFileOffset,
+      'isCurrBucket': isCurrBucket,
+      'bucketListLevel': bucketListLevel
     };
   }
 }
@@ -4654,11 +4655,11 @@ class ConfigSettingEvictionIterator extends ConfigSetting {
       : super(ConfigSettingId.evictionIterator);
   factory ConfigSettingEvictionIterator.fromStruct(Map<String, dynamic> json) {
     return ConfigSettingEvictionIterator(
-        EvictionIterator.fromStruct(json.asMap("evictionIterator")));
+        EvictionIterator.fromStruct(json.asMap('evictionIterator')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [ConfigSettingEvictionIterator.layout(property: "evictionIterator")],
+        [ConfigSettingEvictionIterator.layout(property: 'evictionIterator')],
         property: property);
   }
 
@@ -4669,7 +4670,7 @@ class ConfigSettingEvictionIterator extends ConfigSetting {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"evictionIterator": evictionIterator.toLayoutStruct()};
+    return {'evictionIterator': evictionIterator.toLayoutStruct()};
   }
 }
 
@@ -4680,17 +4681,17 @@ class TTLEntery extends LedgerEntryData {
   TTLEntery({required List<int> keyHash, required int liveUntilLedgerSeq})
       : liveUntilLedgerSeq = liveUntilLedgerSeq.asUint32,
         keyHash = keyHash.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "keyHash"),
+            .exc(StellarConst.hash256Length, name: 'keyHash'),
         super(LedgerEntryType.ttl);
   factory TTLEntery.fromStruct(Map<String, dynamic> json) {
     return TTLEntery(
-        keyHash: json.asBytes("keyHash"),
-        liveUntilLedgerSeq: json.as("liveUntilLedgerSeq"));
+        keyHash: json.asBytes('keyHash'),
+        liveUntilLedgerSeq: json.as('liveUntilLedgerSeq'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "keyHash"),
-      LayoutConst.u32be(property: "liveUntilLedgerSeq"),
+      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'keyHash'),
+      LayoutConst.u32be(property: 'liveUntilLedgerSeq'),
     ], property: property);
   }
 
@@ -4701,7 +4702,7 @@ class TTLEntery extends LedgerEntryData {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"keyHash": keyHash, "liveUntilLedgerSeq": liveUntilLedgerSeq};
+    return {'keyHash': keyHash, 'liveUntilLedgerSeq': liveUntilLedgerSeq};
   }
 }
 
@@ -4712,16 +4713,16 @@ class LedgerEntryExtensionV1 extends XDRSerialization {
       {this.ext = const ExtentionPointVoid(), this.sponsoringId});
   factory LedgerEntryExtensionV1.fromStruct(Map<String, dynamic> json) {
     return LedgerEntryExtensionV1(
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")),
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')),
         sponsoringId: json.mybeAs<StellarPublicKey, Map<String, dynamic>>(
-            key: "sponsoringId",
+            key: 'sponsoringId',
             onValue: (e) => StellarPublicKey.fromStruct(e)));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.optionalU32Be(StellarPublicKey.layout(),
-          property: "sponsoringId"),
-      ExtentionPointVoid.layout(property: "ext"),
+          property: 'sponsoringId'),
+      ExtentionPointVoid.layout(property: 'ext'),
     ], property: property);
   }
 
@@ -4733,8 +4734,8 @@ class LedgerEntryExtensionV1 extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "sponsoringId": sponsoringId?.toLayoutStruct(),
-      "ext": ext.toVariantLayoutStruct()
+      'sponsoringId': sponsoringId?.toLayoutStruct(),
+      'ext': ext.toVariantLayoutStruct()
     };
   }
 }
@@ -4759,7 +4760,7 @@ class LedgerEntryExt extends XDRVariantSerialization {
             v1: LedgerEntryExtensionV1.fromStruct(decode.value));
       default:
         throw const DartStellarPlugingException(
-            "Invalid LedgerEntry extension.");
+            'Invalid LedgerEntry extension.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -4816,15 +4817,15 @@ class LedgerEntry extends XDRSerialization {
   }
   factory LedgerEntry.fromStruct(Map<String, dynamic> json) {
     return LedgerEntry(
-        data: LedgerEntryData.fromStruct(json.asMap("data")),
-        ext: LedgerEntryExt.fromStruct(json.asMap("ext")),
-        lastModifiedLedgerSeq: json.as("lastModifiedLedgerSeq"));
+        data: LedgerEntryData.fromStruct(json.asMap('data')),
+        ext: LedgerEntryExt.fromStruct(json.asMap('ext')),
+        lastModifiedLedgerSeq: json.as('lastModifiedLedgerSeq'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "lastModifiedLedgerSeq"),
-      LedgerEntryData.layout(property: "data"),
-      LedgerEntryExt.layout(property: "ext")
+      LayoutConst.u32be(property: 'lastModifiedLedgerSeq'),
+      LedgerEntryData.layout(property: 'data'),
+      LedgerEntryExt.layout(property: 'ext')
     ], property: property);
   }
 
@@ -4836,9 +4837,9 @@ class LedgerEntry extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "lastModifiedLedgerSeq": lastModifiedLedgerSeq,
-      "data": data.toVariantLayoutStruct(),
-      "ext": ext.toVariantLayoutStruct()
+      'lastModifiedLedgerSeq': lastModifiedLedgerSeq,
+      'data': data.toVariantLayoutStruct(),
+      'ext': ext.toVariantLayoutStruct()
     };
   }
 }
@@ -4876,7 +4877,7 @@ abstract class LedgerKey extends XDRVariantSerialization {
       case LedgerEntryType.ttl:
         return LedgerKeyTTL.fromStruct(decode.value);
       default:
-        throw const DartStellarPlugingException("Invalid LedgerEntry type.");
+        throw const DartStellarPlugingException('Invalid LedgerEntry type.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -4936,7 +4937,7 @@ abstract class LedgerKey extends XDRVariantSerialization {
                   property: type.name);
             default:
               throw const DartStellarPlugingException(
-                  "Invalid LedgerEntry type.");
+                  'Invalid LedgerEntry type.');
           }
         }),
         property: property);
@@ -4955,11 +4956,11 @@ class LedgerKeyAccount extends LedgerKey {
   final StellarPublicKey accountId;
   const LedgerKeyAccount(this.accountId) : super(LedgerEntryType.account);
   factory LedgerKeyAccount.fromStruct(Map<String, dynamic> json) {
-    return LedgerKeyAccount(json.asMap("accountId"));
+    return LedgerKeyAccount(json.asMap('accountId'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "accountId"),
+      StellarPublicKey.layout(property: 'accountId'),
     ], property: property);
   }
 
@@ -4970,12 +4971,12 @@ class LedgerKeyAccount extends LedgerKey {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"accountId": accountId.toLayoutStruct()};
+    return {'accountId': accountId.toLayoutStruct()};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"accountId": accountId.toAddress().toString()};
+    return {'accountId': accountId.toAddress().toString()};
   }
 }
 
@@ -4986,13 +4987,13 @@ class LedgerKeyTrustLine extends LedgerKey {
       : super(LedgerEntryType.trustline);
   factory LedgerKeyTrustLine.fromStruct(Map<String, dynamic> json) {
     return LedgerKeyTrustLine(
-        accountId: json.asMap("accountId"),
-        asset: TrustLineAsset.fromStruct(json.asMap("asset")));
+        accountId: json.asMap('accountId'),
+        asset: TrustLineAsset.fromStruct(json.asMap('asset')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "accountId"),
-      TrustLineAsset.layout(property: "asset")
+      StellarPublicKey.layout(property: 'accountId'),
+      TrustLineAsset.layout(property: 'asset')
     ], property: property);
   }
 
@@ -5004,16 +5005,16 @@ class LedgerKeyTrustLine extends LedgerKey {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "accountId": accountId.toLayoutStruct(),
-      "asset": asset.toVariantLayoutStruct()
+      'accountId': accountId.toLayoutStruct(),
+      'asset': asset.toVariantLayoutStruct()
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "accountId": accountId.toAddress().toString(),
-      "asset": asset.toJson()
+      'accountId': accountId.toAddress().toString(),
+      'asset': asset.toJson()
     };
   }
 }
@@ -5026,12 +5027,12 @@ class LedgerKeyOffer extends LedgerKey {
         super(LedgerEntryType.offer);
   factory LedgerKeyOffer.fromStruct(Map<String, dynamic> json) {
     return LedgerKeyOffer(
-        accountId: json.asMap("accountId"), offerId: json.as("offerId"));
+        accountId: json.asMap('accountId'), offerId: json.as('offerId'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "accountId"),
-      LayoutConst.s64be(property: "offerId")
+      StellarPublicKey.layout(property: 'accountId'),
+      LayoutConst.s64be(property: 'offerId')
     ], property: property);
   }
 
@@ -5042,14 +5043,14 @@ class LedgerKeyOffer extends LedgerKey {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"accountId": accountId.toLayoutStruct(), "offerId": offerId};
+    return {'accountId': accountId.toLayoutStruct(), 'offerId': offerId};
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "accountId": accountId.toAddress().toString(),
-      "offerId": offerId.toString()
+      'accountId': accountId.toAddress().toString(),
+      'offerId': offerId.toString()
     };
   }
 }
@@ -5062,12 +5063,12 @@ class LedgerKeyData extends LedgerKey {
         super(LedgerEntryType.data);
   factory LedgerKeyData.fromStruct(Map<String, dynamic> json) {
     return LedgerKeyData(
-        accountId: json.asMap("accountId"), dataName: json.as("dataName"));
+        accountId: json.asMap('accountId'), dataName: json.as('dataName'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "accountId"),
-      LayoutConst.xdrString(property: "dataName")
+      StellarPublicKey.layout(property: 'accountId'),
+      LayoutConst.xdrString(property: 'dataName')
     ], property: property);
   }
 
@@ -5078,14 +5079,14 @@ class LedgerKeyData extends LedgerKey {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"accountId": accountId.toLayoutStruct(), "dataName": dataName};
+    return {'accountId': accountId.toLayoutStruct(), 'dataName': dataName};
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "accountId": accountId.toAddress().toString(),
-      "dataName": dataName
+      'accountId': accountId.toAddress().toString(),
+      'dataName': dataName
     };
   }
 }
@@ -5096,11 +5097,11 @@ class LedgerKeyClaimableBalance extends LedgerKey {
       : super(LedgerEntryType.claimableBalance);
   factory LedgerKeyClaimableBalance.fromStruct(Map<String, dynamic> json) {
     return LedgerKeyClaimableBalance(
-        ClaimableBalanceId.fromStruct(json.asMap("balanceId")));
+        ClaimableBalanceId.fromStruct(json.asMap('balanceId')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [ClaimableBalanceId.layout(property: "balanceId")],
+        [ClaimableBalanceId.layout(property: 'balanceId')],
         property: property);
   }
 
@@ -5112,14 +5113,14 @@ class LedgerKeyClaimableBalance extends LedgerKey {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "balanceId": balanceId.toVariantLayoutStruct(),
+      'balanceId': balanceId.toVariantLayoutStruct(),
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "balanceId": balanceId.toJson(),
+      'balanceId': balanceId.toJson(),
     };
   }
 }
@@ -5128,15 +5129,15 @@ class LedgerKeyLiquidityPool extends LedgerKey {
   final List<int> liquidityPoolId;
   LedgerKeyLiquidityPool(List<int> liquidityPoolId)
       : liquidityPoolId = liquidityPoolId.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "liquidityPoolId"),
+            .exc(StellarConst.hash256Length, name: 'liquidityPoolId'),
         super(LedgerEntryType.liquidityPool);
   factory LedgerKeyLiquidityPool.fromStruct(Map<String, dynamic> json) {
-    return LedgerKeyLiquidityPool(json.asBytes("liquidityPoolId"));
+    return LedgerKeyLiquidityPool(json.asBytes('liquidityPoolId'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.hash256Length,
-          property: "liquidityPoolId")
+          property: 'liquidityPoolId')
     ], property: property);
   }
 
@@ -5147,13 +5148,13 @@ class LedgerKeyLiquidityPool extends LedgerKey {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"liquidityPoolId": liquidityPoolId};
+    return {'liquidityPoolId': liquidityPoolId};
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "liquidityPoolId": BytesUtils.toHexString(liquidityPoolId, prefix: "0x"),
+      'liquidityPoolId': BytesUtils.toHexString(liquidityPoolId, prefix: '0x'),
     };
   }
 }
@@ -5167,15 +5168,15 @@ class LedgerKeyContractData extends LedgerKey {
       : super(LedgerEntryType.contractData);
   factory LedgerKeyContractData.fromStruct(Map<String, dynamic> json) {
     return LedgerKeyContractData(
-        contract: ScAddress.fromStruct(json.asMap("contract")),
-        durability: ContractDataDurability.fromValue(json.as("durability")),
-        key: ScVal.fromStruct(json.asMap("key")));
+        contract: ScAddress.fromStruct(json.asMap('contract')),
+        durability: ContractDataDurability.fromValue(json.as('durability')),
+        key: ScVal.fromStruct(json.asMap('key')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ScAddress.layout(property: "contract"),
-      ScVal.layout(property: "key"),
-      LayoutConst.s32be(property: "durability")
+      ScAddress.layout(property: 'contract'),
+      ScVal.layout(property: 'key'),
+      LayoutConst.s32be(property: 'durability')
     ], property: property);
   }
 
@@ -5187,18 +5188,18 @@ class LedgerKeyContractData extends LedgerKey {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "contract": contract.toVariantLayoutStruct(),
-      "key": key.toVariantLayoutStruct(),
-      "durability": durability.value
+      'contract': contract.toVariantLayoutStruct(),
+      'key': key.toVariantLayoutStruct(),
+      'durability': durability.value
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "contract": contract.toJson(),
-      "key": key.toJson(),
-      "durability": durability.name
+      'contract': contract.toJson(),
+      'key': key.toJson(),
+      'durability': durability.name
     };
   }
 }
@@ -5207,14 +5208,14 @@ class LedgerKeyContractCode extends LedgerKey {
   final List<int> hash;
   LedgerKeyContractCode(List<int> hash)
       : hash = hash.asImmutableBytes.exc(StellarConst.hash256Length,
-            name: "LedgerKeyContractCode Hash"),
+            name: 'LedgerKeyContractCode Hash'),
         super(LedgerEntryType.contractCode);
   factory LedgerKeyContractCode.fromStruct(Map<String, dynamic> json) {
-    return LedgerKeyContractCode(json.asBytes("hash"));
+    return LedgerKeyContractCode(json.asBytes('hash'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "hash")],
+        [LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'hash')],
         property: property);
   }
 
@@ -5225,12 +5226,12 @@ class LedgerKeyContractCode extends LedgerKey {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"hash": hash};
+    return {'hash': hash};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"hash": BytesUtils.toHexString(hash, prefix: "0x")};
+    return {'hash': BytesUtils.toHexString(hash, prefix: '0x')};
   }
 }
 
@@ -5240,11 +5241,11 @@ class LedgerKeyConfigSetting extends LedgerKey {
       : super(LedgerEntryType.configSetting);
   factory LedgerKeyConfigSetting.fromStruct(Map<String, dynamic> json) {
     return LedgerKeyConfigSetting(
-        ConfigSettingId.fromValue(json.as("configSettingId")));
+        ConfigSettingId.fromValue(json.as('configSettingId')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "configSettingId"),
+      LayoutConst.u32be(property: 'configSettingId'),
     ], property: property);
   }
 
@@ -5255,12 +5256,12 @@ class LedgerKeyConfigSetting extends LedgerKey {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"configSettingId": configSettingId.value};
+    return {'configSettingId': configSettingId.value};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"configSettingId": configSettingId.name};
+    return {'configSettingId': configSettingId.name};
   }
 }
 
@@ -5268,14 +5269,14 @@ class LedgerKeyTTL extends LedgerKey {
   final List<int> keyHash;
   LedgerKeyTTL(List<int> keyHash)
       : keyHash = keyHash.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "keyHash"),
+            .exc(StellarConst.hash256Length, name: 'keyHash'),
         super(LedgerEntryType.ttl);
   factory LedgerKeyTTL.fromStruct(Map<String, dynamic> json) {
-    return LedgerKeyTTL(json.asBytes("keyHash"));
+    return LedgerKeyTTL(json.asBytes('keyHash'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "keyHash")
+      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'keyHash')
     ], property: property);
   }
 
@@ -5286,12 +5287,12 @@ class LedgerKeyTTL extends LedgerKey {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"keyHash": keyHash};
+    return {'keyHash': keyHash};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"keyHash": BytesUtils.toHexString(keyHash, prefix: "0x")};
+    return {'keyHash': BytesUtils.toHexString(keyHash, prefix: '0x')};
   }
 }
 
@@ -5305,19 +5306,19 @@ class LedgerFootprint extends XDRSerialization {
   factory LedgerFootprint.fromStruct(Map<String, dynamic> json) {
     return LedgerFootprint(
       readOnly: json
-          .asListOfMap("readOnly")!
+          .asListOfMap('readOnly')!
           .map((e) => LedgerKey.fromStruct(e))
           .toList(),
       readWrite: json
-          .asListOfMap("readWrite")!
+          .asListOfMap('readWrite')!
           .map((e) => LedgerKey.fromStruct(e))
           .toList(),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.xdrVec(LedgerKey.layout(), property: "readOnly"),
-      LayoutConst.xdrVec(LedgerKey.layout(), property: "readWrite"),
+      LayoutConst.xdrVec(LedgerKey.layout(), property: 'readOnly'),
+      LayoutConst.xdrVec(LedgerKey.layout(), property: 'readWrite'),
     ], property: property);
   }
 
@@ -5329,16 +5330,16 @@ class LedgerFootprint extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "readOnly": readOnly.map((e) => e.toVariantLayoutStruct()).toList(),
-      "readWrite": readWrite.map((e) => e.toVariantLayoutStruct()).toList(),
+      'readOnly': readOnly.map((e) => e.toVariantLayoutStruct()).toList(),
+      'readWrite': readWrite.map((e) => e.toVariantLayoutStruct()).toList(),
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "readOnly": readOnly.map((e) => e.toJson()).toList(),
-      "readWrite": readWrite.map((e) => e.toJson()).toList(),
+      'readOnly': readOnly.map((e) => e.toJson()).toList(),
+      'readWrite': readWrite.map((e) => e.toJson()).toList(),
     };
   }
 }
@@ -5358,17 +5359,17 @@ class SorobanResources extends XDRSerialization {
         writeBytes = writeBytes.asUint32;
   factory SorobanResources.fromStruct(Map<String, dynamic> json) {
     return SorobanResources(
-        footprint: LedgerFootprint.fromStruct(json.asMap("footprint")),
-        instructions: json.as("instructions"),
-        readBytes: json.as("readBytes"),
-        writeBytes: json.as("writeBytes"));
+        footprint: LedgerFootprint.fromStruct(json.asMap('footprint')),
+        instructions: json.as('instructions'),
+        readBytes: json.as('readBytes'),
+        writeBytes: json.as('writeBytes'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LedgerFootprint.layout(property: "footprint"),
-      LayoutConst.u32be(property: "instructions"),
-      LayoutConst.u32be(property: "readBytes"),
-      LayoutConst.u32be(property: "writeBytes"),
+      LedgerFootprint.layout(property: 'footprint'),
+      LayoutConst.u32be(property: 'instructions'),
+      LayoutConst.u32be(property: 'readBytes'),
+      LayoutConst.u32be(property: 'writeBytes'),
     ], property: property);
   }
 
@@ -5380,20 +5381,20 @@ class SorobanResources extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "footprint": footprint.toLayoutStruct(),
-      "instructions": instructions,
-      "readBytes": readBytes,
-      "writeBytes": writeBytes
+      'footprint': footprint.toLayoutStruct(),
+      'instructions': instructions,
+      'readBytes': readBytes,
+      'writeBytes': writeBytes
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "footprint": footprint.toJson(),
-      "instructions": instructions,
-      "readBytes": readBytes,
-      "writeBytes": writeBytes
+      'footprint': footprint.toJson(),
+      'instructions': instructions,
+      'readBytes': readBytes,
+      'writeBytes': writeBytes
     };
   }
 }
@@ -5415,15 +5416,15 @@ class SorobanTransactionData extends XDRSerialization {
   }
   factory SorobanTransactionData.fromStruct(Map<String, dynamic> json) {
     return SorobanTransactionData(
-        resources: SorobanResources.fromStruct(json.asMap("resources")),
-        resourceFee: json.as("resourceFee"),
-        ext: ExtentionPointVoid.fromStruct(json.as("ext")));
+        resources: SorobanResources.fromStruct(json.asMap('resources')),
+        resourceFee: json.as('resourceFee'),
+        ext: ExtentionPointVoid.fromStruct(json.as('ext')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ExtentionPointVoid.layout(property: "ext"),
-      SorobanResources.layout(property: "resources"),
-      LayoutConst.s64be(property: "resourceFee"),
+      ExtentionPointVoid.layout(property: 'ext'),
+      SorobanResources.layout(property: 'resources'),
+      LayoutConst.s64be(property: 'resourceFee'),
     ], property: property);
   }
 
@@ -5435,17 +5436,17 @@ class SorobanTransactionData extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "ext": ext.toVariantLayoutStruct(),
-      "resources": resources.toLayoutStruct(),
-      "resourceFee": resourceFee
+      'ext': ext.toVariantLayoutStruct(),
+      'resources': resources.toLayoutStruct(),
+      'resourceFee': resourceFee
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "resources": resources.toJson(),
-      "resourceFee": resourceFee.toString()
+      'resources': resources.toJson(),
+      'resourceFee': resourceFee.toString()
     };
   }
 }
@@ -5472,17 +5473,17 @@ class CryptoKeyType {
   static CryptoKeyType fromName(String? name) {
     return values.firstWhere(
       (e) => e.name == name,
-      orElse: () => throw DartStellarPlugingException("Asset type not found.",
+      orElse: () => throw DartStellarPlugingException('Asset type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "CryptoKeyType.$name";
+    return 'CryptoKeyType.$name';
   }
 }
 
@@ -5497,8 +5498,8 @@ abstract class MuxedAccount extends XDRVariantSerialization {
           id: address.accountId, ed25519: address.keyBytes());
     } else if (address.type != XlmAddrTypes.pubKey) {
       throw DartStellarPlugingException(
-          "Only Stellar ED25519 public key address (XlmAddrTypes.pubKey, XlmAddrTypes.muxed) can be converted to muxed account.",
-          details: {"type": address.type.name});
+          'Only Stellar ED25519 public key address (XlmAddrTypes.pubKey, XlmAddrTypes.muxed) can be converted to muxed account.',
+          details: {'type': address.type.name});
     }
 
     return MuxedAccountEd25519(address.keyBytes());
@@ -5518,8 +5519,8 @@ abstract class MuxedAccount extends XDRVariantSerialization {
       case CryptoKeyType.muxedEd25519:
         return MuxedAccountMed25519.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid MuxedAccount type.",
-            details: {"type": type});
+        throw DartStellarPlugingException('Invalid MuxedAccount type.',
+            details: {'type': type});
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) =>
@@ -5553,13 +5554,13 @@ class MuxedAccountMed25519 extends MuxedAccount {
 
   factory MuxedAccountMed25519.fromStruct(Map<String, dynamic> json) {
     return MuxedAccountMed25519(
-        id: json.as("id"), ed25519: json.asBytes("ed25519"));
+        id: json.as('id'), ed25519: json.asBytes('ed25519'));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) =>
       LayoutConst.struct([
-        LayoutConst.u64be(property: "id"),
-        LayoutConst.fixedBlob32(property: "ed25519"),
+        LayoutConst.u64be(property: 'id'),
+        LayoutConst.fixedBlob32(property: 'ed25519'),
       ], property: property);
 
   @override
@@ -5569,7 +5570,7 @@ class MuxedAccountMed25519 extends MuxedAccount {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"id": id, "ed25519": ed25519};
+    return {'id': id, 'ed25519': ed25519};
   }
 
   @override
@@ -5583,11 +5584,11 @@ class MuxedAccountEd25519 extends MuxedAccount {
       : ed25519 = ed25519.asImmutableBytes,
         super._(CryptoKeyType.ed25519);
   factory MuxedAccountEd25519.fromStruct(Map<String, dynamic> json) {
-    return MuxedAccountEd25519(json.asBytes("ed25519"));
+    return MuxedAccountEd25519(json.asBytes('ed25519'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) =>
       LayoutConst.struct([
-        LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "ed25519")
+        LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'ed25519')
       ], property: property);
   @override
   Layout<Map<String, dynamic>> createLayout({String? property}) {
@@ -5596,7 +5597,7 @@ class MuxedAccountEd25519 extends MuxedAccount {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"ed25519": ed25519};
+    return {'ed25519': ed25519};
   }
 
   @override
@@ -5619,10 +5620,10 @@ class PreconditionType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "Precondition type not found.",
+          'Precondition type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -5635,12 +5636,12 @@ class TimeBounds extends XDRSerialization {
       : minTime = minTime.asUint64,
         maxTime = maxTime.asUint64;
   factory TimeBounds.fromStruct(Map<String, dynamic> json) {
-    return TimeBounds(minTime: json.as("minTime"), maxTime: json.as("maxTime"));
+    return TimeBounds(minTime: json.as('minTime'), maxTime: json.as('maxTime'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u64be(property: "minTime"),
-      LayoutConst.u64be(property: "maxTime")
+      LayoutConst.u64be(property: 'minTime'),
+      LayoutConst.u64be(property: 'maxTime')
     ], property: property);
   }
 
@@ -5651,12 +5652,12 @@ class TimeBounds extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"minTime": minTime, "maxTime": maxTime};
+    return {'minTime': minTime, 'maxTime': maxTime};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"minTime": minTime.toString(), "maxTime": maxTime.toString()};
+    return {'minTime': minTime.toString(), 'maxTime': maxTime.toString()};
   }
 }
 
@@ -5668,12 +5669,12 @@ class LedgerBounds extends XDRSerialization {
         maxLedger = maxLedger.asUint32;
   factory LedgerBounds.fromStruct(Map<String, dynamic> json) {
     return LedgerBounds(
-        minLedger: json.as("minLedger"), maxLedger: json.as("maxLedger"));
+        minLedger: json.as('minLedger'), maxLedger: json.as('maxLedger'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "minLedger"),
-      LayoutConst.u32be(property: "maxLedger")
+      LayoutConst.u32be(property: 'minLedger'),
+      LayoutConst.u32be(property: 'maxLedger')
     ], property: property);
   }
 
@@ -5684,12 +5685,12 @@ class LedgerBounds extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"minLedger": minLedger, "maxLedger": maxLedger};
+    return {'minLedger': minLedger, 'maxLedger': maxLedger};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"minLedger": minLedger, "maxLedger": maxLedger};
+    return {'minLedger': minLedger, 'maxLedger': maxLedger};
   }
 }
 
@@ -5710,30 +5711,30 @@ class PreconditionsV2 extends XDRSerialization {
       : minSeqNum = minSeqNum?.asInt64,
         minSeqAge = minSeqAge.asUint64,
         minSeqLedgerGap = minSeqLedgerGap.asUint32,
-        extraSigners = extraSigners.immutable.max(2, name: "extraSigners");
+        extraSigners = extraSigners.immutable.max(2, name: 'extraSigners');
   factory PreconditionsV2.fromStruct(Map<String, dynamic> json) {
     return PreconditionsV2(
         timeBounds: json.mybeAs<TimeBounds, Map<String, dynamic>>(
-            key: "timeBounds", onValue: (e) => TimeBounds.fromStruct(e)),
+            key: 'timeBounds', onValue: (e) => TimeBounds.fromStruct(e)),
         ledgerBounds: json.mybeAs<LedgerBounds, Map<String, dynamic>>(
-            key: "ledgerBounds", onValue: (e) => LedgerBounds.fromStruct(e)),
-        minSeqNum: json.as("minSeqNum"),
-        minSeqAge: json.as("minSeqAge"),
-        minSeqLedgerGap: json.as("minSeqLedgerGap"),
+            key: 'ledgerBounds', onValue: (e) => LedgerBounds.fromStruct(e)),
+        minSeqNum: json.as('minSeqNum'),
+        minSeqAge: json.as('minSeqAge'),
+        minSeqLedgerGap: json.as('minSeqLedgerGap'),
         extraSigners: json
-            .asListOfMap("extraSigners")!
+            .asListOfMap('extraSigners')!
             .map((e) => SignerKey.fromStruct(e))
             .toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.optionalU32Be(TimeBounds.layout(), property: "timeBounds"),
+      LayoutConst.optionalU32Be(TimeBounds.layout(), property: 'timeBounds'),
       LayoutConst.optionalU32Be(LedgerBounds.layout(),
-          property: "ledgerBounds"),
-      LayoutConst.optionalU32Be(LayoutConst.s64be(), property: "minSeqNum"),
-      LayoutConst.u64be(property: "minSeqAge"),
-      LayoutConst.u32be(property: "minSeqLedgerGap"),
-      LayoutConst.xdrVec(SignerKey.layout(), property: "extraSigners")
+          property: 'ledgerBounds'),
+      LayoutConst.optionalU32Be(LayoutConst.s64be(), property: 'minSeqNum'),
+      LayoutConst.u64be(property: 'minSeqAge'),
+      LayoutConst.u32be(property: 'minSeqLedgerGap'),
+      LayoutConst.xdrVec(SignerKey.layout(), property: 'extraSigners')
     ], property: property);
   }
 
@@ -5745,12 +5746,12 @@ class PreconditionsV2 extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "timeBounds": timeBounds?.toLayoutStruct(),
-      "ledgerBounds": ledgerBounds?.toLayoutStruct(),
-      "minSeqNum": minSeqNum,
-      "minSeqAge": minSeqAge,
-      "minSeqLedgerGap": minSeqLedgerGap,
-      "extraSigners":
+      'timeBounds': timeBounds?.toLayoutStruct(),
+      'ledgerBounds': ledgerBounds?.toLayoutStruct(),
+      'minSeqNum': minSeqNum,
+      'minSeqAge': minSeqAge,
+      'minSeqLedgerGap': minSeqLedgerGap,
+      'extraSigners':
           extraSigners.map((e) => e.toVariantLayoutStruct()).toList()
     };
   }
@@ -5770,8 +5771,8 @@ abstract class Preconditions extends XDRVariantSerialization {
       case PreconditionType.v2:
         return PrecondV2.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid Precondition type.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Invalid Precondition type.',
+            details: {'type': type.name});
     }
   }
 
@@ -5826,11 +5827,11 @@ class PrecondTime extends Preconditions {
   final TimeBounds timeBounds;
   const PrecondTime(this.timeBounds) : super(PreconditionType.time);
   factory PrecondTime.fromStruct(Map<String, dynamic> json) {
-    return PrecondTime(TimeBounds.fromStruct(json.asMap("timeBounds")));
+    return PrecondTime(TimeBounds.fromStruct(json.asMap('timeBounds')));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([TimeBounds.layout(property: "timeBounds")],
+    return LayoutConst.struct([TimeBounds.layout(property: 'timeBounds')],
         property: property);
   }
 
@@ -5841,7 +5842,7 @@ class PrecondTime extends Preconditions {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"timeBounds": timeBounds.toLayoutStruct()};
+    return {'timeBounds': timeBounds.toLayoutStruct()};
   }
 }
 
@@ -5849,11 +5850,11 @@ class PrecondV2 extends Preconditions {
   final PreconditionsV2 preconditionsV2;
   const PrecondV2(this.preconditionsV2) : super(PreconditionType.v2);
   factory PrecondV2.fromStruct(Map<String, dynamic> json) {
-    return PrecondV2(PreconditionsV2.fromStruct(json.asMap("preconditionsV2")));
+    return PrecondV2(PreconditionsV2.fromStruct(json.asMap('preconditionsV2')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [PreconditionsV2.layout(property: "preconditionsV2")],
+        [PreconditionsV2.layout(property: 'preconditionsV2')],
         property: property);
   }
 
@@ -5864,12 +5865,12 @@ class PrecondV2 extends Preconditions {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"preconditionsV2": preconditionsV2.toLayoutStruct()};
+    return {'preconditionsV2': preconditionsV2.toLayoutStruct()};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"preconditionsV2": preconditionsV2.toJson()};
+    return {'preconditionsV2': preconditionsV2.toJson()};
   }
 }
 
@@ -5886,8 +5887,8 @@ abstract class AssetCode extends XDRVariantSerialization {
       case AssetType.creditAlphanum4:
         return AssetCode4.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid AssetCode type",
-            details: {"type": type});
+        throw DartStellarPlugingException('Invalid AssetCode type',
+            details: {'type': type});
     }
   }
 
@@ -5914,17 +5915,17 @@ class AssetCode4 extends AssetCode {
   AssetCode4(List<int> code)
       : super(
             type: AssetType.creditAlphanum4,
-            code: code.asImmutableBytes.exc(codeLength, name: "Asset code"));
+            code: code.asImmutableBytes.exc(codeLength, name: 'Asset code'));
   factory AssetCode4.fromString(String code) {
     return AssetCode4(
         StellarHelper.toAlphanumAssetCode(code: code, length: codeLength));
   }
   factory AssetCode4.fromStruct(Map<String, dynamic> json) {
-    return AssetCode4(json.asBytes("code"));
+    return AssetCode4(json.asBytes('code'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.fixedBlobN(codeLength, property: "code"),
+      LayoutConst.fixedBlobN(codeLength, property: 'code'),
     ], property: property);
   }
 
@@ -5935,12 +5936,12 @@ class AssetCode4 extends AssetCode {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"code": code};
+    return {'code': code};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"code": StellarHelper.toAssetsCode(code)};
+    return {'code': StellarHelper.toAssetsCode(code)};
   }
 }
 
@@ -5949,19 +5950,19 @@ class AssetCode12 extends AssetCode {
   AssetCode12(List<int> code)
       : super(
             type: AssetType.creditAlphanum12,
-            code: code.asImmutableBytes.exc(codeLength, name: "Asset code"));
+            code: code.asImmutableBytes.exc(codeLength, name: 'Asset code'));
   factory AssetCode12.fromString(String code) {
     return AssetCode12(
         StellarHelper.toAlphanumAssetCode(code: code, length: codeLength));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.fixedBlobN(codeLength, property: "code"),
+      LayoutConst.fixedBlobN(codeLength, property: 'code'),
     ], property: property);
   }
 
   factory AssetCode12.fromStruct(Map<String, dynamic> json) {
-    return AssetCode12(json.asBytes("code"));
+    return AssetCode12(json.asBytes('code'));
   }
 
   @override
@@ -5971,12 +5972,12 @@ class AssetCode12 extends AssetCode {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"code": code};
+    return {'code': code};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"code": StellarHelper.toAssetsCode(code)};
+    return {'code': StellarHelper.toAssetsCode(code)};
   }
 }
 
@@ -5985,26 +5986,26 @@ class RevokeSponsorshipType {
   final int value;
   const RevokeSponsorshipType._({required this.name, required this.value});
   static const RevokeSponsorshipType ledgerEntry =
-      RevokeSponsorshipType._(name: "LedgerEntry", value: 0);
+      RevokeSponsorshipType._(name: 'LedgerEntry', value: 0);
   static const RevokeSponsorshipType signer =
-      RevokeSponsorshipType._(name: "Signer", value: 1);
+      RevokeSponsorshipType._(name: 'Signer', value: 1);
 
   static const List<RevokeSponsorshipType> values = [ledgerEntry, signer];
   static RevokeSponsorshipType fromName(String? name) {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "RevokeSponsorship type not found.",
+          'RevokeSponsorship type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "RevokeSponsorshipType.$name";
+    return 'RevokeSponsorshipType.$name';
   }
 }
 
@@ -6020,8 +6021,8 @@ abstract class RevokeSponsorship extends XDRVariantSerialization {
       case RevokeSponsorshipType.signer:
         return RevokeSponsorshipSigner.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid RevokeSponsorship type.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Invalid RevokeSponsorship type.',
+            details: {'type': type.name});
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -6054,13 +6055,13 @@ class RevokeSponsorshipSigner extends RevokeSponsorship {
       : super(RevokeSponsorshipType.signer);
   factory RevokeSponsorshipSigner.fromStruct(Map<String, dynamic> json) {
     return RevokeSponsorshipSigner(
-        accountId: StellarPublicKey.fromStruct(json.asMap("accountId")),
-        signerKey: SignerKey.fromStruct(json.asMap("signerKey")));
+        accountId: StellarPublicKey.fromStruct(json.asMap('accountId')),
+        signerKey: SignerKey.fromStruct(json.asMap('signerKey')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "accountId"),
-      SignerKey.layout(property: "signerKey")
+      StellarPublicKey.layout(property: 'accountId'),
+      SignerKey.layout(property: 'signerKey')
     ], property: property);
   }
 
@@ -6072,16 +6073,16 @@ class RevokeSponsorshipSigner extends RevokeSponsorship {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "accountId": accountId.toLayoutStruct(),
-      "signerKey": signerKey.toVariantLayoutStruct(),
+      'accountId': accountId.toLayoutStruct(),
+      'signerKey': signerKey.toVariantLayoutStruct(),
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "accountId": accountId.toAddress().toString(),
-      "signerKey": signerKey.toJson(),
+      'accountId': accountId.toAddress().toString(),
+      'signerKey': signerKey.toJson(),
     };
   }
 }
@@ -6092,11 +6093,11 @@ class RevokeSponsorshipLedgerKey extends RevokeSponsorship {
       : super(RevokeSponsorshipType.ledgerEntry);
   factory RevokeSponsorshipLedgerKey.fromStruct(Map<String, dynamic> json) {
     return RevokeSponsorshipLedgerKey(
-        LedgerKey.fromStruct(json.asMap("ledgerKey")));
+        LedgerKey.fromStruct(json.asMap('ledgerKey')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LedgerKey.layout(property: "ledgerKey"),
+      LedgerKey.layout(property: 'ledgerKey'),
     ], property: property);
   }
 
@@ -6108,13 +6109,13 @@ class RevokeSponsorshipLedgerKey extends RevokeSponsorship {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "ledgerKey": ledgerKey.toVariantLayoutStruct(),
+      'ledgerKey': ledgerKey.toVariantLayoutStruct(),
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"ledgerKey": ledgerKey.toJson()};
+    return {'ledgerKey': ledgerKey.toJson()};
   }
 }
 
@@ -6139,17 +6140,17 @@ class HostFunctionType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "HostFunction type not found.",
+          'HostFunction type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "HostFunctionType.$name";
+    return 'HostFunctionType.$name';
   }
 }
 
@@ -6167,8 +6168,8 @@ abstract class HostFunction extends XDRVariantSerialization {
       case HostFunctionType.uploadContractWasm:
         return HostFunctionTypeUploadContractWasm.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid HostFunction type.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Invalid HostFunction type.',
+            details: {'type': type.name});
     }
   }
 
@@ -6204,10 +6205,10 @@ class HostFunctionTypeInvokeContract extends HostFunction {
       : super(HostFunctionType.invokeContract);
   factory HostFunctionTypeInvokeContract.fromStruct(Map<String, dynamic> json) {
     return HostFunctionTypeInvokeContract(
-        InvokeContractArgs.fromStruct(json.asMap("args")));
+        InvokeContractArgs.fromStruct(json.asMap('args')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([InvokeContractArgs.layout(property: "args")],
+    return LayoutConst.struct([InvokeContractArgs.layout(property: 'args')],
         property: property);
   }
 
@@ -6219,13 +6220,13 @@ class HostFunctionTypeInvokeContract extends HostFunction {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "args": args.toLayoutStruct(),
+      'args': args.toLayoutStruct(),
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"args": args.toJson()};
+    return {'args': args.toJson()};
   }
 }
 
@@ -6245,17 +6246,17 @@ class ContractIdPreimageType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ContractIdPreimage type not found.",
+          'ContractIdPreimage type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "ContractIdPreimageType.$name";
+    return 'ContractIdPreimageType.$name';
   }
 }
 
@@ -6271,8 +6272,8 @@ abstract class ContractIdPreimage extends XDRVariantSerialization {
       case ContractIdPreimageType.fromAsset:
         return ContractIdPreimageFromAsset.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid ContractIdPreimage type.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Invalid ContractIdPreimage type.',
+            details: {'type': type.name});
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -6302,18 +6303,18 @@ class ContractIdPreimageFromAddress extends ContractIdPreimage {
   final List<int> salt;
   ContractIdPreimageFromAddress(
       {required this.address, required List<int> salt})
-      : salt = salt.immutable.exc(StellarConst.hash256Length, name: "salt"),
+      : salt = salt.immutable.exc(StellarConst.hash256Length, name: 'salt'),
         super(ContractIdPreimageType.fromAddress);
   factory ContractIdPreimageFromAddress.fromStruct(Map<String, dynamic> json) {
     return ContractIdPreimageFromAddress(
-      address: ScAddress.fromStruct(json.asMap("address")),
-      salt: json.asBytes("salt"),
+      address: ScAddress.fromStruct(json.asMap('address')),
+      salt: json.asBytes('salt'),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ScAddress.layout(property: "address"),
-      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "salt")
+      ScAddress.layout(property: 'address'),
+      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'salt')
     ], property: property);
   }
 
@@ -6324,14 +6325,14 @@ class ContractIdPreimageFromAddress extends ContractIdPreimage {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"address": address.toVariantLayoutStruct(), "salt": salt};
+    return {'address': address.toVariantLayoutStruct(), 'salt': salt};
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "address": address.address.toString(),
-      "salt": BytesUtils.toHexString(salt, prefix: "0x")
+      'address': address.address.toString(),
+      'salt': BytesUtils.toHexString(salt, prefix: '0x')
     };
   }
 }
@@ -6342,12 +6343,12 @@ class ContractIdPreimageFromAsset extends ContractIdPreimage {
       : super(ContractIdPreimageType.fromAsset);
   factory ContractIdPreimageFromAsset.fromStruct(Map<String, dynamic> json) {
     return ContractIdPreimageFromAsset(
-      StellarAsset.fromStruct(json.asMap("asset")),
+      StellarAsset.fromStruct(json.asMap('asset')),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarAsset.layout(property: "asset"),
+      StellarAsset.layout(property: 'asset'),
     ], property: property);
   }
 
@@ -6358,12 +6359,12 @@ class ContractIdPreimageFromAsset extends ContractIdPreimage {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"asset": asset.toVariantLayoutStruct()};
+    return {'asset': asset.toVariantLayoutStruct()};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"asset": asset.toJson()};
+    return {'asset': asset.toJson()};
   }
 }
 
@@ -6375,13 +6376,13 @@ class CreateContractArgs extends XDRSerialization {
   factory CreateContractArgs.fromStruct(Map<String, dynamic> json) {
     return CreateContractArgs(
         contractIdPreimage:
-            ContractIdPreimage.fromStruct(json.as("contractIdPreimage")),
-        executable: ContractExecutable.fromStruct(json.as("executable")));
+            ContractIdPreimage.fromStruct(json.as('contractIdPreimage')),
+        executable: ContractExecutable.fromStruct(json.as('executable')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ContractIdPreimage.layout(property: "contractIdPreimage"),
-      ContractExecutable.layout(property: "executable"),
+      ContractIdPreimage.layout(property: 'contractIdPreimage'),
+      ContractExecutable.layout(property: 'executable'),
     ], property: property);
   }
 
@@ -6393,16 +6394,16 @@ class CreateContractArgs extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "contractIdPreimage": contractIdPreimage.toVariantLayoutStruct(),
-      "executable": executable.toVariantLayoutStruct(),
+      'contractIdPreimage': contractIdPreimage.toVariantLayoutStruct(),
+      'executable': executable.toVariantLayoutStruct(),
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "contractIdPreimage": contractIdPreimage.toJson(),
-      "executable": executable.toJson(),
+      'contractIdPreimage': contractIdPreimage.toJson(),
+      'executable': executable.toJson(),
     };
   }
 }
@@ -6413,11 +6414,11 @@ class HostFunctionTypeCreateContract extends HostFunction {
       : super(HostFunctionType.createContract);
   factory HostFunctionTypeCreateContract.fromStruct(Map<String, dynamic> json) {
     return HostFunctionTypeCreateContract(
-        CreateContractArgs.fromStruct(json.asMap("args")));
+        CreateContractArgs.fromStruct(json.asMap('args')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      CreateContractArgs.layout(property: "args"),
+      CreateContractArgs.layout(property: 'args'),
     ], property: property);
   }
 
@@ -6428,7 +6429,7 @@ class HostFunctionTypeCreateContract extends HostFunction {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"args": args.toLayoutStruct()};
+    return {'args': args.toLayoutStruct()};
   }
 }
 
@@ -6439,11 +6440,11 @@ class HostFunctionTypeUploadContractWasm extends HostFunction {
         super(HostFunctionType.uploadContractWasm);
   factory HostFunctionTypeUploadContractWasm.fromStruct(
       Map<String, dynamic> json) {
-    return HostFunctionTypeUploadContractWasm(json.asBytes("wasm"));
+    return HostFunctionTypeUploadContractWasm(json.asBytes('wasm'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.xdrVecBytes(property: "wasm"),
+      LayoutConst.xdrVecBytes(property: 'wasm'),
     ], property: property);
   }
 
@@ -6454,12 +6455,12 @@ class HostFunctionTypeUploadContractWasm extends HostFunction {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"wasm": wasm};
+    return {'wasm': wasm};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"wasm": BytesUtils.toHexString(wasm)};
+    return {'wasm': BytesUtils.toHexString(wasm)};
   }
 }
 
@@ -6477,17 +6478,17 @@ class SorobanCredentialsType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "SorobanCredentials type not found.",
+          'SorobanCredentials type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "SorobanCredentialsType.$name";
+    return 'SorobanCredentialsType.$name';
   }
 }
 
@@ -6503,8 +6504,8 @@ abstract class SorobanCredentials extends XDRVariantSerialization {
       case SorobanCredentialsType.sourceAccount:
         return SorobanCredentialsSourceAccount.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid SorobanCredentials type.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Invalid SorobanCredentials type.',
+            details: {'type': type.name});
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -6544,17 +6545,17 @@ class SorobanAddressCredentials extends SorobanCredentials {
         super(SorobanCredentialsType.address);
   factory SorobanAddressCredentials.fromStruct(Map<String, dynamic> json) {
     return SorobanAddressCredentials(
-        address: ScAddress.fromStruct(json.asMap("address")),
-        nonce: json.as("nonce"),
-        signatureExpirationLedger: json.as("signatureExpirationLedger"),
-        signature: ScVal.fromStruct(json.asMap("signature")));
+        address: ScAddress.fromStruct(json.asMap('address')),
+        nonce: json.as('nonce'),
+        signatureExpirationLedger: json.as('signatureExpirationLedger'),
+        signature: ScVal.fromStruct(json.asMap('signature')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ScAddress.layout(property: "address"),
-      LayoutConst.s64be(property: "nonce"),
-      LayoutConst.u32be(property: "signatureExpirationLedger"),
-      ScVal.layout(property: "signature")
+      ScAddress.layout(property: 'address'),
+      LayoutConst.s64be(property: 'nonce'),
+      LayoutConst.u32be(property: 'signatureExpirationLedger'),
+      ScVal.layout(property: 'signature')
     ], property: property);
   }
 
@@ -6566,20 +6567,20 @@ class SorobanAddressCredentials extends SorobanCredentials {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "address": address.toVariantLayoutStruct(),
-      "nonce": nonce,
-      "signatureExpirationLedger": signatureExpirationLedger,
-      "signature": signature.toVariantLayoutStruct()
+      'address': address.toVariantLayoutStruct(),
+      'nonce': nonce,
+      'signatureExpirationLedger': signatureExpirationLedger,
+      'signature': signature.toVariantLayoutStruct()
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "address": address.address.toString(),
-      "nonce": nonce.toString(),
-      "signatureExpirationLedger": signatureExpirationLedger,
-      "signature": signature.toJson()
+      'address': address.address.toString(),
+      'nonce': nonce.toString(),
+      'signatureExpirationLedger': signatureExpirationLedger,
+      'signature': signature.toJson()
     };
   }
 }
@@ -6625,17 +6626,17 @@ class SorobanAuthorizedFunctionType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "SorobanAuthorizedFunction type not found.",
+          'SorobanAuthorizedFunction type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "SorobanAuthorizedFunctionType.$name";
+    return 'SorobanAuthorizedFunctionType.$name';
   }
 }
 
@@ -6655,8 +6656,8 @@ abstract class SorobanAuthorizedFunction extends XDRVariantSerialization {
             .fromStruct(decode.value);
       default:
         throw DartStellarPlugingException(
-            "Invalid SorobanAuthorizedFunction type.",
-            details: {"type": type.name});
+            'Invalid SorobanAuthorizedFunction type.',
+            details: {'type': type.name});
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -6693,16 +6694,16 @@ class InvokeContractArgs extends XDRSerialization {
       : args = args.immutable;
   factory InvokeContractArgs.fromStruct(Map<String, dynamic> json) {
     return InvokeContractArgs(
-        contractAddress: ScAddress.fromStruct(json.asMap("contractAddress")),
-        functionName: ScValSymbol.fromStruct(json.asMap("functionName")),
+        contractAddress: ScAddress.fromStruct(json.asMap('contractAddress')),
+        functionName: ScValSymbol.fromStruct(json.asMap('functionName')),
         args:
-            json.asListOfMap("args")!.map((e) => ScVal.fromStruct(e)).toList());
+            json.asListOfMap('args')!.map((e) => ScVal.fromStruct(e)).toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      ScAddress.layout(property: "contractAddress"),
-      ScValSymbol.layout(property: "functionName"),
-      LayoutConst.xdrVec(ScVal.layout(), property: "args")
+      ScAddress.layout(property: 'contractAddress'),
+      ScValSymbol.layout(property: 'functionName'),
+      LayoutConst.xdrVec(ScVal.layout(), property: 'args')
     ], property: property);
   }
 
@@ -6714,9 +6715,9 @@ class InvokeContractArgs extends XDRSerialization {
   @override
   Map<String, dynamic> toJson() {
     return {
-      "contractAddress": contractAddress.address.toString(),
-      "functionName": functionName.value,
-      "args": args.map((e) => e.toJson()).toList()
+      'contractAddress': contractAddress.address.toString(),
+      'functionName': functionName.value,
+      'args': args.map((e) => e.toJson()).toList()
     };
   }
 
@@ -6724,9 +6725,9 @@ class InvokeContractArgs extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "contractAddress": contractAddress.toVariantLayoutStruct(),
-      "functionName": functionName.toLayoutStruct(),
-      "args": args.map((e) => e.toVariantLayoutStruct()).toList()
+      'contractAddress': contractAddress.toVariantLayoutStruct(),
+      'functionName': functionName.toLayoutStruct(),
+      'args': args.map((e) => e.toVariantLayoutStruct()).toList()
     };
   }
 }
@@ -6739,11 +6740,11 @@ class SorobanAuthorizedFunctionTypeContractFunction
   factory SorobanAuthorizedFunctionTypeContractFunction.fromStruct(
       Map<String, dynamic> json) {
     return SorobanAuthorizedFunctionTypeContractFunction(
-        InvokeContractArgs.fromStruct(json.asMap("args")));
+        InvokeContractArgs.fromStruct(json.asMap('args')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      InvokeContractArgs.layout(property: "args"),
+      InvokeContractArgs.layout(property: 'args'),
     ], property: property);
   }
 
@@ -6754,12 +6755,12 @@ class SorobanAuthorizedFunctionTypeContractFunction
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"args": args.toLayoutStruct()};
+    return {'args': args.toLayoutStruct()};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"args": args.toJson()};
+    return {'args': args.toJson()};
   }
 }
 
@@ -6772,11 +6773,11 @@ class SorobanAuthorizedFunctionTypeCreateContractHostFunction
   factory SorobanAuthorizedFunctionTypeCreateContractHostFunction.fromStruct(
       Map<String, dynamic> json) {
     return SorobanAuthorizedFunctionTypeCreateContractHostFunction(
-        CreateContractArgs.fromStruct(json.asMap("args")));
+        CreateContractArgs.fromStruct(json.asMap('args')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      CreateContractArgs.layout(property: "args"),
+      CreateContractArgs.layout(property: 'args'),
     ], property: property);
   }
 
@@ -6787,12 +6788,12 @@ class SorobanAuthorizedFunctionTypeCreateContractHostFunction
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"args": args.toLayoutStruct()};
+    return {'args': args.toLayoutStruct()};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"args": args.toJson()};
+    return {'args': args.toJson()};
   }
 }
 
@@ -6805,9 +6806,9 @@ class SorobanAuthorizedInvocation extends XDRSerialization {
       : subInvocations = subInvocations.immutable;
   factory SorobanAuthorizedInvocation.fromStruct(Map<String, dynamic> json) {
     return SorobanAuthorizedInvocation(
-        function: SorobanAuthorizedFunction.fromStruct(json.asMap("function")),
+        function: SorobanAuthorizedFunction.fromStruct(json.asMap('function')),
         subInvocations: json
-            .asListOfMap("subInvocations")!
+            .asListOfMap('subInvocations')!
             .map((e) => SorobanAuthorizedInvocation.fromStruct(e))
             .toList());
   }
@@ -6819,8 +6820,8 @@ class SorobanAuthorizedInvocation extends XDRSerialization {
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.lazyStruct([
       LazyLayout(
-          layout: SorobanAuthorizedFunction.layout, property: "function"),
-      LazyLayout(layout: _selfVector, property: "subInvocations")
+          layout: SorobanAuthorizedFunction.layout, property: 'function'),
+      LazyLayout(layout: _selfVector, property: 'subInvocations')
     ], property: property);
   }
 
@@ -6832,16 +6833,16 @@ class SorobanAuthorizedInvocation extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "function": function.toVariantLayoutStruct(),
-      "subInvocations": subInvocations.map((e) => e.toLayoutStruct()).toList()
+      'function': function.toVariantLayoutStruct(),
+      'subInvocations': subInvocations.map((e) => e.toLayoutStruct()).toList()
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "function": function.toJson(),
-      "subInvocations": subInvocations.map((e) => e.toJson()).toList()
+      'function': function.toJson(),
+      'subInvocations': subInvocations.map((e) => e.toJson()).toList()
     };
   }
 }
@@ -6859,14 +6860,14 @@ class SorobanAuthorizationEntry extends XDRSerialization {
   }
   factory SorobanAuthorizationEntry.fromStruct(Map<String, dynamic> json) {
     return SorobanAuthorizationEntry(
-        credentials: SorobanCredentials.fromStruct(json.asMap("credentials")),
+        credentials: SorobanCredentials.fromStruct(json.asMap('credentials')),
         rootInvocation: SorobanAuthorizedInvocation.fromStruct(
-            json.asMap("rootInvocation")));
+            json.asMap('rootInvocation')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      SorobanCredentials.layout(property: "credentials"),
-      SorobanAuthorizedInvocation.layout(property: "rootInvocation")
+      SorobanCredentials.layout(property: 'credentials'),
+      SorobanAuthorizedInvocation.layout(property: 'rootInvocation')
     ], property: property);
   }
 
@@ -6878,16 +6879,16 @@ class SorobanAuthorizationEntry extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "rootInvocation": rootInvocation.toLayoutStruct(),
-      "credentials": credentials.toVariantLayoutStruct()
+      'rootInvocation': rootInvocation.toLayoutStruct(),
+      'credentials': credentials.toVariantLayoutStruct()
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      "rootInvocation": rootInvocation.toJson(),
-      "credentials": credentials.toJson()
+      'rootInvocation': rootInvocation.toJson(),
+      'credentials': credentials.toJson()
     };
   }
 }
@@ -6916,17 +6917,17 @@ class TrustLineFlag {
   ];
   @override
   String toString() {
-    return "TrustLineFlag.$name";
+    return 'TrustLineFlag.$name';
   }
 
   static TrustLineFlag fromValue(int? flag) {
     return values.firstWhere(
       (e) => e.value == flag,
       orElse: () => throw DartStellarPlugingException(
-          "TrustLineFlag not found.",
+          'TrustLineFlag not found.',
           details: {
-            "flag": flag,
-            "values": values.map((e) => e.name).join(", ")
+            'flag': flag,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -6957,17 +6958,17 @@ class TrustAuthFlag {
 
   @override
   String toString() {
-    return "TrustAuthFlag.$name";
+    return 'TrustAuthFlag.$name';
   }
 
   static TrustAuthFlag fromValue(int? flag) {
     return values.firstWhere(
       (e) => e.value == flag,
       orElse: () => throw DartStellarPlugingException(
-          "TrustAuthFlag not found.",
+          'TrustAuthFlag not found.',
           details: {
-            "flag": flag,
-            "values": values.map((e) => e.name).join(", ")
+            'flag': flag,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -6992,16 +6993,16 @@ class AuthFlag {
   ];
   @override
   String toString() {
-    return "AuthFlag.$name";
+    return 'AuthFlag.$name';
   }
 
   static AuthFlag fromValue(int? flag) {
     return values.firstWhere(
       (e) => e.value == flag,
-      orElse: () => throw DartStellarPlugingException("AuthFlag not found.",
+      orElse: () => throw DartStellarPlugingException('AuthFlag not found.',
           details: {
-            "flag": flag,
-            "values": values.map((e) => e.name).join(", ")
+            'flag': flag,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -7028,7 +7029,7 @@ class SorobanTransactionDataExt extends XDRVariantSerialization {
                 SorobanTransactionData.fromStruct(decode.value));
       default:
         throw const DartStellarPlugingException(
-            "Invalid SorobanTransactionData extension.");
+            'Invalid SorobanTransactionData extension.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -7070,7 +7071,7 @@ class SorobanTransactionDataExt extends XDRVariantSerialization {
 
   @override
   Map<String, dynamic> toJson() {
-    return {"sorobanTransactionData": sorobanTransactionData?.toJson()};
+    return {'sorobanTransactionData': sorobanTransactionData?.toJson()};
   }
 }
 
@@ -7079,13 +7080,13 @@ class ExtensionPointType {
   final int value;
   const ExtensionPointType._({required this.name, required this.value});
   static const ExtensionPointType extVoid =
-      ExtensionPointType._(name: "extVoid", value: 0);
+      ExtensionPointType._(name: 'extVoid', value: 0);
   static const ExtensionPointType extArgs1 =
-      ExtensionPointType._(name: "extArgs1", value: 1);
+      ExtensionPointType._(name: 'extArgs1', value: 1);
   static const ExtensionPointType extArgs2 =
-      ExtensionPointType._(name: "extArgs2", value: 2);
+      ExtensionPointType._(name: 'extArgs2', value: 2);
   static const ExtensionPointType extArgs3 =
-      ExtensionPointType._(name: "extArgs3", value: 2);
+      ExtensionPointType._(name: 'extArgs3', value: 2);
   static const List<ExtensionPointType> values = [
     extVoid,
     extArgs1,
@@ -7095,10 +7096,10 @@ class ExtensionPointType {
   static ExtensionPointType fromName(String? name) {
     return values.firstWhere(
       (e) => e.name == name,
-      orElse: () => throw DartStellarPlugingException("Asset type not found.",
+      orElse: () => throw DartStellarPlugingException('Asset type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -7126,7 +7127,7 @@ class StellarTransactionV1 extends StellarTransaction {
       this.sorobanData = const SorobanTransactionDataExt()})
       : operations = operations.immutable.max(
             StellarConst.maxTransactionOperationLength,
-            name: "operations"),
+            name: 'operations'),
         fee = fee.asUint32,
         seqNum = seqNum.asInt64,
         super(EnvelopeType.tx);
@@ -7138,17 +7139,17 @@ class StellarTransactionV1 extends StellarTransaction {
   }
   factory StellarTransactionV1.fromStruct(Map<String, dynamic> json) {
     return StellarTransactionV1(
-        sourceAccount: MuxedAccount.fromStruct(json.asMap("sourceAccount")),
-        fee: json.as("fee"),
-        seqNum: json.as("seqNum"),
-        cond: Preconditions.fromStruct(json.asMap("cond")),
-        memo: StellarMemo.fromStruct(json.asMap("memo")),
+        sourceAccount: MuxedAccount.fromStruct(json.asMap('sourceAccount')),
+        fee: json.as('fee'),
+        seqNum: json.as('seqNum'),
+        cond: Preconditions.fromStruct(json.asMap('cond')),
+        memo: StellarMemo.fromStruct(json.asMap('memo')),
         operations: json
-            .asListOfMap("operations")!
+            .asListOfMap('operations')!
             .map((e) => Operation.fromStruct(e))
             .toList(),
         sorobanData:
-            SorobanTransactionDataExt.fromStruct(json.asMap("sorobanData")));
+            SorobanTransactionDataExt.fromStruct(json.asMap('sorobanData')));
   }
   StellarTransactionV1 copyWith({
     MuxedAccount? sourceAccount,
@@ -7172,13 +7173,13 @@ class StellarTransactionV1 extends StellarTransaction {
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      MuxedAccount.layout(property: "sourceAccount"),
-      LayoutConst.u32be(property: "fee"),
-      LayoutConst.s64be(property: "seqNum"),
-      Preconditions.layout(property: "cond"),
-      StellarMemo.layout(property: "memo"),
-      LayoutConst.xdrVec(Operation.layout(), property: "operations"),
-      SorobanTransactionDataExt.layout(property: "sorobanData")
+      MuxedAccount.layout(property: 'sourceAccount'),
+      LayoutConst.u32be(property: 'fee'),
+      LayoutConst.s64be(property: 'seqNum'),
+      Preconditions.layout(property: 'cond'),
+      StellarMemo.layout(property: 'memo'),
+      LayoutConst.xdrVec(Operation.layout(), property: 'operations'),
+      SorobanTransactionDataExt.layout(property: 'sorobanData')
     ], property: property);
   }
 
@@ -7190,13 +7191,13 @@ class StellarTransactionV1 extends StellarTransaction {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "sourceAccount": sourceAccount.toVariantLayoutStruct(),
-      "fee": fee,
-      "seqNum": seqNum,
-      "cond": cond.toVariantLayoutStruct(),
-      "memo": memo.toVariantLayoutStruct(),
-      "operations": operations.map((e) => e.toLayoutStruct()).toList(),
-      "sorobanData": sorobanData.toVariantLayoutStruct()
+      'sourceAccount': sourceAccount.toVariantLayoutStruct(),
+      'fee': fee,
+      'seqNum': seqNum,
+      'cond': cond.toVariantLayoutStruct(),
+      'memo': memo.toVariantLayoutStruct(),
+      'operations': operations.map((e) => e.toLayoutStruct()).toList(),
+      'sorobanData': sorobanData.toVariantLayoutStruct()
     };
   }
 }
@@ -7223,7 +7224,7 @@ class StellarTransactionV0 extends StellarTransaction {
       this.ext = const ExtentionPointVoid()})
       : operations = operations.immutable.max(
             StellarConst.maxTransactionOperationLength,
-            name: "operations"),
+            name: 'operations'),
         fee = fee.asUint32,
         seqNum = seqNum.asInt64,
         super(EnvelopeType.txV0);
@@ -7231,29 +7232,29 @@ class StellarTransactionV0 extends StellarTransaction {
   factory StellarTransactionV0.fromStruct(Map<String, dynamic> json) {
     return StellarTransactionV0(
         sourceAccount:
-            StellarPublicKey.fromPublicBytes(json.asBytes("sourceAccount")),
-        fee: json.as("fee"),
-        seqNum: json.as("seqNum"),
+            StellarPublicKey.fromPublicBytes(json.asBytes('sourceAccount')),
+        fee: json.as('fee'),
+        seqNum: json.as('seqNum'),
         timeBounds: json.mybeAs<TimeBounds, Map<String, dynamic>>(
-            key: "timeBounds", onValue: (e) => TimeBounds.fromStruct(e)),
-        memo: StellarMemo.fromStruct(json.asMap("memo")),
+            key: 'timeBounds', onValue: (e) => TimeBounds.fromStruct(e)),
+        memo: StellarMemo.fromStruct(json.asMap('memo')),
         operations: json
-            .asListOfMap("operations")!
+            .asListOfMap('operations')!
             .map((e) => Operation.fromStruct(e))
             .toList(),
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")));
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.hash256Length,
-          property: "sourceAccount"),
-      LayoutConst.u32be(property: "fee"),
-      LayoutConst.s64be(property: "seqNum"),
-      LayoutConst.optionalU32Be(TimeBounds.layout(), property: "timeBounds"),
-      StellarMemo.layout(property: "memo"),
-      LayoutConst.xdrVec(Operation.layout(), property: "operations"),
-      ExtentionPointVoid.layout(property: "ext")
+          property: 'sourceAccount'),
+      LayoutConst.u32be(property: 'fee'),
+      LayoutConst.s64be(property: 'seqNum'),
+      LayoutConst.optionalU32Be(TimeBounds.layout(), property: 'timeBounds'),
+      StellarMemo.layout(property: 'memo'),
+      LayoutConst.xdrVec(Operation.layout(), property: 'operations'),
+      ExtentionPointVoid.layout(property: 'ext')
     ], property: property);
   }
 
@@ -7265,13 +7266,13 @@ class StellarTransactionV0 extends StellarTransaction {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "sourceAccount": sourceAccount.toBytes(),
-      "fee": fee,
-      "seqNum": seqNum,
-      "timeBounds": timeBounds?.toLayoutStruct(),
-      "memo": memo.toVariantLayoutStruct(),
-      "operations": operations.map((e) => e.toLayoutStruct()).toList(),
-      "ext": ext.toVariantLayoutStruct()
+      'sourceAccount': sourceAccount.toBytes(),
+      'fee': fee,
+      'seqNum': seqNum,
+      'timeBounds': timeBounds?.toLayoutStruct(),
+      'memo': memo.toVariantLayoutStruct(),
+      'operations': operations.map((e) => e.toLayoutStruct()).toList(),
+      'ext': ext.toVariantLayoutStruct()
     };
   }
 }
@@ -7281,21 +7282,21 @@ class DecoratedSignature extends XDRSerialization {
   final List<int> signature;
   DecoratedSignature({required List<int> hint, required List<int> signature})
       : hint = hint.asImmutableBytes
-            .exc(StellarConst.pubkeyHintBytesLength, name: "hint"),
+            .exc(StellarConst.pubkeyHintBytesLength, name: 'hint'),
         signature = signature.asImmutableBytes
-            .max(StellarConst.ed25519SignatureLength, name: "signature");
+            .max(StellarConst.ed25519SignatureLength, name: 'signature');
 
   factory DecoratedSignature.fromStruct(Map<String, dynamic> json) {
     return DecoratedSignature(
-      hint: json.asBytes("hint"),
-      signature: json.asBytes("signature"),
+      hint: json.asBytes('hint'),
+      signature: json.asBytes('signature'),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.pubkeyHintBytesLength,
-          property: "hint"),
-      LayoutConst.xdrVecBytes(property: "signature"),
+          property: 'hint'),
+      LayoutConst.xdrVecBytes(property: 'signature'),
     ], property: property);
   }
 
@@ -7306,7 +7307,7 @@ class DecoratedSignature extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"hint": hint, "signature": signature};
+    return {'hint': hint, 'signature': signature};
   }
 }
 
@@ -7344,17 +7345,17 @@ class EnvelopeType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "Envelope type not found.",
+          'Envelope type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "EnvelopeType.$name";
+    return 'EnvelopeType.$name';
   }
 }
 
@@ -7390,8 +7391,8 @@ abstract class Envelope<T extends StellarTransaction>
               return LazyVariantModel(
                   index: type.value,
                   layout: ({property}) => throw DartStellarPlugingException(
-                      "Envlop type does not supported.",
-                      details: {"type": type.name, "property": property}),
+                      'Envlop type does not supported.',
+                      details: {'type': type.name, 'property': property}),
                   property: type.name);
           }
         }),
@@ -7413,13 +7414,13 @@ abstract class Envelope<T extends StellarTransaction>
         envlope = FeeBumpTransactionEnvelope.fromStruct(decode.value);
         break;
       default:
-        throw DartStellarPlugingException("Envelope does not supported.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Envelope does not supported.',
+            details: {'type': type.name});
     }
     if (envlope is! Envelope<T>) {
-      throw DartStellarPlugingException("Envelope casting failed.", details: {
-        "excepted": "Envelope<$T>",
-        "envelope": envlope.runtimeType.toString()
+      throw DartStellarPlugingException('Envelope casting failed.', details: {
+        'excepted': 'Envelope<$T>',
+        'envelope': envlope.runtimeType.toString()
       });
     }
     return envlope;
@@ -7439,10 +7440,16 @@ abstract class Envelope<T extends StellarTransaction>
 
   E cast<E extends Envelope<T>>() {
     if (this is! E) {
-      throw DartStellarPlugingException("Incorrect Envelope casting.",
-          details: {"excepted": "$T", "type": "$runtimeType"});
+      throw DartStellarPlugingException('Incorrect Envelope casting.',
+          details: {'excepted': '$T', 'type': '$runtimeType'});
     }
     return this as E;
+  }
+
+  String txId(List<int> networkIdHash) {
+    final payload = TransactionSignaturePayload(
+        networkId: networkIdHash, taggedTransaction: tx);
+    return payload.txId();
   }
 }
 
@@ -7454,22 +7461,22 @@ class TransactionV0Envelope extends Envelope<StellarTransactionV0> {
   TransactionV0Envelope(
       {required this.tx, required List<DecoratedSignature> signatures})
       : signatures = signatures.immutable
-            .max(StellarConst.envlopSignaturesLength, name: "signatures"),
+            .max(StellarConst.envlopSignaturesLength, name: 'signatures'),
         super(EnvelopeType.txV0);
 
   factory TransactionV0Envelope.fromStruct(Map<String, dynamic> json) {
     return TransactionV0Envelope(
-      tx: StellarTransactionV0.fromStruct(json.asMap("tx")),
+      tx: StellarTransactionV0.fromStruct(json.asMap('tx')),
       signatures: json
-          .asListOfMap("signatures")!
+          .asListOfMap('signatures')!
           .map((e) => DecoratedSignature.fromStruct(e))
           .toList(),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarTransactionV0.layout(property: "tx"),
-      LayoutConst.xdrVec(DecoratedSignature.layout(), property: "signatures"),
+      StellarTransactionV0.layout(property: 'tx'),
+      LayoutConst.xdrVec(DecoratedSignature.layout(), property: 'signatures'),
     ], property: property);
   }
 
@@ -7481,8 +7488,8 @@ class TransactionV0Envelope extends Envelope<StellarTransactionV0> {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "tx": tx.toLayoutStruct(),
-      "signatures": signatures.map((e) => e.toLayoutStruct()).toList()
+      'tx': tx.toLayoutStruct(),
+      'signatures': signatures.map((e) => e.toLayoutStruct()).toList()
     };
   }
 
@@ -7502,7 +7509,7 @@ class TransactionV1Envelope extends Envelope<StellarTransactionV1> {
   TransactionV1Envelope(
       {required this.tx, required List<DecoratedSignature> signatures})
       : signatures = signatures.immutable
-            .max(StellarConst.envlopSignaturesLength, name: "signatures"),
+            .max(StellarConst.envlopSignaturesLength, name: 'signatures'),
         super(EnvelopeType.tx);
   factory TransactionV1Envelope.fromXdr(List<int> bytes, {String? property}) {
     final decode = XDRSerialization.deserialize(
@@ -7511,17 +7518,17 @@ class TransactionV1Envelope extends Envelope<StellarTransactionV1> {
   }
   factory TransactionV1Envelope.fromStruct(Map<String, dynamic> json) {
     return TransactionV1Envelope(
-      tx: StellarTransactionV1.fromStruct(json.asMap("tx")),
+      tx: StellarTransactionV1.fromStruct(json.asMap('tx')),
       signatures: json
-          .asListOfMap("signatures")!
+          .asListOfMap('signatures')!
           .map((e) => DecoratedSignature.fromStruct(e))
           .toList(),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarTransactionV1.layout(property: "tx"),
-      LayoutConst.xdrVec(DecoratedSignature.layout(), property: "signatures"),
+      StellarTransactionV1.layout(property: 'tx'),
+      LayoutConst.xdrVec(DecoratedSignature.layout(), property: 'signatures'),
     ], property: property);
   }
 
@@ -7533,8 +7540,8 @@ class TransactionV1Envelope extends Envelope<StellarTransactionV1> {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "tx": tx.toLayoutStruct(),
-      "signatures": signatures.map((e) => e.toLayoutStruct()).toList()
+      'tx': tx.toLayoutStruct(),
+      'signatures': signatures.map((e) => e.toLayoutStruct()).toList()
     };
   }
 
@@ -7560,18 +7567,18 @@ class StellarFeeBumpTransaction extends StellarTransaction {
         super(EnvelopeType.txFeeBump);
   factory StellarFeeBumpTransaction.fromStruct(Map<String, dynamic> json) {
     return StellarFeeBumpTransaction(
-        feeSource: MuxedAccount.fromStruct(json.asMap("feeSource")),
-        fee: json.as("fee"),
-        innerTx: Envelope.fromStruct(json.asMap("innerTx")).cast(),
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")));
+        feeSource: MuxedAccount.fromStruct(json.asMap('feeSource')),
+        fee: json.as('fee'),
+        innerTx: Envelope.fromStruct(json.asMap('innerTx')).cast(),
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      MuxedAccount.layout(property: "feeSource"),
-      LayoutConst.s64be(property: "fee"),
-      Envelope.layout(property: "innerTx"),
-      ExtentionPointVoid.layout(property: "ext")
+      MuxedAccount.layout(property: 'feeSource'),
+      LayoutConst.s64be(property: 'fee'),
+      Envelope.layout(property: 'innerTx'),
+      ExtentionPointVoid.layout(property: 'ext')
     ], property: property);
   }
 
@@ -7583,10 +7590,10 @@ class StellarFeeBumpTransaction extends StellarTransaction {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "feeSource": feeSource.toVariantLayoutStruct(),
-      "fee": fee,
-      "innerTx": innerTx.toVariantLayoutStruct(),
-      "ext": ext.toVariantLayoutStruct()
+      'feeSource': feeSource.toVariantLayoutStruct(),
+      'fee': fee,
+      'innerTx': innerTx.toVariantLayoutStruct(),
+      'ext': ext.toVariantLayoutStruct()
     };
   }
 
@@ -7606,22 +7613,22 @@ class FeeBumpTransactionEnvelope extends Envelope<StellarFeeBumpTransaction> {
   FeeBumpTransactionEnvelope(
       {required this.tx, required List<DecoratedSignature> signatures})
       : signatures = signatures.immutable
-            .max(StellarConst.envlopSignaturesLength, name: "signatures"),
+            .max(StellarConst.envlopSignaturesLength, name: 'signatures'),
         super(EnvelopeType.txFeeBump);
 
   factory FeeBumpTransactionEnvelope.fromStruct(Map<String, dynamic> json) {
     return FeeBumpTransactionEnvelope(
-      tx: StellarFeeBumpTransaction.fromStruct(json.asMap("tx")),
+      tx: StellarFeeBumpTransaction.fromStruct(json.asMap('tx')),
       signatures: json
-          .asListOfMap("signatures")!
+          .asListOfMap('signatures')!
           .map((e) => DecoratedSignature.fromStruct(e))
           .toList(),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarFeeBumpTransaction.layout(property: "tx"),
-      LayoutConst.xdrVec(DecoratedSignature.layout(), property: "signatures"),
+      StellarFeeBumpTransaction.layout(property: 'tx'),
+      LayoutConst.xdrVec(DecoratedSignature.layout(), property: 'signatures'),
     ], property: property);
   }
 
@@ -7633,8 +7640,8 @@ class FeeBumpTransactionEnvelope extends Envelope<StellarFeeBumpTransaction> {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "tx": tx.toLayoutStruct(),
-      "signatures": signatures.map((e) => e.toLayoutStruct()).toList()
+      'tx': tx.toLayoutStruct(),
+      'signatures': signatures.map((e) => e.toLayoutStruct()).toList()
     };
   }
 
@@ -7681,8 +7688,8 @@ abstract class StellarTransaction extends XDRVariantSerialization {
               return LazyVariantModel(
                   index: type.value,
                   layout: ({property}) => throw DartStellarPlugingException(
-                      "Transaction type does not supported.",
-                      details: {"type": type.name, "property": property}),
+                      'Transaction type does not supported.',
+                      details: {'type': type.name, 'property': property}),
                   property: type.name);
           }
         }),
@@ -7701,8 +7708,8 @@ abstract class StellarTransaction extends XDRVariantSerialization {
         return StellarFeeBumpTransaction.fromStruct(decode.value);
       default:
         throw DartStellarPlugingException(
-            "Transaction type does not supported.",
-            details: {"type": type.name});
+            'Transaction type does not supported.',
+            details: {'type': type.name});
     }
   }
 
@@ -7716,8 +7723,8 @@ abstract class StellarTransaction extends XDRVariantSerialization {
 
   T cast<T extends StellarTransaction>() {
     if (this is! T) {
-      throw DartStellarPlugingException("Incorrect StellarTransaction casting.",
-          details: {"excepted": "$T", "type": "$runtimeType"});
+      throw DartStellarPlugingException('Incorrect StellarTransaction casting.',
+          details: {'excepted': '$T', 'type': '$runtimeType'});
     }
     return this as T;
   }
@@ -7730,7 +7737,7 @@ class TransactionSignaturePayload extends XDRSerialization {
     required List<int> networkId,
     required this.taggedTransaction,
   }) : networkId = networkId.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "networkId");
+            .exc(StellarConst.hash256Length, name: 'networkId');
   factory TransactionSignaturePayload.fromXdr(List<int> bytes,
       {String? property}) {
     final decode = XDRSerialization.deserialize(
@@ -7739,14 +7746,14 @@ class TransactionSignaturePayload extends XDRSerialization {
   }
   factory TransactionSignaturePayload.fromStruct(Map<String, dynamic> json) {
     return TransactionSignaturePayload(
-        networkId: json.asBytes("networkId"),
+        networkId: json.asBytes('networkId'),
         taggedTransaction:
-            StellarTransaction.fromStruct(json.asMap("taggedTransaction")));
+            StellarTransaction.fromStruct(json.asMap('taggedTransaction')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "networkId"),
-      StellarTransaction.layout(property: "taggedTransaction"),
+      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'networkId'),
+      StellarTransaction.layout(property: 'taggedTransaction'),
     ], property: property);
   }
 
@@ -7758,13 +7765,17 @@ class TransactionSignaturePayload extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "networkId": networkId,
-      "taggedTransaction": taggedTransaction.toVariantLayoutStruct()
+      'networkId': networkId,
+      'taggedTransaction': taggedTransaction.toVariantLayoutStruct()
     };
   }
 
   List<int> txHash() {
     return QuickCrypto.sha256Hash(toXDR());
+  }
+
+  String txId() {
+    return BytesUtils.toHexString(txHash());
   }
 }
 
@@ -7783,17 +7794,17 @@ class MemoType {
   static MemoType fromName(String? name) {
     return values.firstWhere(
       (e) => e.name == name,
-      orElse: () => throw DartStellarPlugingException("Asset type not found.",
+      orElse: () => throw DartStellarPlugingException('Asset type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "MemoType.$name";
+    return 'MemoType.$name';
   }
 }
 
@@ -7815,8 +7826,8 @@ abstract class StellarMemo extends XDRVariantSerialization {
       case MemoType.text:
         return StellarMemoText.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid Memo type.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Invalid Memo type.',
+            details: {'type': type.name});
     }
   }
 
@@ -7855,8 +7866,8 @@ abstract class StellarMemo extends XDRVariantSerialization {
 
   T cast<T extends StellarMemo>() {
     if (this is! T) {
-      throw DartStellarPlugingException("Stellar Memo Casting failed.",
-          details: {"excepted": "$T", "type": runtimeType.toString()});
+      throw DartStellarPlugingException('Stellar Memo Casting failed.',
+          details: {'excepted': '$T', 'type': runtimeType.toString()});
     }
     return this as T;
   }
@@ -7866,14 +7877,14 @@ class StellarMemoReturnHash extends StellarMemo {
   final List<int> hash;
   StellarMemoReturnHash(List<int> hash)
       : hash = hash.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "StellarMemoReturnHash"),
+            .exc(StellarConst.hash256Length, name: 'StellarMemoReturnHash'),
         super(type: MemoType.returnHash);
   factory StellarMemoReturnHash.fromStruct(Map<String, dynamic> json) {
-    return StellarMemoReturnHash(json.asBytes("hash"));
+    return StellarMemoReturnHash(json.asBytes('hash'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "hash"),
+      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'hash'),
     ], property: property);
   }
 
@@ -7884,7 +7895,7 @@ class StellarMemoReturnHash extends StellarMemo {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"hash": hash};
+    return {'hash': hash};
   }
 }
 
@@ -7892,14 +7903,14 @@ class StellarMemoHash extends StellarMemo {
   final List<int> hash;
   StellarMemoHash(List<int> hash)
       : hash = hash.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "StellarMemoHash"),
+            .exc(StellarConst.hash256Length, name: 'StellarMemoHash'),
         super(type: MemoType.hash);
   factory StellarMemoHash.fromStruct(Map<String, dynamic> json) {
-    return StellarMemoHash(json.asBytes("hash"));
+    return StellarMemoHash(json.asBytes('hash'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "hash"),
+      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'hash'),
     ], property: property);
   }
 
@@ -7910,7 +7921,7 @@ class StellarMemoHash extends StellarMemo {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"hash": hash};
+    return {'hash': hash};
   }
 }
 
@@ -7920,11 +7931,11 @@ class StellarMemoID extends StellarMemo {
       : id = id.asUint64,
         super(type: MemoType.id);
   factory StellarMemoID.fromStruct(Map<String, dynamic> json) {
-    return StellarMemoID(json.as("id"));
+    return StellarMemoID(json.as('id'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u64be(property: "id"),
+      LayoutConst.u64be(property: 'id'),
     ], property: property);
   }
 
@@ -7935,7 +7946,7 @@ class StellarMemoID extends StellarMemo {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"id": id};
+    return {'id': id};
   }
 }
 
@@ -7946,11 +7957,11 @@ class StellarMemoText extends StellarMemo {
         super(type: MemoType.text);
 
   factory StellarMemoText.fromStruct(Map<String, dynamic> json) {
-    return StellarMemoText(json.as("text"));
+    return StellarMemoText(json.as('text'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.xdrString(property: "text"),
+      LayoutConst.xdrString(property: 'text'),
     ], property: property);
   }
 
@@ -7961,7 +7972,7 @@ class StellarMemoText extends StellarMemo {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"text": text};
+    return {'text': text};
   }
 }
 
@@ -8009,17 +8020,17 @@ class SignerKeyType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "SignerKey type not found.",
+          'SignerKey type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "SignerKeyType.$name";
+    return 'SignerKeyType.$name';
   }
 }
 
@@ -8039,7 +8050,7 @@ abstract class SignerKey extends XDRVariantSerialization {
       case SignerKeyType.ed25519SignedPayload:
         return SignerKeyEd25519SignedPayload.fromStruct(decode.value);
       default:
-        throw UnimplementedError("Invalid SignerKeyType.");
+        throw UnimplementedError('Invalid SignerKeyType.');
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -8068,7 +8079,7 @@ abstract class SignerKey extends XDRVariantSerialization {
                   layout: SignerKeyEd25519.layout,
                   property: type.name);
             default:
-              throw UnimplementedError("Invalid SignerKeyType.");
+              throw UnimplementedError('Invalid SignerKeyType.');
           }
         }),
         property: property);
@@ -8089,20 +8100,20 @@ class SignerKeyEd25519SignedPayload extends SignerKey {
   SignerKeyEd25519SignedPayload(
       {required List<int> ed25519, required List<int> payload})
       : ed25519 = ed25519.asImmutableBytes
-            .exc(StellarConst.ed25519PubKeyLength, name: "ed25519"),
+            .exc(StellarConst.ed25519PubKeyLength, name: 'ed25519'),
         payload = payload.asImmutableBytes
-            .max(StellarConst.payloadLength, name: "payload"),
+            .max(StellarConst.payloadLength, name: 'payload'),
         super(type: SignerKeyType.ed25519SignedPayload);
 
   factory SignerKeyEd25519SignedPayload.fromStruct(Map<String, dynamic> json) {
     return SignerKeyEd25519SignedPayload(
-        ed25519: json.asBytes("ed25519"), payload: json.asBytes("payload"));
+        ed25519: json.asBytes('ed25519'), payload: json.asBytes('payload'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.ed25519PubKeyLength,
-          property: "ed25519"),
-      LayoutConst.xdrVecBytes(property: "payload"),
+          property: 'ed25519'),
+      LayoutConst.xdrVecBytes(property: 'payload'),
     ], property: property);
   }
 
@@ -8113,7 +8124,7 @@ class SignerKeyEd25519SignedPayload extends SignerKey {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"ed25519": ed25519, "payload": payload};
+    return {'ed25519': ed25519, 'payload': payload};
   }
 }
 
@@ -8121,16 +8132,16 @@ class SignerKeyEd25519 extends SignerKey {
   final List<int> ed25519;
   SignerKeyEd25519(List<int> ed25519)
       : ed25519 = ed25519.asImmutableBytes
-            .exc(StellarConst.ed25519PubKeyLength, name: "ed25519"),
+            .exc(StellarConst.ed25519PubKeyLength, name: 'ed25519'),
         super(type: SignerKeyType.ed25519);
 
   factory SignerKeyEd25519.fromStruct(Map<String, dynamic> json) {
-    return SignerKeyEd25519(json.asBytes("ed25519"));
+    return SignerKeyEd25519(json.asBytes('ed25519'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.ed25519PubKeyLength,
-          property: "ed25519")
+          property: 'ed25519')
     ], property: property);
   }
 
@@ -8141,7 +8152,7 @@ class SignerKeyEd25519 extends SignerKey {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"ed25519": ed25519};
+    return {'ed25519': ed25519};
   }
 }
 
@@ -8149,16 +8160,16 @@ class SignerKeyPreAuthTx extends SignerKey {
   final List<int> preAuthTx;
   SignerKeyPreAuthTx(List<int> preAuthTx)
       : preAuthTx = preAuthTx.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "preAuthTx"),
+            .exc(StellarConst.hash256Length, name: 'preAuthTx'),
         super(type: SignerKeyType.preAuthTx);
 
   factory SignerKeyPreAuthTx.fromStruct(Map<String, dynamic> json) {
-    return SignerKeyPreAuthTx(json.asBytes("preAuthTx"));
+    return SignerKeyPreAuthTx(json.asBytes('preAuthTx'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.ed25519PubKeyLength,
-          property: "preAuthTx")
+          property: 'preAuthTx')
     ], property: property);
   }
 
@@ -8169,7 +8180,7 @@ class SignerKeyPreAuthTx extends SignerKey {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"preAuthTx": preAuthTx};
+    return {'preAuthTx': preAuthTx};
   }
 }
 
@@ -8177,16 +8188,16 @@ class SignerKeyHashX extends SignerKey {
   final List<int> hashX;
   SignerKeyHashX(List<int> hashX)
       : hashX = hashX.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "KeyHashX"),
+            .exc(StellarConst.hash256Length, name: 'KeyHashX'),
         super(type: SignerKeyType.hashX);
 
   factory SignerKeyHashX.fromStruct(Map<String, dynamic> json) {
-    return SignerKeyHashX(json.asBytes("hashX"));
+    return SignerKeyHashX(json.asBytes('hashX'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.ed25519PubKeyLength,
-          property: "hashX")
+          property: 'hashX')
     ], property: property);
   }
 
@@ -8197,7 +8208,7 @@ class SignerKeyHashX extends SignerKey {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"hashX": hashX};
+    return {'hashX': hashX};
   }
 }
 
@@ -8207,13 +8218,13 @@ class Signer extends XDRSerialization {
   Signer({required this.key, required int weight}) : weight = weight.asUint32;
   factory Signer.fromStruct(Map<String, dynamic> json) {
     return Signer(
-        key: SignerKey.fromStruct(json.asMap("key")),
-        weight: json.as("weight"));
+        key: SignerKey.fromStruct(json.asMap('key')),
+        weight: json.as('weight'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      SignerKey.layout(property: "key"),
-      LayoutConst.u32be(property: "weight")
+      SignerKey.layout(property: 'key'),
+      LayoutConst.u32be(property: 'weight')
     ], property: property);
   }
 
@@ -8224,7 +8235,7 @@ class Signer extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"key": key.toVariantLayoutStruct(), "weight": weight};
+    return {'key': key.toVariantLayoutStruct(), 'weight': weight};
   }
 }
 
@@ -8238,12 +8249,12 @@ class AssetType {
   final String name;
   const AssetType._({required this.value, required this.name});
 
-  static const AssetType native = AssetType._(value: 0, name: "Native");
+  static const AssetType native = AssetType._(value: 0, name: 'Native');
   static const AssetType creditAlphanum4 =
-      AssetType._(name: "CreditAlphanum4", value: 1);
+      AssetType._(name: 'CreditAlphanum4', value: 1);
   static const AssetType creditAlphanum12 =
-      AssetType._(value: 2, name: "CreditAlphanum12");
-  static const AssetType poolShare = AssetType._(value: 3, name: "PoolShare");
+      AssetType._(value: 2, name: 'CreditAlphanum12');
+  static const AssetType poolShare = AssetType._(value: 3, name: 'PoolShare');
 
   static const List<AssetType> values = [
     native,
@@ -8255,16 +8266,16 @@ class AssetType {
 
   @override
   String toString() {
-    return "AssetType.$name";
+    return 'AssetType.$name';
   }
 
   static AssetType fromName(String? name) {
     return values.firstWhere(
       (e) => e.name == name,
-      orElse: () => throw DartStellarPlugingException("Asset type not found.",
+      orElse: () => throw DartStellarPlugingException('Asset type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -8286,7 +8297,7 @@ abstract class StellarAsset extends XDRVariantSerialization {
       case AssetType.poolShare:
         return StellarAssetPoolShare.fromStruct(decode.value);
       default:
-        throw const DartStellarPlugingException("Invalid AssetType.");
+        throw const DartStellarPlugingException('Invalid AssetType.');
     }
   }
   factory StellarAsset.fromXdr(List<int> bytes, {String? property}) {
@@ -8321,7 +8332,7 @@ abstract class StellarAsset extends XDRVariantSerialization {
                   layout: StellarAssetPoolShare.layout,
                   property: type.name);
             default:
-              throw const DartStellarPlugingException("Invalid AssetType.");
+              throw const DartStellarPlugingException('Invalid AssetType.');
           }
         }),
         property: property);
@@ -8337,8 +8348,8 @@ abstract class StellarAsset extends XDRVariantSerialization {
 
   T cast<T extends StellarAsset>() {
     if (this is! T) {
-      throw DartStellarPlugingException("Stellar asset casting failed.",
-          details: {"excepted": "$T", "asset": runtimeType.toString()});
+      throw DartStellarPlugingException('Stellar asset casting failed.',
+          details: {'excepted': '$T', 'asset': runtimeType.toString()});
     }
     return this as T;
   }
@@ -8357,16 +8368,16 @@ class StellarAssetCreditAlphanum4 extends StellarAsset {
             length: _StellarAssetConst.creditAlphanum4Length));
   }
   factory StellarAssetCreditAlphanum4.fromStruct(Map<String, dynamic> json) {
-    final code = StellarHelper.toAssetsCode(json.asBytes("code"));
+    final code = StellarHelper.toAssetsCode(json.asBytes('code'));
     return StellarAssetCreditAlphanum4(
-        issuer: StellarPublicKey.fromStruct(json.asMap("issuer")), code: code);
+        issuer: StellarPublicKey.fromStruct(json.asMap('issuer')), code: code);
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(_StellarAssetConst.creditAlphanum4Length,
-          property: "code"),
-      StellarPublicKey.layout(property: "issuer"),
+          property: 'code'),
+      StellarPublicKey.layout(property: 'issuer'),
     ], property: property);
   }
 
@@ -8378,19 +8389,19 @@ class StellarAssetCreditAlphanum4 extends StellarAsset {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "issuer": issuer.toLayoutStruct(),
-      "code": StellarHelper.toAlphanumAssetCode(
+      'issuer': issuer.toLayoutStruct(),
+      'code': StellarHelper.toAlphanumAssetCode(
           code: code, length: _StellarAssetConst.creditAlphanum4Length)
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"issuer": issuer.toAddress().toString(), "name": code};
+    return {'issuer': issuer.toAddress().toString(), 'name': code};
   }
 
   @override
-  operator ==(other) {
+  bool operator ==(other) {
     if (other is! StellarAssetCreditAlphanum4) return false;
     return code == other.code && issuer == other.issuer;
   }
@@ -8413,15 +8424,15 @@ class StellarAssetCreditAlphanum12 extends StellarAsset {
   }
   factory StellarAssetCreditAlphanum12.fromStruct(Map<String, dynamic> json) {
     return StellarAssetCreditAlphanum12(
-        issuer: StellarPublicKey.fromStruct(json.asMap("issuer")),
-        code: StellarHelper.toAssetsCode(json.asBytes("code")));
+        issuer: StellarPublicKey.fromStruct(json.asMap('issuer')),
+        code: StellarHelper.toAssetsCode(json.asBytes('code')));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(_StellarAssetConst.creditAlphanum12Length,
-          property: "code"),
-      StellarPublicKey.layout(property: "issuer"),
+          property: 'code'),
+      StellarPublicKey.layout(property: 'issuer'),
     ], property: property);
   }
 
@@ -8433,19 +8444,19 @@ class StellarAssetCreditAlphanum12 extends StellarAsset {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "issuer": issuer.toLayoutStruct(),
-      "code": StellarHelper.toAlphanumAssetCode(
+      'issuer': issuer.toLayoutStruct(),
+      'code': StellarHelper.toAlphanumAssetCode(
           code: code, length: _StellarAssetConst.creditAlphanum12Length)
     };
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"issuer": issuer.toAddress().toString(), "name": code};
+    return {'issuer': issuer.toAddress().toString(), 'name': code};
   }
 
   @override
-  operator ==(other) {
+  bool operator ==(other) {
     if (other is! StellarAssetCreditAlphanum12) return false;
     return code == other.code && issuer == other.issuer;
   }
@@ -8455,7 +8466,7 @@ class StellarAssetCreditAlphanum12 extends StellarAsset {
 }
 
 class StellarAssetNative extends StellarAsset {
-  final String code = "XLM";
+  final String code = 'XLM';
   StellarAssetNative() : super(type: AssetType.native);
   factory StellarAssetNative.fromStruct(Map<String, dynamic> json) {
     return StellarAssetNative();
@@ -8476,11 +8487,11 @@ class StellarAssetNative extends StellarAsset {
 
   @override
   Map<String, dynamic> toJson() {
-    return {"name": code};
+    return {'name': code};
   }
 
   @override
-  operator ==(other) {
+  bool operator ==(other) {
     if (other is! StellarAssetNative) return false;
     return true;
   }
@@ -8494,14 +8505,14 @@ class StellarAssetPoolShare extends StellarAsset {
   final List<int> poolID;
   StellarAssetPoolShare(List<int> poolID)
       : poolID = poolID.asImmutableBytes
-            .max(StellarConst.hash256Length, name: "poolID"),
+            .max(StellarConst.hash256Length, name: 'poolID'),
         super(type: AssetType.poolShare);
   factory StellarAssetPoolShare.fromStruct(Map<String, dynamic> json) {
-    return StellarAssetPoolShare(json.asBytes("poolId"));
+    return StellarAssetPoolShare(json.asBytes('poolId'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "poolId")
+      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'poolId')
     ], property: property);
   }
 
@@ -8512,16 +8523,16 @@ class StellarAssetPoolShare extends StellarAsset {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"poolId": poolID};
+    return {'poolId': poolID};
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {"poolId": BytesUtils.toHexString(poolID, prefix: "0x")};
+    return {'poolId': BytesUtils.toHexString(poolID, prefix: '0x')};
   }
 
   @override
-  operator ==(other) {
+  bool operator ==(other) {
     if (other is! StellarAssetPoolShare) return false;
     return BytesUtils.bytesEqual(poolID, other.poolID);
   }

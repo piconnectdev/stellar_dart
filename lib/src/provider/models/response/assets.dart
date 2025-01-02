@@ -13,15 +13,15 @@ abstract class StellarAssetResponse {
       case RequestAssetType.creditAlphanum4:
         return StellarAssetBalanceResponse.fromJson(json);
       default:
-        throw DartStellarPlugingException("Invalid asset type.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Invalid asset type.',
+            details: {'type': type.name});
     }
   }
   Map<String, dynamic> toJson();
 
   @override
   String toString() {
-    return "StellarAssetResponse${toJson()}";
+    return 'StellarAssetResponse${toJson()}';
   }
 }
 

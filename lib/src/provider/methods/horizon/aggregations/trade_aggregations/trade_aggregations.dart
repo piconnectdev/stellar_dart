@@ -15,7 +15,7 @@ import 'package:stellar_dart/src/provider/models/request/request_types.dart';
 /// If you want to change this alignment, the segments can be offset by specifying the offset parameter.s
 /// https://developers.stellar.org/docs/data/horizon/api-reference/list-trade-aggregations
 class HorizonRequestTradeAggregations
-    extends HorizonRequestParam<Map<String, dynamic>, Map<String, dynamic>> {
+    extends HorizonRequest<Map<String, dynamic>, Map<String, dynamic>> {
   /// The lower time boundary represented as milliseconds since epoch.
   final int? startTime;
 
@@ -73,17 +73,17 @@ class HorizonRequestTradeAggregations
 
   @override
   Map<String, dynamic> get queryParameters => {
-        "start_time": startTime,
-        "end_time": endtTime,
-        "resolution": resolution,
-        "offset": offset,
-        "base_asset_type": baseAssetType.name,
-        "base_asset_issuer": baseAssetIssuer,
-        "base_asset_code": baseAssetCode,
-        "counter_asset_type": counterAssetType.name,
-        "counter_asset_issuer": counterAssetIssuer,
-        "counter_asset_code": counterAssetCode,
-        "order": order?.name,
-        "limit": limit
+        'start_time': startTime,
+        'end_time': endtTime,
+        'resolution': resolution,
+        'offset': offset,
+        'base_asset_type': baseAssetType.name,
+        'base_asset_issuer': baseAssetIssuer,
+        'base_asset_code': baseAssetCode,
+        'counter_asset_type': counterAssetType.name,
+        'counter_asset_issuer': counterAssetIssuer,
+        'counter_asset_code': counterAssetCode,
+        'order': order?.name,
+        'limit': limit
       };
 }

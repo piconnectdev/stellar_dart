@@ -7,7 +7,7 @@ import 'package:stellar_dart/src/provider/models/models.dart';
 /// including trustlines that haven’t been authorized yet.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/retrieve-an-account
 class HorizonRequestAccount
-    extends HorizonRequestParam<StellarAccountResponse, Map<String, dynamic>> {
+    extends HorizonRequest<StellarAccountResponse, Map<String, dynamic>> {
   const HorizonRequestAccount(this.accountId);
 
   /// This account’s public key encoded in a base32 string representation.

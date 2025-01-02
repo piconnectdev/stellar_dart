@@ -8,7 +8,7 @@ import 'package:stellar_dart/src/provider/models/models.dart';
 /// in which case it will start from that cursor. By setting the cursor value to now, you can stream operations created since your request time.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/cb-retrieve-related-operations
 class HorizonRequestClaimableBalanceOperations
-    extends HorizonRequestParam<Map<String, dynamic>, Map<String, dynamic>> {
+    extends HorizonRequest<Map<String, dynamic>, Map<String, dynamic>> {
   /// A unique identifier for this claimable balance.
   final String claimableBalanceId;
 

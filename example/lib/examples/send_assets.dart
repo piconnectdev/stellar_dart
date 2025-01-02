@@ -2,8 +2,8 @@ import 'package:stellar_dart/stellar_dart.dart';
 import 'test_provider.dart';
 
 void main() async {
-  /// Initialize the HorizonProvider with the specified URLs for the testnet.
-  final rpc = HorizonProvider(StellarHTTPProvider(
+  /// Initialize the StellarProvider with the specified URLs for the testnet.
+  final rpc = StellarProvider(StellarHTTPProvider(
       url: "https://horizon-testnet.stellar.org",
       soroban: "https://soroban-testnet.stellar.org"));
 

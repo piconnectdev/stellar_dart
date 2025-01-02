@@ -5,7 +5,7 @@ import 'package:stellar_dart/src/provider/models/response/fee.dart';
 /// The fee stats endpoint provides information about per-operation fee stats over the last 5 ledgers.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/retrieve-fee-stats
 class HorizonRequestFeeStats
-    extends HorizonRequestParam<StellarFeeStatsResponse, Map<String, dynamic>> {
+    extends HorizonRequest<StellarFeeStatsResponse, Map<String, dynamic>> {
   const HorizonRequestFeeStats();
 
   @override

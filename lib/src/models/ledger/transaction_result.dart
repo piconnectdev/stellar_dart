@@ -31,10 +31,10 @@ class ClaimAtomType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ClaimAtom type not found.",
+          'ClaimAtom type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -54,8 +54,8 @@ abstract class ClaimAtom extends XDRVariantSerialization {
       case ClaimAtomType.claimAtomTypeLiquidityPool:
         return ClaimLiquidityAtom.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid ClaimAtom type.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Invalid ClaimAtom type.',
+            details: {'type': type.name});
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -99,7 +99,7 @@ class ClaimOfferAtomV0 extends ClaimAtom {
       required this.assetBought,
       required BigInt amountBought})
       : sellerEd25519 = sellerEd25519.asImmutableBytes
-            .exc(StellarConst.ed25519PubKeyLength, name: "sellerEd25519"),
+            .exc(StellarConst.ed25519PubKeyLength, name: 'sellerEd25519'),
         offerID = offerID.asInt64,
         amountSold = amountSold.asInt64,
         amountBought = amountBought.asInt64,
@@ -107,22 +107,22 @@ class ClaimOfferAtomV0 extends ClaimAtom {
 
   factory ClaimOfferAtomV0.fromStruct(Map<String, dynamic> json) {
     return ClaimOfferAtomV0(
-        sellerEd25519: json.asBytes("sellerEd25519"),
-        offerID: json.as("offerID"),
-        assetSold: StellarAsset.fromStruct(json.asMap("assetSold")),
-        amountSold: json.as("amountSold"),
-        assetBought: StellarAsset.fromStruct(json.asMap("assetBought")),
-        amountBought: json.as("amountBought"));
+        sellerEd25519: json.asBytes('sellerEd25519'),
+        offerID: json.as('offerID'),
+        assetSold: StellarAsset.fromStruct(json.asMap('assetSold')),
+        amountSold: json.as('amountSold'),
+        assetBought: StellarAsset.fromStruct(json.asMap('assetBought')),
+        amountBought: json.as('amountBought'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.ed25519PubKeyLength,
-          property: "sellerEd25519"),
-      LayoutConst.s64be(property: "offerID"),
-      StellarAsset.layout(property: "assetSold"),
-      LayoutConst.s64be(property: "amountSold"),
-      StellarAsset.layout(property: "assetBought"),
-      LayoutConst.s64be(property: "amountBought"),
+          property: 'sellerEd25519'),
+      LayoutConst.s64be(property: 'offerID'),
+      StellarAsset.layout(property: 'assetSold'),
+      LayoutConst.s64be(property: 'amountSold'),
+      StellarAsset.layout(property: 'assetBought'),
+      LayoutConst.s64be(property: 'amountBought'),
     ], property: property);
   }
 
@@ -134,12 +134,12 @@ class ClaimOfferAtomV0 extends ClaimAtom {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "sellerEd25519": sellerEd25519,
-      "offerID": offerID,
-      "assetSold": assetSold.toVariantLayoutStruct(),
-      "amountSold": amountSold,
-      "assetBought": assetBought.toVariantLayoutStruct(),
-      "amountBought": amountBought
+      'sellerEd25519': sellerEd25519,
+      'offerID': offerID,
+      'assetSold': assetSold.toVariantLayoutStruct(),
+      'amountSold': amountSold,
+      'assetBought': assetBought.toVariantLayoutStruct(),
+      'amountBought': amountBought
     };
   }
 }
@@ -165,21 +165,21 @@ class ClaimOfferAtom extends ClaimAtom {
 
   factory ClaimOfferAtom.fromStruct(Map<String, dynamic> json) {
     return ClaimOfferAtom(
-        accountId: StellarPublicKey.fromStruct(json.asMap("accountId")),
-        offerID: json.as("offerID"),
-        assetSold: StellarAsset.fromStruct(json.asMap("assetSold")),
-        amountSold: json.as("amountSold"),
-        assetBought: StellarAsset.fromStruct(json.asMap("assetBought")),
-        amountBought: json.as("amountBought"));
+        accountId: StellarPublicKey.fromStruct(json.asMap('accountId')),
+        offerID: json.as('offerID'),
+        assetSold: StellarAsset.fromStruct(json.asMap('assetSold')),
+        amountSold: json.as('amountSold'),
+        assetBought: StellarAsset.fromStruct(json.asMap('assetBought')),
+        amountBought: json.as('amountBought'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "accountId"),
-      LayoutConst.s64be(property: "offerID"),
-      StellarAsset.layout(property: "assetSold"),
-      LayoutConst.s64be(property: "amountSold"),
-      StellarAsset.layout(property: "assetBought"),
-      LayoutConst.s64be(property: "amountBought"),
+      StellarPublicKey.layout(property: 'accountId'),
+      LayoutConst.s64be(property: 'offerID'),
+      StellarAsset.layout(property: 'assetSold'),
+      LayoutConst.s64be(property: 'amountSold'),
+      StellarAsset.layout(property: 'assetBought'),
+      LayoutConst.s64be(property: 'amountBought'),
     ], property: property);
   }
 
@@ -191,12 +191,12 @@ class ClaimOfferAtom extends ClaimAtom {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "accountId": accountId.toLayoutStruct(),
-      "offerID": offerID,
-      "assetSold": assetSold.toVariantLayoutStruct(),
-      "amountSold": amountSold,
-      "assetBought": assetBought.toVariantLayoutStruct(),
-      "amountBought": amountBought
+      'accountId': accountId.toLayoutStruct(),
+      'offerID': offerID,
+      'assetSold': assetSold.toVariantLayoutStruct(),
+      'amountSold': amountSold,
+      'assetBought': assetBought.toVariantLayoutStruct(),
+      'amountBought': amountBought
     };
   }
 }
@@ -214,27 +214,27 @@ class ClaimLiquidityAtom extends ClaimAtom {
       required this.assetBought,
       required BigInt amountBought})
       : liquidityPoolID = liquidityPoolID.asImmutableBytes
-            .exc(StellarConst.ed25519PubKeyLength, name: "liquidityPoolID"),
+            .exc(StellarConst.ed25519PubKeyLength, name: 'liquidityPoolID'),
         amountSold = amountSold.asInt64,
         amountBought = amountBought.asInt64,
         super(ClaimAtomType.claimAtomTypeLiquidityPool);
 
   factory ClaimLiquidityAtom.fromStruct(Map<String, dynamic> json) {
     return ClaimLiquidityAtom(
-        liquidityPoolID: json.asBytes("liquidityPoolID"),
-        assetSold: StellarAsset.fromStruct(json.asMap("assetSold")),
-        amountSold: json.as("amountSold"),
-        assetBought: StellarAsset.fromStruct(json.asMap("assetBought")),
-        amountBought: json.as("amountBought"));
+        liquidityPoolID: json.asBytes('liquidityPoolID'),
+        assetSold: StellarAsset.fromStruct(json.asMap('assetSold')),
+        amountSold: json.as('amountSold'),
+        assetBought: StellarAsset.fromStruct(json.asMap('assetBought')),
+        amountBought: json.as('amountBought'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.ed25519PubKeyLength,
-          property: "liquidityPoolID"),
-      StellarAsset.layout(property: "assetSold"),
-      LayoutConst.s64be(property: "amountSold"),
-      StellarAsset.layout(property: "assetBought"),
-      LayoutConst.s64be(property: "amountBought"),
+          property: 'liquidityPoolID'),
+      StellarAsset.layout(property: 'assetSold'),
+      LayoutConst.s64be(property: 'amountSold'),
+      StellarAsset.layout(property: 'assetBought'),
+      LayoutConst.s64be(property: 'amountBought'),
     ], property: property);
   }
 
@@ -246,11 +246,11 @@ class ClaimLiquidityAtom extends ClaimAtom {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "liquidityPoolID": liquidityPoolID,
-      "assetSold": assetSold.toVariantLayoutStruct(),
-      "amountSold": amountSold,
-      "assetBought": assetBought.toVariantLayoutStruct(),
-      "amountBought": amountBought
+      'liquidityPoolID': liquidityPoolID,
+      'assetSold': assetSold.toVariantLayoutStruct(),
+      'amountSold': amountSold,
+      'assetBought': assetBought.toVariantLayoutStruct(),
+      'amountBought': amountBought
     };
   }
 }
@@ -292,10 +292,10 @@ class CreateAccountResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "CreateAccountResultCode not found.",
+          'CreateAccountResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -337,7 +337,7 @@ abstract class CreateAccountResult extends OperationInner {
 }
 
 class CreateAccountResultVoid extends CreateAccountResult {
-  CreateAccountResultVoid(CreateAccountResultCode code) : super(code);
+  CreateAccountResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -405,10 +405,10 @@ class PaymentResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "PaymentResultCode not found.",
+          'PaymentResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -450,7 +450,7 @@ abstract class PaymentResult extends OperationInner {
 }
 
 class PaymentResultVoid extends PaymentResult {
-  PaymentResultVoid(PaymentResultCode code) : super(code);
+  PaymentResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -550,10 +550,10 @@ class PathPaymentStrictReceiveResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "AllowTrustResultCode not found.",
+          'AllowTrustResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -624,16 +624,16 @@ class SimplePaymentResult extends XDRSerialization {
 
   factory SimplePaymentResult.fromStruct(Map<String, dynamic> json) {
     return SimplePaymentResult(
-      destination: StellarPublicKey.fromStruct(json.asMap("destination")),
-      asset: StellarAsset.fromStruct(json.asMap("asset")),
-      amount: json.as("amount"),
+      destination: StellarPublicKey.fromStruct(json.asMap('destination')),
+      asset: StellarAsset.fromStruct(json.asMap('asset')),
+      amount: json.as('amount'),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "destination"),
-      StellarAsset.layout(property: "asset"),
-      LayoutConst.s64be(property: "amount"),
+      StellarPublicKey.layout(property: 'destination'),
+      StellarAsset.layout(property: 'asset'),
+      LayoutConst.s64be(property: 'amount'),
     ], property: property);
   }
 
@@ -645,9 +645,9 @@ class SimplePaymentResult extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "destination": destination.toLayoutStruct(),
-      "asset": asset.toVariantLayoutStruct(),
-      "amount": amount
+      'destination': destination.toLayoutStruct(),
+      'asset': asset.toVariantLayoutStruct(),
+      'amount': amount
     };
   }
 }
@@ -665,15 +665,15 @@ class PathPaymentStrictReceiveResultSuccesss
       Map<String, dynamic> json) {
     return PathPaymentStrictReceiveResultSuccesss(
         offers: json
-            .asListOfMap("offers")!
+            .asListOfMap('offers')!
             .map((e) => ClaimAtom.fromStruct(e))
             .toList(),
-        last: SimplePaymentResult.fromStruct(json.asMap("last")));
+        last: SimplePaymentResult.fromStruct(json.asMap('last')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.xdrVec(ClaimAtom.layout(), property: "offers"),
-      SimplePaymentResult.layout(property: "last")
+      LayoutConst.xdrVec(ClaimAtom.layout(), property: 'offers'),
+      SimplePaymentResult.layout(property: 'last')
     ], property: property);
   }
 
@@ -685,8 +685,8 @@ class PathPaymentStrictReceiveResultSuccesss
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "offers": offers.map((e) => e.toVariantLayoutStruct()).toList(),
-      "last": last.toLayoutStruct()
+      'offers': offers.map((e) => e.toVariantLayoutStruct()).toList(),
+      'last': last.toLayoutStruct()
     };
   }
 }
@@ -701,10 +701,10 @@ class PathPaymentStrictReceiveResultNoIssuer
   factory PathPaymentStrictReceiveResultNoIssuer.fromStruct(
       Map<String, dynamic> json) {
     return PathPaymentStrictReceiveResultNoIssuer(
-        StellarAsset.fromStruct(json.asMap("noIssuer")));
+        StellarAsset.fromStruct(json.asMap('noIssuer')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([StellarAsset.layout(property: "noIssuer")],
+    return LayoutConst.struct([StellarAsset.layout(property: 'noIssuer')],
         property: property);
   }
 
@@ -715,14 +715,13 @@ class PathPaymentStrictReceiveResultNoIssuer
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"noIssuer": noIssuer.toVariantLayoutStruct()};
+    return {'noIssuer': noIssuer.toVariantLayoutStruct()};
   }
 }
 
 class PathPaymentStrictReceiveResultVoid
     extends PathPaymentStrictReceiveResult {
-  PathPaymentStrictReceiveResultVoid(PathPaymentStrictReceiveResultCode code)
-      : super(code);
+  PathPaymentStrictReceiveResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -760,23 +759,23 @@ class OfferEntryResult extends XDRSerialization {
         flags = flags.asUint32;
   factory OfferEntryResult.fromStruct(Map<String, dynamic> json) {
     return OfferEntryResult(
-        sellerID: StellarPublicKey.fromStruct(json.asMap("sellerID")),
-        amount: json.as("amount"),
-        buying: StellarAsset.fromStruct(json.asMap("buying")),
-        selling: StellarAsset.fromStruct(json.asMap("selling")),
-        flags: json.as("flags"),
-        offerID: json.as("offerID"),
-        ext: ExtentionPointVoid.fromStruct(json.asMap("ext")));
+        sellerID: StellarPublicKey.fromStruct(json.asMap('sellerID')),
+        amount: json.as('amount'),
+        buying: StellarAsset.fromStruct(json.asMap('buying')),
+        selling: StellarAsset.fromStruct(json.asMap('selling')),
+        flags: json.as('flags'),
+        offerID: json.as('offerID'),
+        ext: ExtentionPointVoid.fromStruct(json.asMap('ext')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "sellerID"),
-      LayoutConst.s64be(property: "offerID"),
-      StellarAsset.layout(property: "selling"),
-      StellarAsset.layout(property: "buying"),
-      LayoutConst.s64be(property: "amount"),
-      LayoutConst.u32be(property: "flags"),
-      ExtentionPointVoid.layout(property: "ext")
+      StellarPublicKey.layout(property: 'sellerID'),
+      LayoutConst.s64be(property: 'offerID'),
+      StellarAsset.layout(property: 'selling'),
+      StellarAsset.layout(property: 'buying'),
+      LayoutConst.s64be(property: 'amount'),
+      LayoutConst.u32be(property: 'flags'),
+      ExtentionPointVoid.layout(property: 'ext')
     ], property: property);
   }
 
@@ -788,13 +787,13 @@ class OfferEntryResult extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "ext": ext.toVariantLayoutStruct(),
-      "flags": flags,
-      "amount": amount,
-      "buying": buying.toVariantLayoutStruct(),
-      "selling": selling.toVariantLayoutStruct(),
-      "offerID": offerID,
-      "sellerID": sellerID.toLayoutStruct(),
+      'ext': ext.toVariantLayoutStruct(),
+      'flags': flags,
+      'amount': amount,
+      'buying': buying.toVariantLayoutStruct(),
+      'selling': selling.toVariantLayoutStruct(),
+      'offerID': offerID,
+      'sellerID': sellerID.toLayoutStruct(),
     };
   }
 }
@@ -823,10 +822,10 @@ class ManageOfferEffectType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ManageOfferEffect type not found.",
+          'ManageOfferEffect type not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -846,8 +845,8 @@ abstract class ManageOfferEffect extends XDRVariantSerialization {
       case ManageOfferEffectType.manageOfferUpdated:
         return ManageOfferEffectUpdated.fromStruct(decode.value);
       default:
-        throw DartStellarPlugingException("Invalid ManageOfferEffect type.",
-            details: {"type": type.name});
+        throw DartStellarPlugingException('Invalid ManageOfferEffect type.',
+            details: {'type': type.name});
     }
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
@@ -904,10 +903,10 @@ class ManageOfferEffectUpdated extends ManageOfferEffect {
       : super(ManageOfferEffectType.manageOfferUpdated);
   factory ManageOfferEffectUpdated.fromStruct(Map<String, dynamic> json) {
     return ManageOfferEffectUpdated(
-        OfferEntryResult.fromStruct(json.asMap("offerEntry")));
+        OfferEntryResult.fromStruct(json.asMap('offerEntry')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
-    return LayoutConst.struct([OfferEntryResult.layout(property: "offerEntry")],
+    return LayoutConst.struct([OfferEntryResult.layout(property: 'offerEntry')],
         property: property);
   }
 
@@ -918,7 +917,7 @@ class ManageOfferEffectUpdated extends ManageOfferEffect {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"offerEntry": offerEntry.toLayoutStruct()};
+    return {'offerEntry': offerEntry.toLayoutStruct()};
   }
 }
 
@@ -1006,10 +1005,10 @@ class ManageSellOfferResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "AllowTrustResultCode not found.",
+          'AllowTrustResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -1066,16 +1065,16 @@ class ManageOfferSuccessResult extends XDRSerialization {
   factory ManageOfferSuccessResult.fromStruct(Map<String, dynamic> json) {
     return ManageOfferSuccessResult(
       offersClaimed: json
-          .asListOfMap("offersClaimed")!
+          .asListOfMap('offersClaimed')!
           .map((e) => ClaimAtom.fromStruct(e))
           .toList(),
-      offer: ManageOfferEffect.fromStruct(json.asMap("offer")),
+      offer: ManageOfferEffect.fromStruct(json.asMap('offer')),
     );
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.xdrVec(ClaimAtom.layout(), property: "offersClaimed"),
-      ManageOfferEffect.layout(property: "offer")
+      LayoutConst.xdrVec(ClaimAtom.layout(), property: 'offersClaimed'),
+      ManageOfferEffect.layout(property: 'offer')
     ], property: property);
   }
 
@@ -1087,9 +1086,9 @@ class ManageOfferSuccessResult extends XDRSerialization {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "offersClaimed":
+      'offersClaimed':
           offersClaimed.map((e) => e.toVariantLayoutStruct()).toList(),
-      "offer": offer.toVariantLayoutStruct()
+      'offer': offer.toVariantLayoutStruct()
     };
   }
 }
@@ -1100,11 +1099,11 @@ class ManageSellOfferResultSuccess extends ManageSellOfferResult {
       : super(ManageSellOfferResultCode.manageSellOfferSuccess);
   factory ManageSellOfferResultSuccess.fromStruct(Map<String, dynamic> json) {
     return ManageSellOfferResultSuccess(
-        ManageOfferSuccessResult.fromStruct(json.asMap("success")));
+        ManageOfferSuccessResult.fromStruct(json.asMap('success')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [ManageOfferSuccessResult.layout(property: "success")],
+        [ManageOfferSuccessResult.layout(property: 'success')],
         property: property);
   }
 
@@ -1115,12 +1114,12 @@ class ManageSellOfferResultSuccess extends ManageSellOfferResult {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"success": success.toLayoutStruct()};
+    return {'success': success.toLayoutStruct()};
   }
 }
 
 class ManageSellOfferResultVoid extends ManageSellOfferResult {
-  ManageSellOfferResultVoid(ManageSellOfferResultCode code) : super(code);
+  ManageSellOfferResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -1186,11 +1185,11 @@ class CreatePassiveSellOfferResultSuccess extends CreatePassiveSellOfferResult {
   factory CreatePassiveSellOfferResultSuccess.fromStruct(
       Map<String, dynamic> json) {
     return CreatePassiveSellOfferResultSuccess(
-        ManageOfferSuccessResult.fromStruct(json.asMap("success")));
+        ManageOfferSuccessResult.fromStruct(json.asMap('success')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [ManageOfferSuccessResult.layout(property: "success")],
+        [ManageOfferSuccessResult.layout(property: 'success')],
         property: property);
   }
 
@@ -1201,13 +1200,12 @@ class CreatePassiveSellOfferResultSuccess extends CreatePassiveSellOfferResult {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"success": success.toLayoutStruct()};
+    return {'success': success.toLayoutStruct()};
   }
 }
 
 class CreatePassiveSellOfferResultVoid extends CreatePassiveSellOfferResult {
-  CreatePassiveSellOfferResultVoid(ManageSellOfferResultCode code)
-      : super(code);
+  CreatePassiveSellOfferResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -1280,10 +1278,10 @@ class SetOptionsResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "AllowTrustResultCode not found.",
+          'AllowTrustResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -1325,7 +1323,7 @@ abstract class SetOptionsResult extends OperationInner {
 }
 
 class SetOptionsResultVoid extends SetOptionsResult {
-  SetOptionsResultVoid(SetOptionsResultCode code) : super(code);
+  SetOptionsResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -1389,10 +1387,10 @@ class ChangeTrustResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "AllowTrustResultCode not found.",
+          'AllowTrustResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -1434,7 +1432,7 @@ abstract class ChangeTrustResult extends OperationInner {
 }
 
 class ChangeTrustResultVoid extends ChangeTrustResult {
-  ChangeTrustResultVoid(ChangeTrustResultCode code) : super(code);
+  ChangeTrustResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -1490,10 +1488,10 @@ class AllowTrustResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "AllowTrustResultCode not found.",
+          'AllowTrustResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -1535,7 +1533,7 @@ abstract class AllowTrustResult extends OperationInner {
 }
 
 class AllowTrustResultVoid extends AllowTrustResult {
-  AllowTrustResultVoid(AllowTrustResultCode code) : super(code);
+  AllowTrustResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -1595,10 +1593,10 @@ class AccountMergeResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "AccountMergeResultCode not found.",
+          'AccountMergeResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -1648,7 +1646,7 @@ abstract class AccountMergeResult extends OperationInner {
 }
 
 class AccountMergeResultVoid extends AccountMergeResult {
-  AccountMergeResultVoid(AccountMergeResultCode code) : super(code);
+  AccountMergeResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -1670,11 +1668,11 @@ class AccountMergeResultSuccess extends AccountMergeResult {
       : sourceAccountBalance = sourceAccountBalance.asInt64,
         super(AccountMergeResultCode.accountMergeSuccess);
   factory AccountMergeResultSuccess.fromStruct(Map<String, dynamic> json) {
-    return AccountMergeResultSuccess(json.as("sourceAccountBalance"));
+    return AccountMergeResultSuccess(json.as('sourceAccountBalance'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [LayoutConst.s64be(property: "sourceAccountBalance")],
+        [LayoutConst.s64be(property: 'sourceAccountBalance')],
         property: property);
   }
 
@@ -1685,7 +1683,7 @@ class AccountMergeResultSuccess extends AccountMergeResult {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"sourceAccountBalance": sourceAccountBalance};
+    return {'sourceAccountBalance': sourceAccountBalance};
   }
 }
 
@@ -1709,10 +1707,10 @@ class InflationResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "InflationResultCode not found.",
+          'InflationResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -1767,13 +1765,13 @@ class InflationPayout extends XDRSerialization {
       : amount = amount.asInt64;
   factory InflationPayout.fromStruct(Map<String, dynamic> json) {
     return InflationPayout(
-        destination: StellarPublicKey.fromStruct(json.asMap("destination")),
-        amount: json.as("amount"));
+        destination: StellarPublicKey.fromStruct(json.asMap('destination')),
+        amount: json.as('amount'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      StellarPublicKey.layout(property: "destination"),
-      LayoutConst.s64be(property: "amount")
+      StellarPublicKey.layout(property: 'destination'),
+      LayoutConst.s64be(property: 'amount')
     ], property: property);
   }
 
@@ -1784,12 +1782,12 @@ class InflationPayout extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"destination": destination.toLayoutStruct(), "amount": amount};
+    return {'destination': destination.toLayoutStruct(), 'amount': amount};
   }
 }
 
 class InflationResultVoid extends InflationResult {
-  InflationResultVoid(InflationResultCode code) : super(code);
+  InflationResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -1812,13 +1810,13 @@ class InflationResultSuccess extends InflationResult {
         super(InflationResultCode.inflationSuccess);
   factory InflationResultSuccess.fromStruct(Map<String, dynamic> json) {
     return InflationResultSuccess(json
-        .asListOfMap("payouts")!
+        .asListOfMap('payouts')!
         .map((e) => InflationPayout.fromStruct(e))
         .toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [LayoutConst.xdrVec(InflationPayout.layout(), property: "payouts")],
+        [LayoutConst.xdrVec(InflationPayout.layout(), property: 'payouts')],
         property: property);
   }
 
@@ -1829,7 +1827,7 @@ class InflationResultSuccess extends InflationResult {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"payouts": payouts.map((e) => e.toLayoutStruct()).toList()};
+    return {'payouts': payouts.map((e) => e.toLayoutStruct()).toList()};
   }
 }
 
@@ -1865,10 +1863,10 @@ class ManageDataResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "BumpSequenceResultCode not found.",
+          'BumpSequenceResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -1910,7 +1908,7 @@ abstract class ManageDataResult extends OperationInner {
 }
 
 class ManageDataResultVoid extends ManageDataResult {
-  ManageDataResultVoid(ManageDataResultCode code) : super(code);
+  ManageDataResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -1946,10 +1944,10 @@ class BumpSequenceResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "BumpSequenceResultCode not found.",
+          'BumpSequenceResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -1991,7 +1989,7 @@ abstract class BumpSequenceResult extends OperationInner {
 }
 
 class BumpSequenceResultVoid extends BumpSequenceResult {
-  BumpSequenceResultVoid(BumpSequenceResultCode code) : super(code);
+  BumpSequenceResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -2071,10 +2069,10 @@ class ManageBuyOfferResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ManageBuyOfferResultCode not found.",
+          'ManageBuyOfferResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -2129,11 +2127,11 @@ class ManageBuyOfferResultSuccess extends ManageBuyOfferResult {
       : super(ManageBuyOfferResultCode.manageBuyOfferSuccess);
   factory ManageBuyOfferResultSuccess.fromStruct(Map<String, dynamic> json) {
     return ManageBuyOfferResultSuccess(
-        ManageOfferSuccessResult.fromStruct(json.asMap("success")));
+        ManageOfferSuccessResult.fromStruct(json.asMap('success')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [ManageOfferSuccessResult.layout(property: "success")],
+        [ManageOfferSuccessResult.layout(property: 'success')],
         property: property);
   }
 
@@ -2144,12 +2142,12 @@ class ManageBuyOfferResultSuccess extends ManageBuyOfferResult {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"success": success.toLayoutStruct()};
+    return {'success': success.toLayoutStruct()};
   }
 }
 
 class ManageBuyOfferResultVoid extends ManageBuyOfferResult {
-  ManageBuyOfferResultVoid(ManageBuyOfferResultCode code) : super(code);
+  ManageBuyOfferResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -2241,10 +2239,10 @@ class PathPaymentStrictSendResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "CreateClaimableBalanceResultCode not found.",
+          'CreateClaimableBalanceResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -2287,8 +2285,7 @@ abstract class PathPaymentStrictSendResult extends OperationInner {
 }
 
 class PathPaymentStrictSendResultVoid extends PathPaymentStrictSendResult {
-  PathPaymentStrictSendResultVoid(PathPaymentStrictSendResultCode code)
-      : super(code);
+  PathPaymentStrictSendResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -2340,10 +2337,10 @@ class CreateClaimableBalanceResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "CreateClaimableBalanceResultCode not found.",
+          'CreateClaimableBalanceResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -2393,8 +2390,7 @@ abstract class CreateClaimableBalanceResult extends OperationInner {
 }
 
 class CreateClaimableBalanceResultVoid extends CreateClaimableBalanceResult {
-  CreateClaimableBalanceResultVoid(CreateClaimableBalanceResultCode code)
-      : super(code);
+  CreateClaimableBalanceResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -2417,11 +2413,11 @@ class CreateClaimableBalanceResultSuccess extends CreateClaimableBalanceResult {
   factory CreateClaimableBalanceResultSuccess.fromStruct(
       Map<String, dynamic> json) {
     return CreateClaimableBalanceResultSuccess(
-        ClaimableBalanceId.fromStruct(json.asMap("balanceId")));
+        ClaimableBalanceId.fromStruct(json.asMap('balanceId')));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct(
-        [ClaimableBalanceId.layout(property: "balanceId")],
+        [ClaimableBalanceId.layout(property: 'balanceId')],
         property: property);
   }
 
@@ -2432,7 +2428,7 @@ class CreateClaimableBalanceResultSuccess extends CreateClaimableBalanceResult {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"balanceId": balanceId.toVariantLayoutStruct()};
+    return {'balanceId': balanceId.toVariantLayoutStruct()};
   }
 }
 
@@ -2471,10 +2467,10 @@ class ClaimClaimableBalanceResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ClaimClaimableBalanceResultCode not found.",
+          'ClaimClaimableBalanceResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -2517,8 +2513,7 @@ abstract class ClaimClaimableBalanceResult extends OperationInner {
 }
 
 class ClaimClaimableBalanceResultVoid extends ClaimClaimableBalanceResult {
-  ClaimClaimableBalanceResultVoid(ClaimClaimableBalanceResultCode code)
-      : super(code);
+  ClaimClaimableBalanceResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -2557,10 +2552,10 @@ class EndSponsoringFutureReservesResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "EndSponsoringFutureReservesResultCode not found.",
+          'EndSponsoringFutureReservesResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -2608,9 +2603,7 @@ abstract class EndSponsoringFutureReservesResult extends OperationInner {
 
 class EndSponsoringFutureReservesResultVoid
     extends EndSponsoringFutureReservesResult {
-  EndSponsoringFutureReservesResultVoid(
-      EndSponsoringFutureReservesResultCode code)
-      : super(code);
+  EndSponsoringFutureReservesResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -2657,10 +2650,10 @@ class RevokeSponsorshipResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "RevokeSponsorshipResultCode not found.",
+          'RevokeSponsorshipResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -2703,7 +2696,7 @@ abstract class RevokeSponsorshipResult extends OperationInner {
 }
 
 class RevokeSponsorshipResultVoid extends RevokeSponsorshipResult {
-  RevokeSponsorshipResultVoid(RevokeSponsorshipResultCode code) : super(code);
+  RevokeSponsorshipResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -2747,10 +2740,10 @@ class ClawbackResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ClawbackResultCode not found.",
+          'ClawbackResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -2792,7 +2785,7 @@ abstract class ClawbackResult extends OperationInner {
 }
 
 class ClawbackResultVoid extends ClawbackResult {
-  ClawbackResultVoid(ClawbackResultCode code) : super(code);
+  ClawbackResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -2839,10 +2832,10 @@ class ClawbackClaimableBalanceResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "ClawbackClaimableBalanceResultCode not found.",
+          'ClawbackClaimableBalanceResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -2889,8 +2882,7 @@ abstract class ClawbackClaimableBalanceResult extends OperationInner {
 
 class ClawbackClaimableBalanceResultVoid
     extends ClawbackClaimableBalanceResult {
-  ClawbackClaimableBalanceResultVoid(ClawbackClaimableBalanceResultCode code)
-      : super(code);
+  ClawbackClaimableBalanceResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -2937,10 +2929,10 @@ class SetTrustLineFlagsResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "SetTrustLineFlagsResultCode not found.",
+          'SetTrustLineFlagsResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -2983,7 +2975,7 @@ abstract class SetTrustLineFlagsResult extends OperationInner {
 }
 
 class SetTrustLineFlagsResultVoid extends SetTrustLineFlagsResult {
-  SetTrustLineFlagsResultVoid(SetTrustLineFlagsResultCode code) : super(code);
+  SetTrustLineFlagsResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -3038,10 +3030,10 @@ class LiquidityPoolDepositResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "LiquidityPoolDepositResultCode not found.",
+          'LiquidityPoolDepositResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -3084,8 +3076,7 @@ abstract class LiquidityPoolDepositResult extends OperationInner {
 }
 
 class LiquidityPoolDepositResultVoid extends LiquidityPoolDepositResult {
-  LiquidityPoolDepositResultVoid(LiquidityPoolDepositResultCode code)
-      : super(code);
+  LiquidityPoolDepositResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -3136,10 +3127,10 @@ class LiquidityPoolWithdrawResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "LiquidityPoolWithdrawResultCode not found.",
+          'LiquidityPoolWithdrawResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -3182,8 +3173,7 @@ abstract class LiquidityPoolWithdrawResult extends OperationInner {
 }
 
 class LiquidityPoolWithdrawResultVoid extends LiquidityPoolWithdrawResult {
-  LiquidityPoolWithdrawResultVoid(LiquidityPoolWithdrawResultCode code)
-      : super(code);
+  LiquidityPoolWithdrawResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -3233,10 +3223,10 @@ class InvokeHostFunctionResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "InvokeHostFunctionResultCode not found.",
+          'InvokeHostFunctionResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -3286,7 +3276,7 @@ abstract class InvokeHostFunctionResult extends OperationInner {
 }
 
 class InvokeHostFunctionResultVoid extends InvokeHostFunctionResult {
-  InvokeHostFunctionResultVoid(InvokeHostFunctionResultCode code) : super(code);
+  InvokeHostFunctionResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -3306,15 +3296,15 @@ class InvokeHostFunctionResultSuccess extends InvokeHostFunctionResult {
   final List<int> success;
   InvokeHostFunctionResultSuccess(List<int> success)
       : success = success.asImmutableBytes.exc(StellarConst.hash256Length,
-            name: "InvokeHostFunctionResultSuccess"),
+            name: 'InvokeHostFunctionResultSuccess'),
         super(InvokeHostFunctionResultCode.invokeHostFunctionSuccess);
   factory InvokeHostFunctionResultSuccess.fromStruct(
       Map<String, dynamic> json) {
-    return InvokeHostFunctionResultSuccess(json.asBytes("success"));
+    return InvokeHostFunctionResultSuccess(json.asBytes('success'));
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: "success")
+      LayoutConst.fixedBlobN(StellarConst.hash256Length, property: 'success')
     ], property: property);
   }
 
@@ -3325,7 +3315,7 @@ class InvokeHostFunctionResultSuccess extends InvokeHostFunctionResult {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"success": success};
+    return {'success': success};
   }
 }
 
@@ -3357,10 +3347,10 @@ class ExtendFootprintTTLResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "OperationResultCode not found.",
+          'OperationResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -3403,7 +3393,7 @@ abstract class ExtendFootprintTTLResult extends OperationInner {
 }
 
 class ExtendFootprintTTLResultVoid extends ExtendFootprintTTLResult {
-  ExtendFootprintTTLResultVoid(ExtendFootprintTTLResultCode code) : super(code);
+  ExtendFootprintTTLResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -3446,10 +3436,10 @@ class RestoreFootprintResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "OperationResultCode not found.",
+          'OperationResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -3492,7 +3482,7 @@ abstract class RestoreFootprintResult extends OperationInner {
 }
 
 class RestoreFootprintResultVoid extends RestoreFootprintResult {
-  RestoreFootprintResultVoid(RestoreFootprintResultCode code) : super(code);
+  RestoreFootprintResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -3541,10 +3531,10 @@ class BeginSponsoringFutureReservesResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "BeginSponsoringFutureReservesResultCode not found.",
+          'BeginSponsoringFutureReservesResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -3590,9 +3580,7 @@ abstract class BeginSponsoringFutureReservesResult extends OperationInner {
 
 class BeginSponsoringFutureReservesResultVoid
     extends BeginSponsoringFutureReservesResult {
-  BeginSponsoringFutureReservesResultVoid(
-      BeginSponsoringFutureReservesResultCode code)
-      : super(code);
+  BeginSponsoringFutureReservesResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -3678,17 +3666,17 @@ class TransactionResultType {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "TransactionResultType not found.",
+          'TransactionResultType not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
 
   @override
   String toString() {
-    return "TransactionResultType.$name";
+    return 'TransactionResultType.$name';
   }
 }
 
@@ -3726,10 +3714,10 @@ class OperationResultCode {
     return values.firstWhere(
       (e) => e.name == name,
       orElse: () => throw DartStellarPlugingException(
-          "OperationResultCode not found.",
+          'OperationResultCode not found.',
           details: {
-            "name": name,
-            "values": values.map((e) => e.name).join(", ")
+            'name': name,
+            'values': values.map((e) => e.name).join(', ')
           }),
     );
   }
@@ -3925,7 +3913,7 @@ class OperationResultOpInner extends OperationResult {
                   property: type.name);
             default:
               throw const DartStellarPlugingException(
-                  "Invalid Operation type.");
+                  'Invalid Operation type.');
           }
         }),
         property: property);
@@ -4018,7 +4006,7 @@ class OperationResultOpInner extends OperationResult {
         inner = RestoreFootprintResult.fromStruct(decode.value);
         break;
       default:
-        throw const DartStellarPlugingException("Invalid Operation type.");
+        throw const DartStellarPlugingException('Invalid Operation type.');
     }
     return OperationResultOpInner(inner);
   }
@@ -4035,7 +4023,7 @@ class OperationResultOpInner extends OperationResult {
 }
 
 class OperationResultVoid extends OperationResult {
-  OperationResultVoid(OperationResultCode code) : super(code);
+  OperationResultVoid(super.code);
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
   }
@@ -4058,20 +4046,20 @@ class InnerTransactionResultPair extends TransactionResultCode {
     required this.result,
     required List<int> transactionHash,
   })  : transactionHash = transactionHash.asImmutableBytes
-            .exc(StellarConst.hash256Length, name: "transactionHash"),
+            .exc(StellarConst.hash256Length, name: 'transactionHash'),
         super(code: TransactionResultType.txFeeBumpInnerFailed);
   factory InnerTransactionResultPair.fromStruct(Map<String, dynamic> json) {
     return InnerTransactionResultPair(
-      result: TransactionResult.fromStruct(json.asMap("result")),
-      transactionHash: json.asBytes("transactionHash"),
+      result: TransactionResult.fromStruct(json.asMap('result')),
+      transactionHash: json.asBytes('transactionHash'),
     );
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
       LayoutConst.fixedBlobN(StellarConst.hash256Length,
-          property: "transactionHash"),
-      TransactionResult.layout(property: "result")
+          property: 'transactionHash'),
+      TransactionResult.layout(property: 'result')
     ], property: property);
   }
 
@@ -4083,8 +4071,8 @@ class InnerTransactionResultPair extends TransactionResultCode {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "transactionHash": transactionHash,
-      "result": result.toLayoutStruct(),
+      'transactionHash': transactionHash,
+      'result': result.toLayoutStruct(),
     };
   }
 }
@@ -4152,8 +4140,7 @@ abstract class TransactionResultCode extends XDRVariantSerialization {
 }
 
 class TransactionResultVoid extends TransactionResultCode {
-  TransactionResultVoid({required TransactionResultType code})
-      : super(code: code);
+  TransactionResultVoid({required super.code});
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.noArgs(property: property);
@@ -4179,13 +4166,13 @@ class TransactionResultTxSuccess extends TransactionResultCode {
   factory TransactionResultTxSuccess.fromStruct(Map<String, dynamic> json) {
     return TransactionResultTxSuccess(
         operationResult: json
-            .asListOfMap("operationResult")!
+            .asListOfMap('operationResult')!
             .map((e) => OperationResult.fromStruct(e))
             .toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.xdrVec(OperationResult.layout(), property: "operationResult")
+      LayoutConst.xdrVec(OperationResult.layout(), property: 'operationResult')
     ], property: property);
   }
 
@@ -4197,7 +4184,7 @@ class TransactionResultTxSuccess extends TransactionResultCode {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "operationResult":
+      'operationResult':
           operationResult.map((e) => e.toVariantLayoutStruct()).toList()
     };
   }
@@ -4212,13 +4199,13 @@ class TransactionResultTxFailed extends TransactionResultCode {
   factory TransactionResultTxFailed.fromStruct(Map<String, dynamic> json) {
     return TransactionResultTxFailed(
         operationResult: json
-            .asListOfMap("operationResult")!
+            .asListOfMap('operationResult')!
             .map((e) => OperationResult.fromStruct(e))
             .toList());
   }
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.xdrVec(OperationResult.layout(), property: "operationResult")
+      LayoutConst.xdrVec(OperationResult.layout(), property: 'operationResult')
     ], property: property);
   }
 
@@ -4230,7 +4217,7 @@ class TransactionResultTxFailed extends TransactionResultCode {
   @override
   Map<String, dynamic> toLayoutStruct() {
     return {
-      "operationResult":
+      'operationResult':
           operationResult.map((e) => e.toVariantLayoutStruct()).toList()
     };
   }
@@ -4249,14 +4236,14 @@ class TransactionResult extends XDRSerialization {
   }
   factory TransactionResult.fromStruct(Map<String, dynamic> json) {
     return TransactionResult(
-        feeCharged: json.as("feeCharged"),
-        code: TransactionResultCode.fromStruct(json.asMap("code")));
+        feeCharged: json.as('feeCharged'),
+        code: TransactionResultCode.fromStruct(json.asMap('code')));
   }
 
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.s64be(property: "feeCharged"),
-      TransactionResultCode.layout(property: "code")
+      LayoutConst.s64be(property: 'feeCharged'),
+      TransactionResultCode.layout(property: 'code')
     ], property: property);
   }
 
@@ -4267,6 +4254,6 @@ class TransactionResult extends XDRSerialization {
 
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"feeCharged": feeCharged, "code": code.toVariantLayoutStruct()};
+    return {'feeCharged': feeCharged, 'code': code.toVariantLayoutStruct()};
   }
 }

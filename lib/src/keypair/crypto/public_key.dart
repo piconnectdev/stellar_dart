@@ -30,8 +30,8 @@ class StellarPublicKey extends XDRSerialization {
     if (address.type != XlmAddrTypes.pubKey &&
         address.type != XlmAddrTypes.muxed) {
       throw DartStellarPlugingException(
-          "Only Stellar ED25519 public key address (XlmAddrTypes.pubKey, XlmAddrTypes.muxed) can be converted to `StellarPublicKey`.",
-          details: {"type": address.type.name});
+          'Only Stellar ED25519 public key address (XlmAddrTypes.pubKey, XlmAddrTypes.muxed) can be converted to `StellarPublicKey`.',
+          details: {'type': address.type.name});
     }
     return StellarPublicKey.fromPublicBytes(address.keyBytes());
   }
@@ -49,12 +49,12 @@ class StellarPublicKey extends XDRSerialization {
   ///
   /// The `json` must include a valid type and `ed25519` public key.
   factory StellarPublicKey.fromStruct(Map<String, dynamic> json) {
-    final int type = json.as("type");
+    final int type = json.as('type');
     if (type != 0) {
       throw const DartStellarPlugingException(
-          "Invalid StellarPublicKey XDR bytes.");
+          'Invalid StellarPublicKey XDR bytes.');
     }
-    return StellarPublicKey.fromPublicBytes(json.asBytes("ed25519"));
+    return StellarPublicKey.fromPublicBytes(json.asBytes('ed25519'));
   }
 
   /// Defines the layout for XDR serialization/deserialization.
@@ -62,8 +62,8 @@ class StellarPublicKey extends XDRSerialization {
   /// This layout includes a type field and a fixed 32-byte Ed25519 public key field.
   static Layout<Map<String, dynamic>> layout({String? property}) {
     return LayoutConst.struct([
-      LayoutConst.u32be(property: "type"),
-      LayoutConst.fixedBlob32(property: "ed25519")
+      LayoutConst.u32be(property: 'type'),
+      LayoutConst.fixedBlob32(property: 'ed25519')
     ], property: property);
   }
 
@@ -81,7 +81,7 @@ class StellarPublicKey extends XDRSerialization {
   /// Converts the public key into a structured map for serialization.
   @override
   Map<String, dynamic> toLayoutStruct() {
-    return {"type": 0, "ed25519": _publicKey.compressed.sublist(1)};
+    return {'type': 0, 'ed25519': _publicKey.compressed.sublist(1)};
   }
 
   /// Returns the public key as a byte array.
@@ -110,7 +110,7 @@ class StellarPublicKey extends XDRSerialization {
 
   /// Equality operator that checks if two `StellarPublicKey` objects are equal.
   @override
-  operator ==(other) {
+  bool operator ==(other) {
     if (other is! StellarPublicKey) return false;
     return _publicKey == other._publicKey;
   }

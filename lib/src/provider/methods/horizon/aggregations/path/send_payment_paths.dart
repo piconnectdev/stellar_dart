@@ -10,7 +10,7 @@ import 'package:stellar_dart/src/provider/models/request/request_types.dart';
 /// paths from the different source assets to the destination asset. Only paths that satisfy the source_amount are returned.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/list-strict-send-payment-paths
 class HorizonRequestSendPaymentPaths
-    extends HorizonRequestParam<Map<String, dynamic>, Map<String, dynamic>> {
+    extends HorizonRequest<Map<String, dynamic>, Map<String, dynamic>> {
   /// The Stellar address of the receiver. Any returned path must end with an asset that the recipient can receive.
   /// Using either source_account or source_assets as an argument is required for strict send path payments.
   final String? destinationAccount;
@@ -46,11 +46,11 @@ class HorizonRequestSendPaymentPaths
 
   @override
   Map<String, dynamic> get queryParameters => {
-        "destination_account": destinationAccount,
-        "destination_assets": destinationAssets,
-        "source_asset_type": sourceAssetType.name,
-        "source_asset_issuer": sourceAssetIssuer,
-        "source_asset_code": sourceAssetCode,
-        "source_amount": sourceAmount
+        'destination_account': destinationAccount,
+        'destination_assets': destinationAssets,
+        'source_asset_type': sourceAssetType.name,
+        'source_asset_issuer': sourceAssetIssuer,
+        'source_asset_code': sourceAssetCode,
+        'source_amount': sourceAmount
       };
 }

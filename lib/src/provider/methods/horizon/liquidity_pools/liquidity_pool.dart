@@ -4,7 +4,7 @@ import 'package:stellar_dart/src/provider/core/core/methods.dart';
 /// The single liquidity pool endpoint provides information on a liquidity pool.
 /// https://developers.stellar.org/docs/data/horizon/api-reference/retrieve-a-liquidity-pool
 class HorizonRequestLiquidityPool
-    extends HorizonRequestParam<Map<String, dynamic>, Map<String, dynamic>> {
+    extends HorizonRequest<Map<String, dynamic>, Map<String, dynamic>> {
   /// A unique identifier for this liquidity pool.
   final String liquidityPoolId;
   const HorizonRequestLiquidityPool(this.liquidityPoolId);
