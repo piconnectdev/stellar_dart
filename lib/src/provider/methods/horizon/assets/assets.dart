@@ -12,11 +12,8 @@ class HorizonRequestAssets extends HorizonRequest<List<StellarAllAssetResponse>,
   /// The Stellar address of the issuer for the asset you would like to filter by.
   final String? assetIssuer;
 
-  const HorizonRequestAssets({
-    this.assetCode,
-    this.assetIssuer,
-    super.paginationParams,
-  });
+  const HorizonRequestAssets(
+      {this.assetCode, this.assetIssuer, super.paginationParams});
 
   @override
   String get method => StellarHorizonMethods.assets.url;
