@@ -44,7 +44,7 @@ abstract class StellarAddress {
   T cast<T extends StellarAddress>() {
     if (this is! T) {
       throw DartStellarPlugingException('Address casting failed.',
-          details: {'excepted': '$T', 'address': runtimeType.toString()});
+          details: {'expected': '$T', 'address': runtimeType.toString()});
     }
     return this as T;
   }

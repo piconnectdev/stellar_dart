@@ -84,7 +84,7 @@ class StellarHelper {
     final codeBytes = StringUtils.encode(code);
     if (code.length > length) {
       throw DartStellarPlugingException('Invalid asset code length.', details: {
-        'excepted': length,
+        'expected': length,
         'length': codeBytes.length,
         'code': code
       });

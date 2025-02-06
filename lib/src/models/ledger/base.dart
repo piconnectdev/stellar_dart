@@ -2130,7 +2130,7 @@ abstract class ScVal<T> extends XDRVariantSerialization {
 
     if (val is! ScVal<T>) {
       throw DartStellarPlugingException('Incorrect SCval type casting.',
-          details: {'excepted': '$T', 'ScVal': val.runtimeType});
+          details: {'expected': '$T', 'ScVal': val.runtimeType});
     }
     return val;
   }
@@ -2268,7 +2268,7 @@ abstract class ScVal<T> extends XDRVariantSerialization {
   E cast<E extends ScVal>() {
     if (this is! E) {
       throw DartStellarPlugingException('ScVal Casting failed.',
-          details: {'excepted': '$T', 'type': '$runtimeType'});
+          details: {'expected': '$T', 'type': '$runtimeType'});
     }
     return this as E;
   }
@@ -4585,7 +4585,7 @@ class ConfigSettingBucketlistSizeWindow extends ConfigSetting {
       if (e is! BigInt) {
         throw DartStellarPlugingException('Incorrect value.', details: {
           'key': 'ledgerMaxTxCount',
-          'excepted': 'BigInt',
+          'expected': 'BigInt',
           'value': e.runtimeType,
           'data': json['ledgerMaxTxCount']
         });
@@ -7419,7 +7419,7 @@ abstract class Envelope<T extends StellarTransaction>
     }
     if (envlope is! Envelope<T>) {
       throw DartStellarPlugingException('Envelope casting failed.', details: {
-        'excepted': 'Envelope<$T>',
+        'expected': 'Envelope<$T>',
         'envelope': envlope.runtimeType.toString()
       });
     }
@@ -7441,7 +7441,7 @@ abstract class Envelope<T extends StellarTransaction>
   E cast<E extends Envelope<T>>() {
     if (this is! E) {
       throw DartStellarPlugingException('Incorrect Envelope casting.',
-          details: {'excepted': '$T', 'type': '$runtimeType'});
+          details: {'expected': '$T', 'type': '$runtimeType'});
     }
     return this as E;
   }
@@ -7724,7 +7724,7 @@ abstract class StellarTransaction extends XDRVariantSerialization {
   T cast<T extends StellarTransaction>() {
     if (this is! T) {
       throw DartStellarPlugingException('Incorrect StellarTransaction casting.',
-          details: {'excepted': '$T', 'type': '$runtimeType'});
+          details: {'expected': '$T', 'type': '$runtimeType'});
     }
     return this as T;
   }
@@ -7867,7 +7867,7 @@ abstract class StellarMemo extends XDRVariantSerialization {
   T cast<T extends StellarMemo>() {
     if (this is! T) {
       throw DartStellarPlugingException('Stellar Memo Casting failed.',
-          details: {'excepted': '$T', 'type': runtimeType.toString()});
+          details: {'expected': '$T', 'type': runtimeType.toString()});
     }
     return this as T;
   }
@@ -8349,7 +8349,7 @@ abstract class StellarAsset extends XDRVariantSerialization {
   T cast<T extends StellarAsset>() {
     if (this is! T) {
       throw DartStellarPlugingException('Stellar asset casting failed.',
-          details: {'excepted': '$T', 'asset': runtimeType.toString()});
+          details: {'expected': '$T', 'asset': runtimeType.toString()});
     }
     return this as T;
   }

@@ -23,7 +23,7 @@ abstract class HorizonRequest<RESULT, RESPONSE>
     final pathParams = StellarProviderUtils.extractParams(method);
     if (pathParams.length != pathParameters.length) {
       throw DartStellarPlugingException('Invalid Path Parameters.',
-          details: {'pathParams': pathParameters, 'excepted': pathParams});
+          details: {'pathParams': pathParameters, 'expected': pathParams});
     }
     String params = method;
     for (int i = 0; i < pathParams.length; i++) {

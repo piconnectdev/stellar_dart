@@ -104,7 +104,7 @@ class StellarPublicKey extends XDRSerialization {
   ///
   /// Requires a `digest` (the hashed data) and the `signature` to verify.
   bool verify({required List<int> digest, required List<int> signature}) {
-    final verifier = SolanaVerifier.fromKeyBytes(toBytes());
+    final verifier = Ed25519Verifier.fromKeyBytes(toBytes());
     return verifier.verify(digest, signature);
   }
 

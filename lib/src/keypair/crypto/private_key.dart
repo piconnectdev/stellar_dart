@@ -72,7 +72,7 @@ class StellarPrivateKey {
   ///
   /// Returns a `DecoratedSignature`, which includes the signature and the key hint.
   DecoratedSignature sign(List<int> message) {
-    final signer = SolanaSigner.fromKeyBytes(_privateKey.raw);
+    final signer = Ed25519Signer.fromKeyBytes(_privateKey.raw);
     final sign = signer.sign(message);
     final hint = toPublicKey().hint();
     return DecoratedSignature(hint: hint, signature: sign);

@@ -39,7 +39,7 @@ extension ListValidator<T> on List<T> {
     if (this.length != length) {
       throw DartStellarPlugingException(
           "Incorrect ${name == null ? '' : '$name '}array length.",
-          details: {'excepted': length, 'length': this.length});
+          details: {'expected': length, 'length': this.length});
     }
     return this;
   }
@@ -68,7 +68,7 @@ extension StringValidator on String {
     if (this.length != length) {
       throw DartStellarPlugingException(
           "Incorrect ${name == null ? '' : '$name '}array length.",
-          details: {'excepted': length, 'length': this.length});
+          details: {'expected': length, 'length': this.length});
     }
     return this;
   }
@@ -91,7 +91,7 @@ extension QuickMap on Map<String, dynamic> {
     } on TypeError {
       throw DartStellarPlugingException('Incorrect value.', details: {
         'key': key,
-        'excepted': '$T',
+        'expected': '$T',
         'value': value.runtimeType,
         'data': this
       });
@@ -116,7 +116,7 @@ extension QuickMap on Map<String, dynamic> {
     } on TypeError {
       throw DartStellarPlugingException('Incorrect value.', details: {
         'key': key,
-        'excepted': '$E',
+        'expected': '$E',
         'value': value.runtimeType,
         'data': this
       });
@@ -141,7 +141,7 @@ extension QuickMap on Map<String, dynamic> {
     } on TypeError {
       throw DartStellarPlugingException('Incorrect value.', details: {
         'key': key,
-        'excepted': '$E',
+        'expected': '$E',
         'value': value.runtimeType,
         'data': this
       });
@@ -193,7 +193,7 @@ extension QuickMap on Map<String, dynamic> {
     } on TypeError {
       throw DartStellarPlugingException('Incorrect value.', details: {
         'key': key,
-        'excepted': '$T',
+        'expected': '$T',
         'value': value.runtimeType,
         'data': this
       });

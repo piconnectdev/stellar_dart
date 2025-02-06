@@ -389,7 +389,7 @@ abstract class OperationBody extends XDRVariantSerialization {
   T cast<T extends OperationBody>() {
     if (this is! T) {
       throw DartStellarPlugingException('Operation body casting failed.',
-          details: {'excepted': '$T', 'body': runtimeType.toString()});
+          details: {'expected': '$T', 'body': runtimeType.toString()});
     }
     return this as T;
   }
