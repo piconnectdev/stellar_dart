@@ -4,6 +4,7 @@ import 'package:stellar_dart/stellar_dart.dart';
 abstract class StellarAddress {
   final String baseAddress;
   final XlmAddrTypes type;
+  String get address => baseAddress;
   const StellarAddress({required this.baseAddress, required this.type});
   factory StellarAddress.fromBase32Addr(String address) {
     final decode = XlmAddrDecoder().decode(address);

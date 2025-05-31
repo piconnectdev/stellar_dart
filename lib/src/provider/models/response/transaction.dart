@@ -20,7 +20,7 @@ class StellarTransactionResponse {
   final int operationCount;
   final String envelopeXdr;
   final String resultXdr;
-  final String resultMetaXdr;
+  final String? resultMetaXdr;
   final String feeMetaXdr;
   final String memoType;
   final List<String> signatures;

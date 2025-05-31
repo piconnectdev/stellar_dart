@@ -15,6 +15,9 @@ class StellarMuxedAddress extends StellarAddress {
   /// The muxed address as a string.
   final String muxedAddress;
 
+  @override
+  String get address => muxedAddress;
+
   /// Private constructor for initializing the muxed address, account ID, and address type.
   StellarMuxedAddress._({
     required String address,
