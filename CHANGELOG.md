@@ -1,5 +1,6 @@
 ## 1.8.0
 
+- Update dependencies.
 - Fixed API transaction response model.
 - Added `address` getter to the `StellarAddress` class for deterministic address viewing.
 
