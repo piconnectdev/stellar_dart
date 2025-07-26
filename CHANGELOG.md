@@ -1,3 +1,8 @@
+## 1.9.0
+
+- Update dependencies.
+- Add utility for parsing TOML metadata
+
 ## 1.8.0
 
 - Update dependencies.

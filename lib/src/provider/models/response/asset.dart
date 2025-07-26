@@ -1,7 +1,26 @@
+class StellarAssetLink {
+  final StellarAssetToml toml;
+  const StellarAssetLink({required this.toml});
+  factory StellarAssetLink.fromJson(Map<String, dynamic> json) {
+    return StellarAssetLink(
+        toml: StellarAssetToml.fromJson(json["toml"] ?? {}));
+  }
+}
+
+class StellarAssetToml {
+  final String? href;
+  const StellarAssetToml({this.href});
+  factory StellarAssetToml.fromJson(Map<String, dynamic> json) {
+    final String href = json["href"] ?? '';
+    return StellarAssetToml(href: (href.isEmpty ? null : href));
+  }
+}
+
 class StellarAllAssetResponse {
   final String assetType;
   final String assetIssuer;
   final String pagingToken;
+  final String assetCode;
   final AutorizationResponse accounts;
   final int numClaimableBalances;
   final int numContracts;
@@ -13,9 +32,10 @@ class StellarAllAssetResponse {
   final String claimableBalancesAmount;
   final String contractsAmount;
   final String liquidityPoolsAmount;
-  final String amount;
-  final int numAccounts;
+  final String? amount;
+  final int? numAccounts;
   final FlagsResponse flags;
+  final StellarAssetLink link;
 
   StellarAllAssetResponse({
     required this.assetType,
@@ -35,29 +55,32 @@ class StellarAllAssetResponse {
     required this.amount,
     required this.numAccounts,
     required this.flags,
+    required this.link,
+    required this.assetCode,
   });
 
   factory StellarAllAssetResponse.fromJson(Map<String, dynamic> json) {
     return StellarAllAssetResponse(
-      assetType: json['asset_type'],
-      assetIssuer: json['asset_issuer'],
-      pagingToken: json['paging_token'],
-      accounts: AutorizationResponse.fromJson(json['accounts']),
-      numClaimableBalances: json['num_claimable_balances'],
-      numContracts: json['num_contracts'],
-      numLiquidityPools: json['num_liquidity_pools'],
-      balances: AutorizationResponse.fromJson(json['balances']),
-      authorized: json['authorized'],
-      authorizedToMaintainLiabilities:
-          json['authorized_to_maintain_liabilities'],
-      unauthorized: json['unauthorized'],
-      claimableBalancesAmount: json['claimable_balances_amount'],
-      contractsAmount: json['contracts_amount'],
-      liquidityPoolsAmount: json['liquidity_pools_amount'],
-      amount: json['amount'],
-      numAccounts: json['num_accounts'],
-      flags: FlagsResponse.fromJson(json['flags']),
-    );
+        assetType: json['asset_type'],
+        link: StellarAssetLink.fromJson(json["_links"] ?? {}),
+        assetIssuer: json['asset_issuer'],
+        pagingToken: json['paging_token'],
+        accounts: AutorizationResponse.fromJson(json['accounts']),
+        numClaimableBalances: json['num_claimable_balances'],
+        numContracts: json['num_contracts'],
+        numLiquidityPools: json['num_liquidity_pools'],
+        balances: AutorizationResponse.fromJson(json['balances']),
+        authorized: json['authorized'],
+        authorizedToMaintainLiabilities:
+            json['authorized_to_maintain_liabilities'],
+        unauthorized: json['unauthorized'],
+        claimableBalancesAmount: json['claimable_balances_amount'],
+        contractsAmount: json['contracts_amount'],
+        liquidityPoolsAmount: json['liquidity_pools_amount'],
+        amount: json['amount'],
+        numAccounts: json['num_accounts'],
+        flags: FlagsResponse.fromJson(json['flags']),
+        assetCode: json["asset_code"]);
   }
 
   Map<String, dynamic> toJson() {

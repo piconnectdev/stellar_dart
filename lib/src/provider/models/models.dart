@@ -9,3 +9,4 @@ export 'response/transaction.dart';
 export 'response/assets.dart';
 export 'response/all_transaction.dart';
 export 'response/async_transaction_submit_result.dart';
+export 'response/metadata.dart';
